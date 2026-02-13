@@ -1,45 +1,63 @@
 # Job Automation Suite
 
-A comprehensive suite for automated job scraping, analysis, and CV tailoring.
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange)
 
-## Overview
+A powerful, all-in-one suite for **automated job scraping**, **analysis**, and **instant CV tailoring**.
 
-This project unifies `job-scraping-app` and `rendercv` into a powerful monorepo. It features:
-- **Centralized Build System**: A root `Makefile` that handles installation, running, and testing across platforms.
-- **AI-Powered CV Tailoring**: Using `cv_bridge.py`, you can generate custom PDFs for any job with a single click.
-- **Race-Condition-Free Architecture**: Safe for concurrent usage.
-- **Pinned Dependencies**: Ensures stability.
+Stop manually applying to jobs. Let the suite do the work.
 
-## Quick Start
+## 🚀 Key Features
+
+-   **🔍 Automated Scraping**:  Fetches jobs from multiple sources and aggregates them into a clean dashboard.
+-   **📄 Instant CV Tailoring**: Generates a custom PDF CV for *any* job with a single click, injecting relevant keywords and summaries.
+-   **📊 Smart Dashboard**: Filter, sort, and track your applications in real-time.
+-   **🤖 AI-Powered**: Uses LLMs (Optional) to analyze job descriptions and draft cover letters.
+-   **🔄 Continuous Sync**: Built-in `make push` keeps your code and data synced across repositories automatically.
+
+## 🛠️ Quick Start
 
 ### Prerequisites
-- Python 3.10+
-- (Optional) GNU Make (Windows users can use Git Bash or chocolatey `make`)
+-   Python 3.10+
+-   Git
 
 ### Installation
 
+Clone the repo and install everything with one command:
+
 ```bash
+git clone --recursive https://github.com/aguo890/Job-Automation-Suite.git
+cd Job-Automation-Suite
 make install
 ```
 
 ### Usage
 
-Run the scraper and launch the dashboard:
-
+**1. Run the Dashboard:**
+This command auto-fetches the latest jobs and launches the UI.
 ```bash
 make run
-# Output: Streamlit app running at http://localhost:8501
 ```
+*Access at: http://localhost:8501*
 
-Or just scrape:
+**2. Generate a CV:**
+-   Select a job in the dashboard.
+-   Click **"Generate CV for Selected"**.
+-   Download your PDF!
 
-```bash
-make scrape
-```
+## 📂 Project Structure
 
-## Structure
+It's a monorepo containing:
+-   **`job-scraping-app/`**: The intelligence core (Scraper + Dashboard).
+-   **`rendercv/`**: The LaTeX/PDF rendering engine.
+-   **`cv_bridge.py`**: The orchestrator linking them together.
 
-- `job-scraping-app/`: The main dashboard and scraper logic.
-- `rendercv/`: The engine for rendering LaTeX/PDF CVs from YAML.
-- `cv_bridge.py`: The integration layer orchestrating CV generation.
-- `generated_cvs/`: Output directory for tailored CVs.
+## 🤝 Contributing
+
+We love contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
