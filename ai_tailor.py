@@ -7,7 +7,44 @@ from dotenv import load_dotenv
 # Load env variables (DEEPSEEK_API_KEY)
 # Force loading from the same directory as this script (project root)
 env_path = os.path.join(os.path.dirname(__file__), '.env')
+# Force loading from the same directory as this script (project root)
+env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=env_path)
+
+def repair_yaml_syntax(yaml_str):
+    """
+    Heuristically fixes common LLM YAML errors, specifically unquoted colons.
+    Example input:  'project: Project: Zero'
+    Example output: 'project: "Project: Zero"'
+    """
+    lines = yaml_str.split('\n')
+    fixed_lines = []
+    
+    # Regex to find a key (and optional dash) followed by a value that contains a colon
+    # Pattern explanation:
+    # ^(\s*-?\s*[^:]+:)  -> Capture Group 1: The key (e.g., "  - name:")
+    # \s+                -> Whitespace separator
+    # ([^"'].*:.*[^"'])  -> Capture Group 2: The value, IF it has a colon and NO quotes at start/end
+    pattern = re.compile(r'^(\s*-?\s*[^:]+:)\s+([^"\'].*:.*[^"\'])$')
+
+    for line in lines:
+        match = pattern.match(line)
+        if match:
+            # We found a line like: "Title: Subtitle: The Movie"
+            key_part = match.group(1)
+            value_part = match.group(2)
+            
+            # Double check we aren't double-quoting (basic check)
+            if not value_part.strip().startswith('"') and not value_part.strip().startswith("'"):
+                # Escape existing quotes inside the value just in case
+                value_part = value_part.replace('"', '\\"')
+                fixed_line = f'{key_part} "{value_part}"'
+                fixed_lines.append(fixed_line)
+                continue
+        
+        fixed_lines.append(line)
+    
+    return '\n'.join(fixed_lines)
 
 def generate_tailored_resume(base_yaml_content, job_description, job_title, company_name):
     """
@@ -101,8 +138,16 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
         # Last ditch effort: if the response is ONLY yaml potentially
         if "cv:" in full_response:
              new_yaml = full_response.strip()
+    if not new_yaml:
+        # Last ditch effort: if the response is ONLY yaml potentially
+        if "cv:" in full_response:
+             new_yaml = full_response.strip()
         else:
              raise ValueError("DeepSeek failed to generate valid YAML structure.")
+
+    # --- 🛠️ SYNTAX REPAIR 🛠️ ---
+    print(f"🔧 DEBUG: Attempting to repair YAML syntax...")
+    new_yaml = repair_yaml_syntax(new_yaml)
 
     # 2. Extract Strategy
     strategy_match = re.search(r"<STRATEGY>(.*?)</STRATEGY>", full_response, re.DOTALL)
