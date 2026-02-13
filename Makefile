@@ -51,6 +51,9 @@ run: scrape
 scrape:
 	$(RUN_SCRAPER)
 
+push:
+	$(PYTHON) scripts/universal_push.py
+
 test:
 	.$(FIX_PATH)/venv/Scripts/python test_bridge.py
 
