@@ -1,0 +1,6 @@
+[submodule "job-scraping-app"]
+	path = job-scraping-app
+	url = https://github.com/aguo890/job-scraping-app.git
+[submodule "rendercv"]
+	path = rendercv
+	url = https://github.com/aguo890/rendercv.git
