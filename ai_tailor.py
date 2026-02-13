@@ -1,205 +1,159 @@
 import os
+import json
+import yaml
 import re
-import uuid
-import yaml # pyyaml
+from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# Load env variables (DEEPSEEK_API_KEY)
-# Force loading from the same directory as this script (project root)
-env_path = os.path.join(os.path.dirname(__file__), '.env')
-# Force loading from the same directory as this script (project root)
-env_path = os.path.join(os.path.dirname(__file__), '.env')
+# --- ROBUST ENV LOADING ---
+current_dir = Path(__file__).parent
+env_path = current_dir / ".env"
 load_dotenv(dotenv_path=env_path)
-
-def repair_yaml_syntax(yaml_str):
-    """
-    Heuristically fixes common LLM YAML errors, specifically unquoted colons.
-    Example input:  'project: Project: Zero'
-    Example output: 'project: "Project: Zero"'
-    """
-    lines = yaml_str.split('\n')
-    fixed_lines = []
-    
-    # Regex to find a key (and optional dash) followed by a value that contains a colon
-    # Pattern explanation:
-    # ^(\s*-?\s*[^:]+:)  -> Capture Group 1: The key (e.g., "  - name:")
-    # \s+                -> Whitespace separator
-    # ([^"'].*:.*[^"'])  -> Capture Group 2: The value, IF it has a colon and NO quotes at start/end
-    pattern = re.compile(r'^(\s*-?\s*[^:]+:)\s+([^"\'].*:.*[^"\'])$')
-
-    for line in lines:
-        match = pattern.match(line)
-        if match:
-            # We found a line like: "Title: Subtitle: The Movie"
-            key_part = match.group(1)
-            value_part = match.group(2)
-            
-            # Double check we aren't double-quoting (basic check)
-            if not value_part.strip().startswith('"') and not value_part.strip().startswith("'"):
-                # Escape existing quotes inside the value just in case
-                value_part = value_part.replace('"', '\\"')
-                fixed_line = f'{key_part} "{value_part}"'
-                fixed_lines.append(fixed_line)
-                continue
-        
-        fixed_lines.append(line)
-    
-    return '\n'.join(fixed_lines)
-
-    return '\n'.join(fixed_lines)
-
-def enforce_rendercv_schema(yaml_data):
-    """
-    Fixes logical schema errors.
-    1. Ensures 'cv.sections.summary' is a list, not a string.
-    """
-    try:
-        # Navigate to sections
-        sections = yaml_data.get('cv', {}).get('sections', {})
-        
-        # FIX: Summary must be a list
-        if 'summary' in sections:
-            summary_content = sections['summary']
-            if isinstance(summary_content, str):
-                print("🔧 DEBUG: Schema Fix - Converting 'summary' from String to List")
-                sections['summary'] = [summary_content]
-                
-        return yaml_data
-    except Exception as e:
-        print(f"⚠️ Warning: Schema enforcement failed slightly: {e}")
-        return yaml_data
 
 def generate_tailored_resume(base_yaml_content, job_description, job_title, company_name):
     """
-    Sends the base resume and JD to DeepSeek-R1 to generate a tailored YAML.
-    Sends the base resume and JD to DeepSeek-R1 to generate a tailored YAML.
-    Returns: (strategy_text, new_yaml_content, gap_analysis_text, reasoning_text)
+    1. Loads Base YAML (Dictionary).
+    2. Asks AI for specific text updates in JSON.
+    3. Injects updates into the Base structure safely.
     """
     
+    # 1. LOAD BASE RESUME (Golden Structure)
+    try:
+        base_resume = yaml.safe_load(base_yaml_content)
+    except yaml.YAMLError as e:
+        raise ValueError(f"CRITICAL: Your source YAML is broken. Fix it first: {e}")
+
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
         raise ValueError("DEEPSEEK_API_KEY not found in .env")
-
-    # Initialize Client (DeepSeek uses OpenAI SDK)
+        
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-    # Construct the System Prompt (The "Ruthless Recruiter")
+    # 2. THE "NUCLEAR" PROMPT
+    # We use Few-Shot examples to force the style.
     system_prompt = """
-    Role: Act as a ruthless Executive Recruiter and Resume Strategist.
-    Goal: Rewrite the resume YAML to ensure an interview for the specific role provided.
+    Role: Ruthless FAANG Technical Recruiter & Resume Editor.
+    Task: Rewrite resume content to strictly match a JD.
     
-    Your task is to analyze the provided JOB DESCRIPTION and the BASE RESUME YAML. You must adapt the resume to perfectly align with the job requirements, using the language and keywords from the JD, while maintaining truthfulness.
+    CRITICAL RULES (VIOLATION = FAILURE):
+    1. **MANDATORY BOLDING**: You MUST bold (using **text**) ANY skill mentioned in the JD.
+       - BAD: "Built a React app with Python."
+       - GOOD: "Architected a **React** frontend backed by **Python** and **FastAPI**."
     
-    STRATEGY INSTRUCTIONS:
-    1. Analyze the Gap: Identify what the candidate is missing compared to the JD.
-    2. Bridge the Gap: Rewrite bullet points to highlight transferrable skills and relevant experiences. Use strong action verbs.
-    3. Keyword Optimization: Integrate specific keywords from the JD into the resume.
-    4. Profile Summary: Rewrite the summary to be a powerful elevator pitch for this specific role.
+    2. **DELETE FLUFF**: Banned phrases: "team player", "demonstrating", "responsible for", "helped", "worked on", "gained experience".
+       - BAD: "Responsible for creating a dashboard demonstrating data visualization."
+       - GOOD: "Deployed a **Real-Time Dashboard** processing 10k+ events/sec."
     
-    CRITICAL OUTPUT FORMATTING RULES:
-    1. Output the Strategy Brief wrapped in <STRATEGY> tags. Explain your approach and why you made specific changes.
-    2. Output the VALID YAML ONLY wrapped in ```yaml code blocks```. This YAML must be valid and ready for RenderCV.
-    3. Output the Gap Analysis wrapped in <GAP_ANALYSIS> tags. Be honest about weaknesses or missing skills tailored to this role.
-    4. Ensure the YAML 'settings' section has the 'pdf_path' updated to: "rendercv_output/{job_title}_{company_name}_CV.pdf" (snake_case).
-    5. CRITICAL YAML FORMATTING RULES:
-       - **ESCAPE COLONS:** If a value contains a colon (e.g., "Project: Title"), you MUST enclose the entire value in double quotes.
-         - BAD: name: JEGA: Academic Test Facility
-         - GOOD: name: "JEGA: Academic Test Facility"
-       - **NO UNQUOTED SPECIAL CHARACTERS:** Wrap all strings with special chars in quotes.
-    6. **LISTS ONLY:** The 'cv.sections.summary' MUST be a list of strings, not a single string block.
-       - BAD: summary: "My summary text..."
-       - GOOD: summary: 
-                 - "My summary text..."
-    7. Do not output the <think> chain in the final response, just the result.
+    3. **METRIC OBSESSION**: Every bullet point SHOULD have a number (%, $, time saved, users, latency).
+    
+    4. **SUMMARY STYLE**: No "Passionate student...". Go straight to value.
+       - GOOD: "**Software Engineer** with 3+ years in **Distributed Systems**. Scaled **Kubernetes** clusters handling 5M requests/day."
+    
+    OUTPUT FORMAT:
+    Return valid JSON only. Do not wrap in markdown blocks.
+    {
+        "strategy_brief": "Briefly explain what you fixed (max 2 sentences).",
+        "gap_analysis": "Identify 2-3 missing critical skills from the JD.",
+        "summary": "The new 2-line summary.",
+        "key_skills": ["List", "Of", "Top", "Matched", "Skills"],
+        "experience_updates": [
+            {
+                "company": "Exact Company Name From Resume",
+                "tailored_bullets": [
+                    "Action Verb + **Keyword** + **Metric** + Result.",
+                    "Action Verb + **Keyword** + **Metric** + Result."
+                ]
+            }
+        ]
+    }
     """
 
     user_content = f"""
-    TARGET ROLE: {job_title} at {company_name}
+    JOB TARGET: {job_title} at {company_name}
     
-    [JOB DESCRIPTION]
+    JOB DESCRIPTION (KEYWORDS TO EXTRACT & BOLD):
     {job_description}
-
-    [BASE YAML RESUME]
+    
+    CURRENT RESUME CONTENT:
     {base_yaml_content}
+    
+    INSTRUCTIONS:
+    1. Scan the JD for technical keywords (e.g., React, AWS, CI/CD).
+    2. Rewrite my experience bullets to include these keywords IF I have done them.
+    3. Bold the keywords using markdown (**Keyword**).
+    4. Shorten bullets to be punchy.
     """
 
-    # Call DeepSeek-R1 (Reasoning Model)
+    # 3. CALL AI
+    # Lower temperature for stricter formatting
     response = client.chat.completions.create(
         model="deepseek-reasoner",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content}
         ],
-        temperature=0.6, # Low temp for structured YAML, but enough for creativity in phrasing
-        timeout=120.0 # Extend timeout to 120s for R1 thinking time
+        response_format={'type': 'json_object'}, 
+        temperature=0.3, 
+        timeout=120.0
     )
-
-    full_response = response.choices[0].message.content
+    
+    raw_response = response.choices[0].message.content
+    
+    # Extract Reasoning Content (for dashboard display)
     try:
-        reasoning = response.choices[0].message.reasoning_content
-    except AttributeError:
-        # Fallback if attribute is missing
-        reasoning = "No reasoning content found in API response."
-    
-    # --- Debug Logging ---
-    log_dir = "logs"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    
-    with open(f"{log_dir}/deepseek_raw_{uuid.uuid4().hex}.txt", "w", encoding="utf-8") as log:
-        log.write(f"--- CONTENT ---\n{full_response}\n\n--- REASONING ---\n{reasoning}")
-    
-    # --- Robust Parsing Logic ---
-    
-    # 1. Extract YAML (Find content between ```yaml and ```)
-    # improved regex to handle potential leading/trailing whitespace or text
-    yaml_match = re.search(r"```yaml\n?(.*?)```", full_response, re.DOTALL)
-    if not yaml_match:
-        # Fallback: Try to find the YAML structure if code blocks are missing
-        # We look for the start of the CV definition typified by "cv:"
-        yaml_match = re.search(r"(cv:.*)", full_response, re.DOTALL)
-    
-    new_yaml = yaml_match.group(1).strip() if yaml_match else None
-    
-    if not new_yaml:
-        # Last ditch effort: if the response is ONLY yaml potentially
-        if "cv:" in full_response:
-             new_yaml = full_response.strip()
-    if not new_yaml:
-        # Last ditch effort: if the response is ONLY yaml potentially
-        if "cv:" in full_response:
-             new_yaml = full_response.strip()
-        else:
-             raise ValueError("DeepSeek failed to generate valid YAML structure.")
+        reasoning = getattr(response.choices[0].message, 'reasoning_content', "Reasoning not accessible.")
+    except Exception:
+        reasoning = "Reasoning unavailable."
 
-    # --- 🛠️ SYNTAX REPAIR 🛠️ ---
-    print(f"🔧 DEBUG: Attempting to repair YAML syntax...")
-    new_yaml = repair_yaml_syntax(new_yaml)
-    
-    # --- 🛠️ SCHEMA ENFORCEMENT 🛠️ ---
+    # 4. PARSE JSON (Robust)
     try:
-        # Load string to dict
-        data = yaml.safe_load(new_yaml)
+        # R1 sometimes puts the json inside ```json ... ``` or just raw.
+        clean_json = raw_response.replace("```json", "").replace("```", "").strip()
+        # Specific fix if R1 adds chatter before the JSON
+        if "{" in clean_json:
+            clean_json = clean_json[clean_json.find("{"):clean_json.rfind("}")+1]
         
-        # Apply Schema Fixes
-        data = enforce_rendercv_schema(data)
-        
-        # Dump back to string (safe round-trip)
-        new_yaml = yaml.dump(data, allow_unicode=True, sort_keys=False)
-        
-    except yaml.YAMLError as e:
-        # If syntax is still bad, we might fail here, but we returned new_yaml anyway if we can't parse it
-        # But wait, if safe_load fails, we can't enforce schema.
-        # We'll just let it fail downstream or handle it here.
-        pass # Let standard return happen, runner will catch syntax error logic elsewhere if needed
+        ai_data = json.loads(clean_json)
+    except json.JSONDecodeError:
+        # Fallback: simple text extraction if JSON fails hard
+        raise ValueError(f"AI Output Malformed. Raw: {raw_response[:200]}")
 
-    # 2. Extract Strategy
-    strategy_match = re.search(r"<STRATEGY>(.*?)</STRATEGY>", full_response, re.DOTALL)
-    strategy = strategy_match.group(1).strip() if strategy_match else "Strategy not parsed."
+    # 5. THE ASSEMBLER (Injecting)
+    
+    # A. Inject Summary
+    if "summary" in ai_data:
+        if 'sections' not in base_resume.get('cv', {}):
+             if 'cv' not in base_resume: base_resume['cv'] = {}
+             base_resume['cv']['sections'] = {}
+        base_resume['cv']['sections']['summary'] = [ai_data['summary']]
 
-    # 3. Extract Gap Analysis
-    gap_match = re.search(r"<GAP_ANALYSIS>(.*?)</GAP_ANALYSIS>", full_response, re.DOTALL)
-    gap_analysis = gap_match.group(1).strip() if gap_match else "Gap analysis not parsed."
+    # B. Inject Focus Skills (Top of Skills Section)
+    if "key_skills" in ai_data and ai_data['key_skills']:
+        sections = base_resume['cv'].get('sections', {})
+        if 'skills' in sections:
+            # Check if we already added Focus Skills to avoid duplicates on re-runs
+            if sections['skills'] and sections['skills'][0].get('label') == "Focus Skills":
+                sections['skills'].pop(0)
+            
+            new_skill_entry = {
+                "label": "Focus Skills",
+                "details": ", ".join(ai_data['key_skills'])
+            }
+            sections['skills'].insert(0, new_skill_entry)
 
-    return strategy, new_yaml, gap_analysis, reasoning
+    # C. Inject Experience
+    if "experience_updates" in ai_data:
+        resume_experiences = base_resume['cv']['sections'].get('experience', [])
+        for update in ai_data['experience_updates']:
+            target_company = update.get('company', '').lower()
+            # Fuzzy match company name
+            for entry in resume_experiences:
+                if target_company in entry.get('company', '').lower() or entry.get('company', '').lower() in target_company:
+                    entry['highlights'] = update['tailored_bullets']
+                    break
+
+    # 6. DUMP YAML
+    final_yaml_str = yaml.dump(base_resume, sort_keys=False, allow_unicode=True)
+    
+    return ai_data.get("strategy_brief", ""), final_yaml_str, ai_data.get("gap_analysis", ""), reasoning
