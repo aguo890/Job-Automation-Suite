@@ -13,6 +13,7 @@ except ImportError:
 # Configuration
 # Order matters: pushing submodules first ensures the root repo sees the updated commit hash
 REPOS_TO_PUSH = [
+    "rendercv",
     "job-scraping-app",
     "."  # The root repo itself
 ]
