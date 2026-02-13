@@ -1,6 +1,7 @@
 import os
 import re
 import uuid
+import yaml # pyyaml
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -46,6 +47,29 @@ def repair_yaml_syntax(yaml_str):
     
     return '\n'.join(fixed_lines)
 
+    return '\n'.join(fixed_lines)
+
+def enforce_rendercv_schema(yaml_data):
+    """
+    Fixes logical schema errors.
+    1. Ensures 'cv.sections.summary' is a list, not a string.
+    """
+    try:
+        # Navigate to sections
+        sections = yaml_data.get('cv', {}).get('sections', {})
+        
+        # FIX: Summary must be a list
+        if 'summary' in sections:
+            summary_content = sections['summary']
+            if isinstance(summary_content, str):
+                print("🔧 DEBUG: Schema Fix - Converting 'summary' from String to List")
+                sections['summary'] = [summary_content]
+                
+        return yaml_data
+    except Exception as e:
+        print(f"⚠️ Warning: Schema enforcement failed slightly: {e}")
+        return yaml_data
+
 def generate_tailored_resume(base_yaml_content, job_description, job_title, company_name):
     """
     Sends the base resume and JD to DeepSeek-R1 to generate a tailored YAML.
@@ -83,7 +107,11 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
          - BAD: name: JEGA: Academic Test Facility
          - GOOD: name: "JEGA: Academic Test Facility"
        - **NO UNQUOTED SPECIAL CHARACTERS:** Wrap all strings with special chars in quotes.
-    6. Do not output the <think> chain in the final response, just the result.
+    6. **LISTS ONLY:** The 'cv.sections.summary' MUST be a list of strings, not a single string block.
+       - BAD: summary: "My summary text..."
+       - GOOD: summary: 
+                 - "My summary text..."
+    7. Do not output the <think> chain in the final response, just the result.
     """
 
     user_content = f"""
@@ -148,6 +176,23 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
     # --- 🛠️ SYNTAX REPAIR 🛠️ ---
     print(f"🔧 DEBUG: Attempting to repair YAML syntax...")
     new_yaml = repair_yaml_syntax(new_yaml)
+    
+    # --- 🛠️ SCHEMA ENFORCEMENT 🛠️ ---
+    try:
+        # Load string to dict
+        data = yaml.safe_load(new_yaml)
+        
+        # Apply Schema Fixes
+        data = enforce_rendercv_schema(data)
+        
+        # Dump back to string (safe round-trip)
+        new_yaml = yaml.dump(data, allow_unicode=True, sort_keys=False)
+        
+    except yaml.YAMLError as e:
+        # If syntax is still bad, we might fail here, but we returned new_yaml anyway if we can't parse it
+        # But wait, if safe_load fails, we can't enforce schema.
+        # We'll just let it fail downstream or handle it here.
+        pass # Let standard return happen, runner will catch syntax error logic elsewhere if needed
 
     # 2. Extract Strategy
     strategy_match = re.search(r"<STRATEGY>(.*?)</STRATEGY>", full_response, re.DOTALL)

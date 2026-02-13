@@ -1,0 +1,163 @@
+--- CONTENT ---
+<STRATEGY>
+Since no specific Job Description (JD) was provided for the Replit New Grad role, the strategy shifts from direct keyword matching to a general but powerful optimization for a top-tier software engineering new grad position. The focus will be on:
+1.  **Highlighting Core SWE Competencies:** Emphasizing full-stack development, system architecture, software design principles, and robust engineering practices. I will reframe experiences to sound more like product-focused software engineering rather than isolated data engineering tasks.
+2.  **Showcasing Product Sense & Impact:** Reformatting bullet points to follow a strong "Action -> Result" pattern, quantifying achievements to demonstrate value creation.
+3.  **Aligning with Replit's Perceived Culture:** Replit is known for developer tools, collaboration, and education. I will tailor the profile summary and project highlights to reflect a passion for building tools, open-source contribution (via the RenderCV fork), and community leadership (via ACM).
+4.  **Improving Readability and Scannability:** I will restructure the resume for a more traditional Software Engineer application:
+    *   Consolidate the two concurrent "Co-founder" roles under a single, impressive "Co-founder & Lead Software Engineer" entry to avoid repetition and present a cleaner narrative.
+    *   Rename the `leadership_&_campus_involvement` section to the more standard `leadership` to fit common ATS expectations.
+    *   Reprioritize sections to lead with strong, recent **Experience**, followed by **Projects**, **Education**, **Leadership**, and **Skills**.
+    *   Refine skill categorization to group languages, frameworks, and tools under clear, standard headings.
+5.  **Crafting a Targeted Summary:** Writing a compelling summary that positions Aaron as a product-minded builder passionate about developer tools and scalable systems, directly appealing to a company like Replit.
+</STRATEGY>
+
+<GAP_ANALYSIS>
+**Potential Gaps for a Replit New Grad Role (without specific JD):**
+*   **No Explicit JD:** The largest gap is the lack of a target to aim for. Without knowing if Replit prioritizes frontend, backend, infra, or specific technologies, the resume must be broadly excellent.
+*   **Potential Perceived Over-Scope:** Holding two concurrent "Co-founder & Lead" roles while being a student is impressive but could raise eyebrows about depth of involvement. Consolidating them mitigates this.
+*   **Missing Classic SWE Internships:** The internship experiences are strong but titled "Data Engineer" and "Data Science." The content is highly relevant to software engineering, but the titles don't scream "SWE." The resume content successfully bridges this gap by detailing software development work.
+*   **Less Emphasis on CS Fundamentals:** The resume is heavy on application and tool building. For some new grad roles, a stronger emphasis on algorithms, data structures, and computer science theory might be expected. This is partially addressed through the degree and project complexity.
+**Overall:** The candidate's profile is exceptionally strong for a new grad. The strategy is to present the undeniable software engineering output and impact in the most coherent and compelling way possible for a generalist SWE role.
+</GAP_ANALYSIS>
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.5/schema.json
+cv:
+  name: Aaron Guo
+  location: Washington, D.C.
+  email: aguo890@gwmail.gwu.edu
+  phone: "+1 980-337-0681"
+  website: https://aguo890.github.io/
+  summary: >
+    Product-minded Software Engineer passionate about building developer tools and scalable applications. Proven ability to lead full-stack projects from concept to deployment, with experience in system architecture, high-performance dashboards, and event-driven backends. Eager to contribute to Replit's mission of making programming more accessible and collaborative.
+  social_networks:
+    - network: LinkedIn
+      username: guo-aaron
+    - network: GitHub
+      username: aguo890
+  sections:
+    experience:
+      - company: Venture Studio (Stealth)
+        position: Co-founder & Lead Software Engineer
+        location: Washington, DC
+        date: 2025-10 – Present
+        highlights:
+          - "**Multi-State Tax SaaS:** Architected and built a full-stack compliance platform from scratch using FastAPI, React/Vite, and PostgreSQL. Engineered a financial allocation engine supporting 50+ tax jurisdictions, reducing manual payroll apportionment risk. Launched to a waitlist of 100+ physicians."
+          - "**Enterprise AI Platform:** Led development of a real-time analytics ERP for a $50M+ ARR manufacturer. Designed a multi-tenant, event-driven backend with Celery and SQLAlchemy, reducing data latency by 95%. Built a React dashboard maintaining 60 FPS for 6,000+ users."
+          - "**Full-Stack Development:** Built and maintained 15+ RESTful API endpoints with comprehensive Pytest coverage. Implemented granular RBAC and input sanitization to mitigate OWASP Top 10 vulnerabilities (XSS, Injection)."
+          - "**System Design:** Designed tamper-proof, event-sourced audit logs for financial compliance and a Zero-Trust architecture for strict data isolation across client facilities."
+      - company: The George Washington University
+        position: Technical Support Assistant
+        location: Washington, DC
+        date: 2025-08 – Present
+        highlights:
+          - Diagnose and resolve 15+ daily technical issues spanning software, hardware, and university systems, acting as a liaison between non-technical staff and IT engineers.
+          - Author and maintain internal knowledge base documentation to improve team efficiency and issue resolution times.
+      - company: Three Stars Fashion Group
+        position: Software Engineering Intern
+        location: Alexandria, Egypt
+        date: 2025-06 – 2025-09
+        highlights:
+          - Automated supplier inventory processing using Python and Pandas, saving the supply chain team 16+ hours per week.
+          - Built and deployed an internal production dashboard with Flask and Chart.js, enabling managers to identify assembly line bottlenecks in real-time.
+          - Designed a serverless alert system using AWS Lambda and SNS to notify logistics teams instantly, reducing communication delays for shipment-ready orders.
+      - company: Sunwater Capital
+        position: Data Science & Engineering Intern
+        location: North Bethesda, MD
+        date: 2025-01 – 2025-05
+        highlights:
+          - Architected an end-to-end data pipeline using PySpark and SerpAPI to extract and clean legislative data, providing the team with a reliable data stream.
+          - Built an AI validation tool with the OpenAI API, reducing manual fact-checking time by 90%.
+          - Developed Python web scrapers and NLP scripts to transform committee transcripts into structured insights for analysts.
+    projects:
+      - name: "JEGA: Secure Academic Testing Platform"
+        date: 2025-10 – Present
+        summary: Open-source, full-stack application for creating proctored academic testing environments.
+        highlights:
+          - Developed a Real-Time Lab Dashboard with an interactive spatial map mirroring physical layouts.
+          - Implemented secure RBAC authentication and session exclusivity to prevent credential sharing.
+          - Built dynamic classroom management tools for roster handling and bulk submission processing.
+      - name: RenderCV Live Editor (Personal Fork)
+        date: 2026-02
+        summary: Dockerized, live-preview CV editor built on the open-source RenderCV engine.
+        highlights:
+          - Added a Streamlit-based web UI with a real-time dual-panel PDF preview, enhancing the developer experience.
+          - Containerized the development environment with Docker for zero-setup deployment.
+          - Extended functionality with one-click PDF downloads and custom output configuration.
+      - name: Multi-Platform Job Scraping Engine
+        date: 2026-02
+        summary: Advanced tool for fetching, processing, and analyzing job postings.
+        highlights:
+          - Engineered multi-platform data fetching from Greenhouse, Lever, and Ashby ATS APIs.
+          - Built an interactive Streamlit dashboard for filtering and analyzing opportunities.
+          - Automated daily scraping and reporting via scheduled GitHub Actions.
+      - name: AI-Powered Content Pipeline
+        date: 2025
+        summary: Automated system for generating and posting short-form video content from Reddit.
+        highlights:
+          - Automated video generation with styled captions and integrated Text-to-Speech via ElevenLabs API.
+          - Implemented cross-platform uploaders for TikTok, Instagram Reels, and YouTube Shorts.
+    education:
+      - institution: The George Washington University
+        area: Computer Science
+        degree: Bachelor of Science
+        date: Expected 2026-06
+        location: Washington, DC
+    leadership:
+      - company: Association of Computing Machinery (ACM) | GWU
+        position: President
+        date: 2024-08 – Present
+        highlights:
+          - Lead 10+ professional development workshops on technical skills, AI/ML, and career preparation for the student community.
+          - Grew chapter membership by over 100 students through strategic outreach and campus events.
+    skills:
+      - label: Programming Languages
+        details: Python, TypeScript, JavaScript, SQL, Java, Kotlin, R, Bash
+      - label: Frameworks & Libraries
+        details: React, Next.js, Node.js, FastAPI, SQLAlchemy, Alembic, Tailwind CSS
+      - label: Tools & Platforms
+        details: Git, Docker, AWS (Lambda, SNS), PostgreSQL, Redis, Celery, Nginx
+      - label: Concepts & Practices
+        details: System Design, REST APIs, Event-Driven Architecture, RBAC, Testing, CI/CD
+      - label: Languages
+        details: English (Native), Mandarin (Fluent)
+design:
+  theme: sb2nov
+  page:
+    top_margin: 0.5in
+    bottom_margin: 0.5in
+    left_margin: 0.5in
+    right_margin: 0.5in
+    show_footer: false
+  typography:
+    font_size:
+      name: 11pt
+      body: 10pt
+      section_titles: 12pt
+    line_spacing: 0.5em
+  section_titles:
+    space_above: 0.3cm
+    space_below: 0.2cm
+  sections:
+    space_between_regular_entries: 0.2cm
+  header:
+    space_below_name: 0.2cm
+    space_below_headline: 0.2cm
+    space_below_connections: 0.2cm
+  entries:
+    side_space: 0cm
+settings:
+  render_command:
+    pdf_path: "rendercv_output/aaron_guo_replit_software_engineer_new_grad_2026.pdf"
+    png_path: "rendercv_output/aaron_guo_replit_software_engineer_new_grad_2026.png"
+```
+
+--- REASONING ---
+Hmm, the user wants a resume tailored for a Software Engineer - New Grad role at Replit without a provided job description. This is tricky since there's no JD to align with. 
+
+The base resume is strong with full-stack experience, leadership, and multiple projects. Need to highlight skills relevant to Replit's likely tech stack and culture. Replit probably values developer tools, collaboration, and rapid prototyping.
+
+The strategy should emphasize the candidate's technical depth, product sense, and open-source contributions. The gap analysis will note the lack of direct Replit-specific experience but highlight transferable skills like building developer tools and collaborative projects.
+
+The YAML needs a compelling summary positioning the candidate as a builder passionate about developer tools. Should also adjust the layout to prioritize projects and skills relevant to software engineering roles.

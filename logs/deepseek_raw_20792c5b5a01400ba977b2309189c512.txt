@@ -1,0 +1,289 @@
+--- CONTENT ---
+<STRATEGY>
+Since no specific Job Description was provided for the "Software Engineer - New Grad (Summer 2026) at Replit" role, the strategy must be based on general expectations for such a position at a modern, developer-focused company like Replit. The goal is to transform the candidate's impressive but data-engineer-heavy resume into a sharp, product-focused Software Engineering resume.
+
+1.  **Role Translation & Re-framing:** The candidate's primary experience is as a "Co-founder & Lead Data Engineer." For a generalist Software Engineer role, I will re-frame this experience to emphasize full-stack software development, system architecture, and product delivery. Keywords like "architected," "engineered," and "built" will be favored over purely data-centric terms.
+2.  **Project Prioritization:** The "Projects" section is strong but lengthy. I will curate it to showcase diversity (full-stack, tooling, open-source contribution) and relevance to a platform like Replit (e.g., developer tools, web applications, collaborative environments like `JEGA`). The most impressive and recent projects will be kept.
+3.  **Skills Restructuring:** The skills list will be re-ordered to lead with **Programming Languages** and **Frameworks & Libraries**, placing "Data & AI" lower to de-emphasize the data specialization for this generalist role. Tools relevant to building and deploying web apps will be highlighted.
+4.  **Profile Summary:** I will craft a new "summary" section at the top of the CV. This will serve as a powerful elevator pitch, synthesizing the candidate's founder-level initiative, full-stack technical prowess, and product-building experience into a narrative tailored for a New Grad SWE role.
+5.  **Formatting & Polish:** The experience bullets will be tightened for conciseness and impact. The leadership role will be integrated into the experience section for a cleaner flow. All YAML formatting rules (quoting strings with colons) will be strictly followed.
+</STRATEGY>
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.5/schema.json
+cv:
+  name: Aaron Guo
+  location: Washington, D.C.
+  email: aguo890@gwmail.gwu.edu
+  phone: "+1 980-337-0681"
+  website: https://aguo890.github.io/
+  social_networks:
+    - network: LinkedIn
+      username: guo-aaron
+    - network: GitHub
+      username: aguo890
+  sections:
+    summary:
+      content: "Aspiring Software Engineer and technical founder with a track record of building and launching full-stack web applications from concept to deployment. Combines strong system design skills with a product-focused mindset, having architected scalable SaaS platforms and internal tools that solve real-world problems. Proficient across the modern web stack and passionate about creating intuitive, high-performance software."
+    experience:
+      - company: "Multi-State Tax Optimization Platform"
+        position: Co-founder & Lead Engineer
+        location: Washington, DC
+        date: 2025-10 – Present
+        highlights:
+          - "Architected and built a multi-tenant SaaS platform from the ground up, using React/Vite, FastAPI, and PostgreSQL to automate complex financial compliance for 100+ waitlisted users."
+          - "Engineered a high-performance, event-sourced backend with SQLAlchemy and Alembic to model intricate business logic across 50+ tax jurisdictions, ensuring data integrity and audit compliance."
+          - "Designed and implemented a full-stack feature set including a real-time analytics dashboard with Recharts, a RAG-based legal information engine, and a comprehensive REST API with 15+ endpoints."
+          - "Established robust development practices: comprehensive Pytest coverage, automated CI/CD, and detailed technical documentation for maintainability and scalability."
+      - company: "AI Factory Analytics Platform"
+        position: Co-founder & Lead Engineer
+        location: Washington, DC
+        date: 2025-10 – Present
+        highlights:
+          - "Led the full-stack development of an enterprise ERP web application, piloting with a major manufacturer to digitize operations for 6,000+ employees."
+          - "Designed a scalable, event-driven microservices architecture using Python, Celery, and Redis, reducing data processing latency by 95% for 10k+ daily records."
+          - "Built a performant React dashboard rendering real-time metrics for 60+ synchronous production lines, optimizing rendering to maintain 60 FPS on low-end hardware."
+          - "Implemented a secure, zero-trust multi-tenant system with granular RBAC and input sanitization, effectively neutralizing OWASP Top 10 vulnerabilities."
+      - company: The George Washington University
+        position: Technical Support Assistant
+        location: Washington, DC
+        date: 2025-08 – Present
+        highlights:
+          - "Resolve 15+ daily technical support tickets for university software, hardware, and network systems, developing strong troubleshooting and client communication skills."
+          - "Author and maintain technical documentation for an internal knowledge base, improving team efficiency and standardizing issue resolution procedures."
+      - company: Association of Computing Machinery (ACM) | GWU
+        position: President
+        location: Washington, DC
+        date: 2024-08 – Present
+        highlights:
+          - "Lead a 100+ member student organization, planning and hosting 10+ technical workshops and speaker events on software development, career prep, and AI."
+          - "Grew chapter membership by over 100% through strategic outreach, content creation, and event promotion, fostering a strong campus tech community."
+      - company: Three Stars Fashion Group
+        position: Software Engineering Intern
+        location: Alexandria, Egypt
+        date: 2025-06 – 2025-09
+        highlights:
+          - "Developed and deployed an internal Flask dashboard with Chart.js to visualize production line output, enabling managers to identify bottlenecks instantly."
+          - "Automated a manual inventory processing workflow with Python and Pandas, saving the supply chain team 16+ hours per week."
+          - "Built a serverless alert system using AWS Lambda and SNS to notify logistics teams of shipment-ready orders, cutting communication delays."
+    projects:
+      - name: "JEGA: Academic Test Facility"
+        date: 2025-10 – Present
+        summary: "A full-stack, open-source application for creating secure, proctored academic testing environments."
+        highlights:
+          - "Engineered a real-time lab dashboard with an interactive spatial room map using React and WebSockets."
+          - "Implemented secure authentication, RBAC, and session management to ensure test integrity and prevent cheating."
+          - "Built dynamic classroom tools for roster management and bulk submission handling."
+      - name: "Job Scraping Engine & Dashboard"
+        date: 2026-02
+        summary: "A full-stack tool for aggregating and analyzing job postings from multiple ATS platforms."
+        highlights:
+          - "Built a backend service to fetch and normalize job data from Greenhouse, Lever, and Ashby APIs."
+          - "Created an interactive Streamlit dashboard for filtering, searching, and analyzing job opportunities."
+          - "Automated daily data collection and reporting using GitHub Actions for continuous operation."
+      - name: "RenderCV (Personal Fork with Web Editor)"
+        date: 2026-02
+        summary: "A Dockerized, live-preview web application for editing and generating resumes using the RenderCV engine."
+        highlights:
+          - "Extended the open-source RenderCV project by building a Streamlit-based web UI with a dual-panel, real-time PDF preview."
+          - "Containerized the entire application with Docker for zero-setup deployment and easy reproducibility."
+          - "Added features for one-click PDF download and customizable output configurations."
+    education:
+      - institution: The George Washington University
+        area: Computer Science
+        degree: Bachelor of Science
+        date: Expected 2026-06
+        location: Washington, DC
+        highlights:
+          - "Relevant Coursework: Data Structures & Algorithms, Software Engineering, Database Systems, Computer Networks, Web Development"
+    skills:
+      - label: Programming Languages
+        details: "Python, TypeScript/JavaScript, SQL, Java, Kotlin, R, Bash"
+      - label: Frameworks & Libraries
+        details: "React, Next.js, Node.js, FastAPI, SQLAlchemy, Tailwind CSS"
+      - label: Tools & Platforms
+        details: "Git, Docker, AWS (Lambda, SNS), PostgreSQL, Redis, Celery, Nginx, Vite"
+      - label: Data & AI
+        details: "Pandas, PySpark, OpenAI API, Prompt Engineering"
+      - label: Spoken Languages
+        details: "English (Native), Mandarin (Fluent)"
+design:
+  theme: sb2nov
+  page:
+    top_margin: 0.5in
+    bottom_margin: 0.5in
+    left_margin: 0.5in
+    right_margin: 0.5in
+    show_footer: false
+  typography:
+    font_size:
+      name: 11pt
+      body: 10pt
+      section_titles: 12pt
+    line_spacing: 0.5em
+  section_titles:
+    space_above: 0.3cm
+    space_below: 0.2cm
+  sections:
+    space_between_regular_entries: 0.2cm
+  header:
+    space_below_name: 0.2cm
+    space_below_headline: 0.2cm
+    space_below_connections: 0.2cm
+  entries:
+    side_space: 0cm
+settings:
+  render_command:
+    pdf_path: "rendercv_output/aaron_guo_software_engineer_new_grad_replit_cv.pdf"
+    png_path: "rendercv_output/aaron_guo_software_engineer_new_grad_replit_cv.png"
+```
+
+<GAP_ANALYSIS>
+**Candid Assessment for a New Grad Software Engineer Role:**
+
+**Strengths (Significant):**
+*   **Initiative & Product Sense:** The candidate's experience as a founder is a massive differentiator. They have demonstrably identified problems, designed solutions, and built complete products—a skill set far beyond typical academic projects.
+*   **Full-Stack Proficiency:** Experience with React, FastAPI, PostgreSQL, and deployment tools shows strong competency across the modern web development stack.
+*   **System Design & Architecture:** Highlights like "event-sourced audit logging," "zero-trust multi-tenant architecture," and optimizing API performance indicate mature thinking about scalability, security, and reliability.
+*   **Technical Communication:** Creating documentation, leading workshops, and acting as a technical liaison are valuable soft skills often lacking in new graduates.
+
+**Potential Gaps / Areas to Frame Carefully:**
+*   **Lack of Large-Scale Team Experience:** Most work appears to be in small, founder-led teams or solo. The resume does not explicitly show experience contributing to a large, mature codebase within an established engineering organization with processes like code reviews, sprint planning, etc. (This is common for new grads but should be acknowledged).
+*   **Data Engineering Focus:** The base resume is heavily skewed towards data pipelines and analytics. While re-framed, a discerning recruiter might still see a data specialist. The revised resume successfully pivots the narrative to "Software Engineer who can handle data," not "Data Engineer trying to be a SWE."
+*   **Formal CS Fundamentals:** While coursework is listed, there is less explicit highlight of core algorithmic thinking or computer science theory in project descriptions. The "Statistical Analysis in Esports" project touched on this but was cut for space. For a role heavy on algorithms, this could be a minor gap.
+*   **Specific Tech Stack Mismatch (Unknown):** Without a Replit JD, we cannot align to specific internal technologies (e.g., Go, specific infra tools). The resume presents strong generalist web dev skills, which is a safe bet.
+
+**Overall:** The candidate is exceptionally strong. The primary "gap" is the typical new-grad lack of corporate software development experience, which is more than compensated for by extraordinary founder-level initiative and proven product-building ability. The revised resume effectively bridges the perceived specialization gap and presents a compelling candidate for any product-focused software engineering team.
+</GAP_ANALYSIS>
+
+--- REASONING ---
+We are given a target role: "Software Engineer - New Grad (Summer 2026) at Replit", but no job description is provided.
+ Therefore, we must rely on general knowledge of what a New Grad Software Engineer role at a company like Replit (a collaborative coding platform) might entail.
+ Since no specific JD is provided, we will tailor the resume to highlight the candidate's strong software engineering skills, particularly in full-stack development, data engineering, and project leadership.
+ We will also emphasize skills that are relevant to Replit's tech stack (if known) or generally to modern software engineering.
+
+ Steps:
+ 1. Since no JD is provided, we will assume the role requires:
+    - Strong programming skills in multiple languages.
+    - Experience with modern web technologies (frontend and backend).
+    - Ability to build and scale applications.
+    - Experience with cloud services and DevOps.
+    - Collaboration and leadership in projects.
+
+ 2. The candidate's base resume is already strong. We will adjust it to emphasize software engineering over data engineering where possible, and highlight projects and experiences that showcase:
+    - Building and deploying full-stack applications.
+    - Working with collaborative tools and platforms (like Replit's own environment?).
+    - Open source contributions or projects.
+
+ 3. We will rewrite the profile summary to target a New Grad Software Engineer role.
+
+ 4. We will reorder sections if necessary to put more relevant experiences first.
+
+ 5. We will adjust the skills section to highlight languages and tools that are most relevant to software engineering.
+
+ 6. Since the role is for Summer 2026, we are applying in early 2026 (as per the date in the base resume). We will adjust the resume accordingly.
+
+ 7. We will change the settings to output a PDF with the name: "rendercv_output/aaron_guo_software_engineer_new_grad_replit_cv.pdf"
+
+ 8. We must ensure the YAML is valid and escape any colons or special characters.
+
+ Let's analyze the base resume:
+  - The candidate has multiple co-founder and lead data engineer roles, which are very impressive and show leadership and technical skills.
+  - There are also internships and a project list that includes full-stack applications.
+  - The candidate is expected to graduate in 2026, so the timing is right.
+
+ We will create a strategy to present the candidate as a strong software engineer, not just a data engineer.
+
+ Strategy:
+  - In the experience section, we will adjust the bullet points to use more software engineering terms and highlight the building of systems and applications.
+  - We will emphasize the full-stack projects and the use of modern frameworks.
+  - We will highlight the open-source project (RenderCV fork) and the Job Scraping Engine as examples of software engineering projects.
+
+  - We will adjust the skills section to group by software engineering relevant categories.
+
+  - We will write a summary that highlights the candidate as a software engineer.
+
+  - We will adjust the order of sections to put projects right after experience, since they are relevant.
+
+  - We will remove the leadership section and instead incorporate that into the experience or summary if needed, but we can keep it as is.
+
+  - We will change the section name "leadership_&_campus_involvement" to a more standard "leadership" or "extracurricular". However, note that the YAML schema for RenderCV might have specific section names. Since we don't have the schema, we'll keep it as is but change the title to "Leadership & Extracurricular" for clarity.
+
+  - We will also adjust the dates to be consistent and remove the month abbreviation in the settings.
+
+ Let's proceed.
+
+ Important: We must output the YAML in a valid format.
+
+ Note: The base YAML has a section "leadership_&_campus_involvement". We are not sure if this is a standard section in RenderCV. We will change it to "leadership" to be safe, but note that the schema might not have this. Alternatively, we can keep it and change the title in the YAML by using a `section` with a `title` field. However, the base YAML does not use the `section` type with a `title` for custom sections. We can try to use the standard sections.
+
+ Looking at the RenderCV schema, the standard sections are:
+   - experience
+   - education
+   - projects
+   - skills
+   - publications
+   - certifications
+   - languages
+   - interests
+   - summary
+
+ We can use the `projects` section for the projects, and the `experience` for work. The leadership experience can be put in `experience` or a custom section. Since the base YAML uses a custom section, we will keep it but change the key to a standard one if possible. Alternatively, we can change the section to `experience` and add another entry for leadership? But then it would be mixed with work experience.
+
+ Alternatively, we can create a custom section by using the `sections` field and then a list of `section` objects. But the base YAML uses a top-level `sections` and then lists the sections by their type. The custom section is defined by the key `leadership_&_campus_involvement`. We don't know if that's allowed. To be safe, we will change it to a standard `experience` entry? But it's not work experience.
+
+ Since the candidate is a student, we can also use the `education` section for the leadership in ACM? Not really.
+
+ We'll keep it as a separate section and hope the theme supports it. Alternatively, we can change the section to `extracurricular` if the theme supports it. We'll change the key to `extracurricular` and the title to "Leadership & Extracurricular".
+
+ Let's change:
+   - In the `sections` field, we'll change `leadership_&_campus_involvement` to `extracurricular`.
+
+ And then in that section, we'll have a list of activities.
+
+ We'll also adjust the `settings` to output the PDF with the correct name.
+
+ We are going to change the `pdf_path` and `png_path` to: 
+   "rendercv_output/aaron_guo_software_engineer_new_grad_replit_cv.pdf"
+   "rendercv_output/aaron_guo_software_engineer_new_grad_replit_cv.png"
+
+ Let's write the YAML accordingly.
+
+ We'll also adjust the summary (if present) or add a summary section. The base YAML does not have a summary, so we'll add one.
+
+ We'll add a new section `summary` at the beginning of the `sections` to provide an elevator pitch.
+
+ The order of sections will be:
+   summary
+   experience
+   projects
+   extracurricular
+   education
+   skills
+
+ Let's craft a summary:
+
+ Summary: "Aspiring Software Engineer with a strong foundation in full-stack development and data engineering. Proven ability to design, build, and deploy scalable applications using modern technologies. Experienced in leading technical projects and teams, with a passion for creating impactful software solutions."
+
+ We'll adjust the experience bullet points to be more software engineering focused.
+
+ We'll also adjust the skills to group by:
+   - Programming Languages
+   - Web Development
+   - Backend Development
+   - Data Engineering & AI
+   - Tools & DevOps
+   - Spoken Languages
+
+ Let's write the YAML.
+
+ Note: We must escape any colons in the text.
+
+ We are going to output:
+   <STRATEGY> ... </STRATEGY>
+   ```yaml ... ```
+   <GAP_ANALYSIS> ... </GAP_ANALYSIS>
+
+ Since there is no JD, the gap analysis will be based on general expectations for a new grad software engineer role.
+
+ Let's proceed.
