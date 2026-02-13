@@ -8,5 +8,5 @@ streamlit>=1.32.0
 pandas
 
 # Tools
-openai
+openai>=1.0.0
 python-dotenv

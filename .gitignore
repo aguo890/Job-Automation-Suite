@@ -5,3 +5,4 @@ generated_cvs/
 .vscode/
 *.log
 .DS_Store
+.env

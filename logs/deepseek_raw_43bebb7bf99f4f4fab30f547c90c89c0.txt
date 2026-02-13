@@ -1,0 +1,173 @@
+<STRATEGY>
+Since no specific job description was provided for the Data Engineer Intern role at Zoox, I will adopt a targeted, generic strategy for a cutting-edge autonomous vehicle company. Zoox is known for its complex data challenges involving real-time sensor data, large-scale distributed systems, and robust data infrastructure. My approach will be to reframe Aaron's extensive experience to highlight the core competencies Zoox would value: building scalable, reliable data pipelines, working with large datasets, implementing efficient data models, and contributing to a software-driven product.
+
+1.  **Repositioning for an Internship:** Aaron's experience is exceptionally strong for an intern, including co-founding ventures. The goal is to frame this not as overqualification, but as evidence of proactivity, ownership, and the ability to ship production-grade data systems—traits valuable to any tech team. I will adjust language to emphasize collaborative engineering and scalable architecture over pure business outcomes.
+
+2.  **Thematic Focus on Data Engineering Pillars:** I will rework bullet points and the summary to consistently touch on key data engineering themes:
+    *   **Scalable Data Pipelines:** Highlighting event-driven ingestion, data transformation, and pipeline optimization.
+    *   **Data Modeling & Storage:** Emphasizing schema design, database optimization (SQLAlchemy), and data governance.
+    *   **System Reliability & Performance:** Showcasing work on API latency, data integrity, and high-performance dashboards.
+    *   **Cloud & DevOps Tools:** Ensuring AWS, Docker, and orchestration tools (Celery) are prominently featured.
+
+3.  **Keyword Integration (Assumed):** I will infuse the resume with terms common in data engineering roles at AV companies: `data pipelines`, `event-driven`, `real-time`, `scalable`, `distributed systems`, `data integrity`, `data modeling`, `ETL/ELT`, `cloud infrastructure (AWS)`, `high-performance`, `optimization`, and `Python/SQL`.
+
+4.  **Structural Adjustments:**
+    *   **Profile Summary:** Rewritten as a powerful, concise pitch positioning Aaron as a builder of robust data infrastructure, directly applicable to Zoox's challenges.
+    *   **Experience:** Bullet points are refined to lead with technical architecture and data-specific achievements. Business context is minimized; technical depth is maximized.
+    *   **Projects:** The "Job Scraping Engine" is a perfect example of a data pipeline project and is moved to the top. Other projects are trimmed or adjusted to highlight data processing aspects.
+    *   **Skills:** Reordered to lead with `Data Engineering & Backend` tools, grouping Python, SQL, cloud services, and data processing frameworks together.
+
+5.  **Visual Clarity:** The original YAML is well-structured. I will maintain clean, readable formatting with strong action verbs.
+</STRATEGY>
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.5/schema.json
+cv:
+  name: Aaron Guo
+  location: Washington, D.C.
+  email: aguo890@gwmail.gwu.edu
+  phone: "+1 980-337-0681"
+  website: https://aguo890.github.io/
+  social_networks:
+    - network: LinkedIn
+      username: guo-aaron
+    - network: GitHub
+      username: aguo890
+  sections:
+    summary:
+      - "*Data Engineering student passionate about building scalable, reliable data infrastructure. Hands-on experience architecting event-driven data pipelines, optimizing high-performance data systems, and implementing robust data models for complex domains. Seeking to contribute strong skills in Python, distributed systems, and cloud data tools to tackle real-world data challenges at Zoox.*"
+    experience:
+      - company: Multi-State Tax Optimization Platform
+        position: Co-founder & Lead Data Engineer
+        location: Washington, DC
+        date: 2025-10 – Present
+        highlights:
+          - "Engineered a governance-first financial data engine using SQLAlchemy & Alembic, designing complex data models to accurately allocate transactions across 50+ tax jurisdictions."
+          - "Architected an event-sourced audit logging system to guarantee data integrity and lineage, ensuring strict compliance with financial regulations."
+          - "Built a high-performance React dashboard with Recharts to visualize real-time financial metrics and tax nexus thresholds, serving as the primary data interface."
+          - "Implemented a robust FastAPI backend with 15+ data-centric endpoints, achieving high reliability through comprehensive Pytest coverage and automated documentation."
+      - company: AI Factory Analytics Platform
+        position: Co-founder & Lead Data Engineer
+        location: Washington, DC
+        date: 2025-10 – Present
+        highlights:
+          - "Architected a scalable, event-driven data ingestion pipeline using Python and Celery to parse 10k+ daily unstructured records, reducing data latency by 95%."
+          - "Designed a Zero-Trust, multi-tenant data architecture isolating facility data, ensuring strict data sovereignty and preventing privilege escalation."
+          - "Optimized high-traffic data API endpoints using advanced SQLAlchemy loading strategies, reducing query latency from 300ms to <50ms and eliminating N+1 bottlenecks."
+          - "Engineered a real-time React dashboard rendering metrics for 60+ synchronous production lines while maintaining 60 FPS performance on low-end hardware."
+      - company: Three Stars Fashion Group
+        position: Data Engineer Intern
+        location: Alexandria, Egypt
+        date: 2025-06 – 2025-09
+        highlights:
+          - "Automated ETL of supplier inventory data using Python and Pandas, transforming weekly manual 16-hour spreadsheet processes into a reliable, automated pipeline."
+          - "Built and deployed a live production dashboard with Flask and Chart.js to visualize real-time assembly line output, enabling managers to identify bottlenecks instantly."
+          - "Designed a serverless alert system using AWS Lambda and SNS to notify the logistics team of shipment-ready orders, cutting communication delays."
+      - company: Sunwater Capital
+        position: Data Science Intern
+        location: North Bethesda, MD
+        date: 2025-01 – 2025-05
+        highlights:
+          - "Architected an end-to-end data pipeline using PySpark and SerpAPI to extract, clean, and structure legislative data, providing a reliable data stream for company-wide analysis."
+          - "Built a Python web scraper and applied NLP techniques to transform unstructured committee transcripts into structured, analyzable datasets of key topics."
+      - company: The George Washington University
+        position: Technical Support Assistant
+        location: Washington, DC
+        date: 2025-08 – Present
+        highlights:
+          - "Diagnose and resolve 15+ daily technical issues across software, hardware, and university systems, developing strong problem-solving and communication skills."
+    leadership_&_campus_involvement:
+      - company: Association of Computing Machinery (ACM) | George Washington University
+        position: President
+        date: 2024-08 – Present
+        highlights:
+          - "Lead 10+ professional development workshops for 100+ students on technical skills, career preparation, and data engineering topics."
+    projects:
+      - name: Job Scraping & Analytics Engine
+        date: 2026-02
+        summary: A distributed data pipeline for aggregating and analyzing job postings from multiple ATS platforms.
+        highlights:
+          - "Built a multi-source data ingestion pipeline fetching from Greenhouse, Lever, and Ashby APIs."
+          - "Engineered an interactive Streamlit dashboard for filtering, analyzing, and visualizing job market data."
+          - "Automated daily pipeline execution and reporting using GitHub Actions for reliable, scheduled data updates."
+      - name: AI-Powered Content Pipeline
+        date: 2025
+        summary: Automated system for generating and distributing short-form video content from web data.
+        highlights:
+          - "Designed an automated ETL pipeline to source stories from Reddit, generate videos with captions, and post to TikTok, Instagram, and YouTube."
+      - name: JEGA: Academic Test Facility
+        date: 2025-10 – Present
+        summary: A full-stack application for managing secure, proctored academic testing environments.
+        highlights:
+          - "Developed a real-time dashboard with a spatial room map mirroring physical lab layouts for live monitoring."
+          - "Implemented secure RBAC and session management to ensure data integrity and prevent unauthorized access."
+    education:
+      - institution: The George Washington University
+        area: Computer Science
+        degree: Bachelor of Science
+        date: Expected 2026-06
+        location: Washington, DC
+        highlights:
+          - "Relevant Coursework: Data Structures & Algorithms, Database Systems, Distributed Systems, Software Engineering"
+    skills:
+      - label: Data Engineering & Backend
+        details: Python, SQL, PySpark, FastAPI, SQLAlchemy, Alembic, PostgreSQL, Celery, REST APIs, Data Modeling, ETL/ELT
+      - label: Cloud & DevOps
+        details: AWS (Lambda, SNS), Docker, Git, GitHub Actions, Bash, Nginx
+      - label: Frontend & Visualization
+        details: React, Vite, TypeScript, Recharts, Chart.js, Streamlit
+      - label: Tools & Methodologies
+        details: Event-Driven Architecture, High-Performance Optimization, RBAC, Data Governance
+      - label: Spoken Languages
+        details: English (Native), Mandarin (Fluent)
+design:
+  theme: sb2nov
+  page:
+    top_margin: 0.5in
+    bottom_margin: 0.5in
+    left_margin: 0.5in
+    right_margin: 0.5in
+    show_footer: false
+  typography:
+    font_size:
+      name: 11pt
+      body: 10pt
+      section_titles: 12pt
+    line_spacing: 0.5em
+  section_titles:
+    space_above: 0.3cm
+    space_below: 0.2cm
+  sections:
+    space_between_regular_entries: 0.2cm
+  header:
+    space_below_name: 0.2cm
+    space_below_headline: 0.2cm
+    space_below_connections: 0.2cm
+  entries:
+    side_space: 0cm
+settings:
+  render_command:
+    pdf_path: "rendercv_output/aaron_guo_zoox_data_engineer_intern_CV.pdf"
+    png_path: "rendercv_output/aaron_guo_zoox_data_engineer_intern_CV.png"
+```
+
+<GAP_ANALYSIS>
+**Strengths:**
+*   **Exceptional Proactivity & Ownership:** Founding companies and building production data systems is far beyond typical intern experience, demonstrating immense drive and capability.
+*   **Directly Relevant Technical Skills:** Strong core skills in Python, SQL, data modeling (SQLAlchemy), API design (FastAPI), and cloud services (AWS). Experience with event-driven pipelines (Celery) is a major plus.
+*   **Proven Ability to Build & Ship:** The resume shows a consistent track record of taking projects from concept to deployed tool, a critical trait for an intern.
+
+**Weaknesses / Missing Experience (Tailored to Zoox/AV):**
+*   **Lack of Large-Scale, Distributed Systems Exposure:** While the projects are impressive, they may not involve petabyte-scale data or technologies like Spark, Flink, or Kafka at the scale Zoox likely operates. The PySpark experience is a good start but limited to one internship.
+*   **No Explicit Sensor or Time-Series Data Experience:** Autonomous vehicles generate massive streams of sensor (LiDAR, camera) and time-series data. There's no direct experience mentioned with these specific data types or related databases (e.g., TimescaleDB, InfluxDB).
+*   **Limited Mention of Data Quality & Monitoring:** Building pipelines is one thing; ensuring their long-term reliability through robust data validation, quality checks, and monitoring (e.g., using Great Expectations, DataDog) is another. This could be an area to develop.
+*   **No C++/Rust Exposure:** While not always required, performance-critical systems in AV often use C++ or Rust. The skill set is heavily Python/JS-focused.
+
+**Mitigation Strategy in Resume:**
+The rewritten resume effectively mitigates these gaps by:
+1.  **Emphasizing Scalability & Architecture:** Framing all projects around "scalable," "event-driven," and "high-performance" systems implies the foundational thinking required for larger scales.
+2.  **Highlighting Data Integrity & Governance:** The focus on "data integrity," "audit logging," and "data sovereignty" shows an understanding of critical data reliability concepts, which is transferable to data quality.
+3.  **Stressing Real-Time Processing:** Mentioning "real-time metrics" and "real-time dashboards" aligns with the streaming data paradigm central to AV.
+
+**Overall:** Aaron is a remarkably strong candidate for a Data Engineer Intern role. The primary "gap" is a lack of specific domain experience in autonomous vehicles, which is expected for an intern. The resume successfully positions his substantial general data engineering skills as directly transferable and highly valuable.
+</GAP_ANALYSIS>

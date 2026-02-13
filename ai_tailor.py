@@ -1,0 +1,115 @@
+import os
+import re
+import uuid
+from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load env variables (DEEPSEEK_API_KEY)
+# Force loading from the same directory as this script (project root)
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path=env_path)
+
+def generate_tailored_resume(base_yaml_content, job_description, job_title, company_name):
+    """
+    Sends the base resume and JD to DeepSeek-R1 to generate a tailored YAML.
+    Sends the base resume and JD to DeepSeek-R1 to generate a tailored YAML.
+    Returns: (strategy_text, new_yaml_content, gap_analysis_text, reasoning_text)
+    """
+    
+    api_key = os.getenv("DEEPSEEK_API_KEY")
+    if not api_key:
+        raise ValueError("DEEPSEEK_API_KEY not found in .env")
+
+    # Initialize Client (DeepSeek uses OpenAI SDK)
+    client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+
+    # Construct the System Prompt (The "Ruthless Recruiter")
+    system_prompt = """
+    Role: Act as a ruthless Executive Recruiter and Resume Strategist.
+    Goal: Rewrite the resume YAML to ensure an interview for the specific role provided.
+    
+    Your task is to analyze the provided JOB DESCRIPTION and the BASE RESUME YAML. You must adapt the resume to perfectly align with the job requirements, using the language and keywords from the JD, while maintaining truthfulness.
+    
+    STRATEGY INSTRUCTIONS:
+    1. Analyze the Gap: Identify what the candidate is missing compared to the JD.
+    2. Bridge the Gap: Rewrite bullet points to highlight transferrable skills and relevant experiences. Use strong action verbs.
+    3. Keyword Optimization: Integrate specific keywords from the JD into the resume.
+    4. Profile Summary: Rewrite the summary to be a powerful elevator pitch for this specific role.
+    
+    CRITICAL OUTPUT FORMATTING RULES:
+    1. Output the Strategy Brief wrapped in <STRATEGY> tags. Explain your approach and why you made specific changes.
+    2. Output the VALID YAML ONLY wrapped in ```yaml code blocks```. This YAML must be valid and ready for RenderCV.
+    3. Output the Gap Analysis wrapped in <GAP_ANALYSIS> tags. Be honest about weaknesses or missing skills tailored to this role.
+    4. Ensure the YAML 'settings' section has the 'pdf_path' updated to: "rendercv_output/{job_title}_{company_name}_CV.pdf" (snake_case).
+    5. CRITICAL YAML FORMATTING RULES:
+       - **ESCAPE COLONS:** If a value contains a colon (e.g., "Project: Title"), you MUST enclose the entire value in double quotes.
+         - BAD: name: JEGA: Academic Test Facility
+         - GOOD: name: "JEGA: Academic Test Facility"
+       - **NO UNQUOTED SPECIAL CHARACTERS:** Wrap all strings with special chars in quotes.
+    6. Do not output the <think> chain in the final response, just the result.
+    """
+
+    user_content = f"""
+    TARGET ROLE: {job_title} at {company_name}
+    
+    [JOB DESCRIPTION]
+    {job_description}
+
+    [BASE YAML RESUME]
+    {base_yaml_content}
+    """
+
+    # Call DeepSeek-R1 (Reasoning Model)
+    response = client.chat.completions.create(
+        model="deepseek-reasoner",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ],
+        temperature=0.6, # Low temp for structured YAML, but enough for creativity in phrasing
+        timeout=120.0 # Extend timeout to 120s for R1 thinking time
+    )
+
+    full_response = response.choices[0].message.content
+    try:
+        reasoning = response.choices[0].message.reasoning_content
+    except AttributeError:
+        # Fallback if attribute is missing
+        reasoning = "No reasoning content found in API response."
+    
+    # --- Debug Logging ---
+    log_dir = "logs"
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    
+    with open(f"{log_dir}/deepseek_raw_{uuid.uuid4().hex}.txt", "w", encoding="utf-8") as log:
+        log.write(f"--- CONTENT ---\n{full_response}\n\n--- REASONING ---\n{reasoning}")
+    
+    # --- Robust Parsing Logic ---
+    
+    # 1. Extract YAML (Find content between ```yaml and ```)
+    # improved regex to handle potential leading/trailing whitespace or text
+    yaml_match = re.search(r"```yaml\n?(.*?)```", full_response, re.DOTALL)
+    if not yaml_match:
+        # Fallback: Try to find the YAML structure if code blocks are missing
+        # We look for the start of the CV definition typified by "cv:"
+        yaml_match = re.search(r"(cv:.*)", full_response, re.DOTALL)
+    
+    new_yaml = yaml_match.group(1).strip() if yaml_match else None
+    
+    if not new_yaml:
+        # Last ditch effort: if the response is ONLY yaml potentially
+        if "cv:" in full_response:
+             new_yaml = full_response.strip()
+        else:
+             raise ValueError("DeepSeek failed to generate valid YAML structure.")
+
+    # 2. Extract Strategy
+    strategy_match = re.search(r"<STRATEGY>(.*?)</STRATEGY>", full_response, re.DOTALL)
+    strategy = strategy_match.group(1).strip() if strategy_match else "Strategy not parsed."
+
+    # 3. Extract Gap Analysis
+    gap_match = re.search(r"<GAP_ANALYSIS>(.*?)</GAP_ANALYSIS>", full_response, re.DOTALL)
+    gap_analysis = gap_match.group(1).strip() if gap_match else "Gap analysis not parsed."
+
+    return strategy, new_yaml, gap_analysis, reasoning
