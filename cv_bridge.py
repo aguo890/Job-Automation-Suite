@@ -128,8 +128,9 @@ class CVOrchestrator:
         # 4. Define Output Filenames with UUID to prevent collisions
         safe_company = "".join([c for c in company if c.isalnum() or c in (' ', '_', '-')]).strip().replace(' ', '_')
         unique_id = uuid.uuid4().hex[:8]
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         # We want the final PDF to be readable but unique enough for this session/request
-        new_filename = f"Aaron_Guo_CV_{safe_company}_{unique_id}" 
+        new_filename = f"Aaron_Guo_CV_{safe_company}_{timestamp}_{unique_id}" 
 
         # 5. Save Temporary Tailored YAML
         # CRITICAL: We save the temp yaml in the SAME directory as the base yaml
@@ -145,6 +146,13 @@ class CVOrchestrator:
 
         # Target PDF Path
         expected_pdf_path = os.path.join(self.output_dir, f"{new_filename}.pdf")
+        
+        # History YAML Path (Save copy of source YAML)
+        history_yaml_path = os.path.join(self.output_dir, f"{new_filename}.yaml")
+        try:
+            shutil.copy2(temp_yaml_path, history_yaml_path)
+        except Exception as e:
+            print(f"Warning: Could not save history YAML: {e}")
 
         if status_callback: status_callback("Compiling PDF with RenderCV...")
 
