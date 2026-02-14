@@ -1,5 +1,6 @@
 import os
 import shutil
+import json
 from datetime import datetime
 import contextlib
 import pathlib
@@ -200,3 +201,122 @@ class CVOrchestrator:
                 raise PermissionError(f"COMBAT LOCK: Please CLOSE the PDF file '{os.path.basename(expected_pdf_path)}' if it is open!")
                 
             raise RuntimeError(f"Rendering failed: {e}")
+
+    # -------------------------------------------------------------------
+    # NEW: Per-Job CV Editor Methods
+    # -------------------------------------------------------------------
+
+    def load_job_cv(self, job_id):
+        """
+        Loads CV content for a specific job.
+        Priority: 1. Tailored YAML in generated_cvs/ -> 2. Master YAML
+        Returns: YAML content as a string.
+        """
+        tailored_path = os.path.join(self.output_dir, f"{job_id}.yaml")
+
+        if os.path.exists(tailored_path):
+            with open(tailored_path, 'r', encoding='utf-8') as f:
+                return f.read()
+
+        if os.path.exists(self.base_cv_path):
+            with open(self.base_cv_path, 'r', encoding='utf-8') as f:
+                return f.read()
+
+        return f"# Error: Master CV not found at {self.base_cv_path}"
+
+    def save_job_cv(self, job_id, yaml_content):
+        """
+        Persists edited YAML to generated_cvs/{job_id}.yaml.
+        Returns: The saved file path.
+        """
+        save_path = os.path.join(self.output_dir, f"{job_id}.yaml")
+        with open(save_path, 'w', encoding='utf-8') as f:
+            f.write(yaml_content)
+        return save_path
+
+    def render_from_content(self, job_id, yaml_content):
+        """
+        Renders a PDF from raw YAML content for the CV Editor.
+        1. Writes temp YAML to rendercv/ (so themes/assets resolve).
+        2. Calls run_rendercv (same proven API as generate_tailored_cv).
+        3. Moves PDF to generated_cvs/{job_id}.pdf.
+        4. Updates tracking.json.
+        Returns: (pdf_path, status_message)
+        """
+        if not run_rendercv:
+            return None, "RenderCV library is not installed."
+
+        base_cv_folder = os.path.dirname(self.base_cv_path)
+        temp_yaml_name = f"temp_{job_id}.yaml"
+        temp_yaml_path = os.path.join(base_cv_folder, temp_yaml_name)
+        expected_pdf_path = os.path.join(self.output_dir, f"{job_id}.pdf")
+
+        try:
+            # A. Write temp YAML in the render context directory
+            with open(temp_yaml_path, 'w', encoding='utf-8') as f:
+                f.write(yaml_content)
+
+            # B. Run RenderCV (CWD dance for asset resolution)
+            with ProgressPanel(quiet=True) as progress:
+                start_dir = os.getcwd()
+                os.chdir(base_cv_folder)
+                try:
+                    run_rendercv(
+                        pathlib.Path(temp_yaml_name),
+                        progress,
+                        pdf_path=pathlib.Path(expected_pdf_path)
+                    )
+                finally:
+                    os.chdir(start_dir)
+
+            # C. Cleanup temp YAML
+            if os.path.exists(temp_yaml_path):
+                os.remove(temp_yaml_path)
+
+            # D. Verify output
+            if os.path.exists(expected_pdf_path):
+                # E. Persist the YAML and update tracking
+                yaml_path = self.save_job_cv(job_id, yaml_content)
+                self.update_tracking(job_id, yaml_path, expected_pdf_path)
+                return expected_pdf_path, "Success"
+
+            return None, f"PDF was not created at {expected_pdf_path}"
+
+        except (Exception, SystemExit) as e:
+            # Cleanup temp file on failure
+            if os.path.exists(temp_yaml_path):
+                os.remove(temp_yaml_path)
+
+            if isinstance(e, SystemExit):
+                if e.code == 0 and os.path.exists(expected_pdf_path):
+                    yaml_path = self.save_job_cv(job_id, yaml_content)
+                    self.update_tracking(job_id, yaml_path, expected_pdf_path)
+                    return expected_pdf_path, "Success"
+                return None, f"RenderCV exited with code {e.code}"
+
+            if isinstance(e, PermissionError) or "Permission denied" in str(e):
+                return None, f"CLOSE the PDF file if it is open!"
+
+            return None, f"Rendering failed: {e}"
+
+    def update_tracking(self, job_id, yaml_path, pdf_path):
+        """
+        Updates tracking.json with CV file paths and status.
+        """
+        tracking_file = os.path.join(self.root_dir, "job-scraping-app", "data", "tracking.json")
+        if not os.path.exists(tracking_file):
+            return
+
+        try:
+            with open(tracking_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            if job_id in data:
+                data[job_id]["cv_yaml_path"] = yaml_path
+                data[job_id]["cv_pdf_path"] = pdf_path
+                data[job_id]["cv_status"] = "Tailored"
+
+                with open(tracking_file, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=2)
+        except Exception as e:
+            print(f"Warning: Could not update tracking: {e}")
