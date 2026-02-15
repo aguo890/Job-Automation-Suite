@@ -91,6 +91,12 @@ def process_repo(repo_path_rel):
             else:
                 print(f"  ❌ Commit failed: {res.stderr}")
 
+    # 1.5 Pull Rebase (Sync with remote to prevent non-fast-forward errors)
+    print("  ⬇️  Pulling changes (rebase)...")
+    pull_res = run_git_cmd(["pull", "--rebase"], repo_path)
+    if pull_res.returncode != 0:
+        print(f"  ⚠️  Pull rebase warning: {pull_res.stderr}")
+
     # 2. Check for Unpushed Commits
     # 'git status -sb' shows ## branch... ahead X
     status_sb = run_git_cmd(["status", "-sb"], repo_path).stdout
