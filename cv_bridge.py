@@ -1,6 +1,8 @@
 import os
 import shutil
 import json
+import tempfile
+import time
 from datetime import datetime
 import pathlib
 import uuid
@@ -41,6 +43,9 @@ class CVOrchestrator:
         
         self.output_dir = self.root_dir / "generated_cvs"
         self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        self.backups_dir = self.root_dir / "rendercv" / "backups"
+        self.backups_dir.mkdir(parents=True, exist_ok=True)
 
     def generate_tailored_cv(self, job_details, use_ai=False, status_callback=None):
         """
@@ -151,6 +156,12 @@ class CVOrchestrator:
     # --- CV Editor Methods ---
 
     def load_job_cv(self, job_id):
+        """Load CV content for a given job. For 'master_cv', always loads the base file."""
+        if job_id == "master_cv":
+            if self.base_cv_path.exists():
+                return self.base_cv_path.read_text(encoding='utf-8')
+            return f"# Error: Master CV not found at {self.base_cv_path}"
+
         tailored_path = self.output_dir / f"{job_id}.yaml"
         if tailored_path.exists():
             return tailored_path.read_text(encoding='utf-8')
@@ -161,9 +172,71 @@ class CVOrchestrator:
         return f"# Error: Master CV not found at {self.base_cv_path}"
 
     def save_job_cv(self, job_id, yaml_content):
+        """Save CV content. Routes to save_master_cv for 'master_cv' ID."""
+        if job_id == "master_cv":
+            return self.save_master_cv(yaml_content)
+
         save_path = self.output_dir / f"{job_id}.yaml"
         save_path.write_text(yaml_content, encoding='utf-8')
         return str(save_path)
+
+    def save_master_cv(self, new_content):
+        """
+        Saves the Master CV with high-reliability practices:
+        1. Validates YAML syntax.
+        2. Creates a timestamped backup.
+        3. Performs an atomic write to prevent corruption.
+        Returns dict with 'success' and optionally 'error'.
+        """
+        import yaml as pyyaml_validator  # for safe_load validation
+
+        # 1. VALIDATION: Fail fast if YAML is invalid
+        try:
+            pyyaml_validator.safe_load(new_content)
+        except pyyaml_validator.YAMLError as e:
+            return {"success": False, "error": f"Invalid YAML: {str(e)}"}
+
+        # 2. BACKUP: Timestamped rotation
+        self.backups_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = int(time.time())
+        backup_path = self.backups_dir / f"Aaron_Guo_CV_{timestamp}.yaml.bak"
+
+        if self.base_cv_path.exists():
+            try:
+                shutil.copy2(str(self.base_cv_path), str(backup_path))
+                self._rotate_backups(keep=5)
+            except Exception as e:
+                return {"success": False, "error": f"Backup failed: {str(e)}"}
+
+        # 3. ATOMIC WRITE: Write temp -> os.replace
+        temp_name = None
+        try:
+            dir_name = str(self.base_cv_path.parent)
+            with tempfile.NamedTemporaryFile('w', dir=dir_name, suffix='.yaml.tmp',
+                                             delete=False, encoding='utf-8') as tmp_file:
+                tmp_file.write(new_content)
+                temp_name = tmp_file.name
+
+            os.replace(temp_name, str(self.base_cv_path))
+            return {"success": True}
+
+        except Exception as e:
+            if temp_name and os.path.exists(temp_name):
+                os.remove(temp_name)
+            return {"success": False, "error": f"Write failed: {str(e)}"}
+
+    def _rotate_backups(self, keep=5):
+        """Delete old backups, keeping only the most recent `keep` files."""
+        try:
+            files = sorted(
+                [f for f in self.backups_dir.iterdir() if f.suffix == '.bak'],
+                key=lambda f: f.stat().st_mtime
+            )  # oldest first
+            if len(files) > keep:
+                for f in files[:len(files) - keep]:
+                    f.unlink()
+        except Exception:
+            pass  # Non-critical failure
 
     def render_from_content(self, job_id, yaml_content):
         if not run_rendercv: return None, "RenderCV missing."
