@@ -47,6 +47,20 @@ make run
 -   Click **"Generate CV for Selected"**.
 -   Download your PDF!
 
+### 🐳 Docker Support
+
+Run the entire suite in a container without installing Python locally.
+
+**Build and Run:**
+```bash
+docker-compose up --build
+```
+*Access at: http://localhost:8501*
+
+**Features:**
+-   **Hot-reloading**: Code changes in `render_cv/` or `job-scraping-app/` require a rebuild unless mounted for dev.
+-   **Persistence**: Config, data, and generated CVs are saved to your host machine automatically.
+
 ## 📂 Project Structure
 
 It's a monorepo containing:

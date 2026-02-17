@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  job-automation-suite:
+    build: .
+    container_name: job_suite
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      # --- Job Scraper Persistence ---
+      # Persist user config (searches, API keys)
+      - ./job-scraping-app/config:/app/job-scraping-app/config
+      # Persist scraped job data
+      - ./job-scraping-app/data:/app/job-scraping-app/data
+
+      # --- CV Generation Persistence ---
+      # Where the final PDFs land
+      - ./generated_cvs:/app/generated_cvs
+      # Backup history of your CVs
+      - ./rendercv/backups:/app/rendercv/backups
+      # Intermediate render artifacts (LaTeX files)
+      - ./rendercv/rendercv_output:/app/rendercv/rendercv_output
+
+      # --- Master Data ---
+      # Direct mapping of your master YAML file so edits save to your host machine
+      - ./rendercv/Aaron_Guo_CV.yaml:/app/rendercv/Aaron_Guo_CV.yaml

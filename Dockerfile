@@ -1,0 +1,54 @@
+# Base Image
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# -----------------------------------------------------------------------------
+# Stage 1: OS Dependencies
+# -----------------------------------------------------------------------------
+# Install system packages required for PDF generation and compilation
+RUN apt-get update && apt-get install -y \
+    gcc \
+    git \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# -----------------------------------------------------------------------------
+# Stage 2: Dependency Caching (The "Google" Way)
+# -----------------------------------------------------------------------------
+# Copy only dependency definitions first to leverage Docker cache
+COPY requirements.txt ./
+COPY rendercv/pyproject.toml ./rendercv/
+COPY job-scraping-app/requirements.txt ./job-scraping-app/
+
+# Install Python dependencies
+# --no-cache-dir reduces image size
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r job-scraping-app/requirements.txt
+# Note: rendercv deps are installed in Stage 4 via pip install -e
+
+# -----------------------------------------------------------------------------
+# Stage 3: Application Code
+# -----------------------------------------------------------------------------
+# Copy the actual source code
+COPY rendercv/ ./rendercv/
+COPY job-scraping-app/ ./job-scraping-app/
+COPY scripts/ ./scripts/
+COPY cv_bridge.py ai_tailor.py ./
+
+# -----------------------------------------------------------------------------
+# Stage 4: Local Package Install
+# -----------------------------------------------------------------------------
+# Install local packages in editable mode so changes to source are immediate
+RUN pip install -e ./rendercv
+RUN pip install -e ./job-scraping-app
+
+# -----------------------------------------------------------------------------
+# Stage 5: Entry
+# -----------------------------------------------------------------------------
+EXPOSE 8501
+
+# Run the dashboard
+CMD ["streamlit", "run", "job-scraping-app/dashboard.py", "--server.port=8501", "--server.address=0.0.0.0"]

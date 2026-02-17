@@ -1,0 +1,18 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv
+env
+.env
+
+# Application specific
+# Ignore local PDFs/artifacts in root (they should be in generated_cvs)
+*.pdf
+temp_playground.yaml
