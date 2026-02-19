@@ -3,20 +3,17 @@
 .gitignore
 
 # Python
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-.Python
-venv
-env
-.env
+**/__pycache__/
+*.py[cod]
+*~
+*.egg-info/
+.venv/
+venv/
+env/
 
-# Application specific
-# Ignore local PDFs/artifacts in root (they should be in generated_cvs)
-*.pdf
-temp_playground.yaml
-generated_cvs
-rendercv/rendercv_output
-job-scraping-app/logs
-job-scraping-app/data
+# Docker
+docker-compose.yml
+Dockerfile*
+
+# UI/Mock Data
+mock_data/
