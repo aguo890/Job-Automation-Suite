@@ -1,0 +1,27 @@
+# Use a modern, slim Python base image
+FROM python:3.12-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install OS dependencies (minimal for scraper)
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only scraper dependencies first to leverage Docker cache
+COPY job-scraping-app/requirements-scraper.txt ./job-scraping-app/
+RUN pip install --no-cache-dir -r job-scraping-app/requirements-scraper.txt
+
+# Copy application code
+COPY job-scraping-app/ ./job-scraping-app/
+
+# Copy common files if any
+COPY cv_bridge.py ai_tailor.py ./
+
+# Performance: Unbuffered logging
+ENV PYTHONUNBUFFERED=1
+
+# Run the scheduler
+CMD ["python", "job-scraping-app/scheduler.py"]

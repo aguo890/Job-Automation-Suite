@@ -1,0 +1,16 @@
+ERROR:root:Failed to load filtering config: [Errno 2] No such file or directory: 'config/filtering.yaml'
+2026-02-19 07:43:45,799 - root - INFO - ================================================================================
+2026-02-19 07:43:45,799 - root - INFO - Starting Job Scraping Application
+2026-02-19 07:43:45,799 - root - INFO - ================================================================================
+2026-02-19 07:43:45,802 - root - INFO - Loading configurations...
+2026-02-19 07:43:45,802 - root - ERROR - Configuration file not found: config/companies.yaml
+2026-02-19 07:43:45,802 - root - ERROR - Fatal error in main execution: [Errno 2] No such file or directory: 'config/companies.yaml'
+Traceback (most recent call last):
+  File "/app/job-scraping-app/main.py", line 80, in main
+    companies_config = load_config('config/companies.yaml')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/job-scraping-app/main.py", line 54, in load_config
+    with open(config_file, 'r', encoding='utf-8') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'config/companies.yaml'
+2026-02-19 07:43:45,803 - __main__ - INFO - Job scraping completed successfully.

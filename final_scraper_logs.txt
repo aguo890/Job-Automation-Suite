@@ -1,0 +1,210 @@
+2026-02-19 07:36:13,084 - __main__ - INFO - Scheduler started. Running initial job...
+2026-02-19 07:36:13,084 - __main__ - INFO - Starting scheduled job scraping...
+2026-02-19 07:36:13,085 - root - INFO - ================================================================================
+2026-02-19 07:36:13,085 - root - INFO - Starting Job Scraping Application
+2026-02-19 07:36:13,085 - root - INFO - ================================================================================
+2026-02-19 07:36:13,087 - root - INFO - Loading configurations...
+2026-02-19 07:36:13,158 - root - INFO - Loaded 204 companies
+2026-02-19 07:36:13,158 - root - INFO - Initializing components...
+2026-02-19 07:36:13,163 - root - INFO - Fetching jobs from all sources...
+2026-02-19 07:36:13,169 - fetchers - INFO - Starting async fetch for 204 companies...
+2026-02-19 07:36:13,262 - fetchers - INFO - Fetched 7 jobs from Ashby for PostHog
+2026-02-19 07:36:13,286 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/anthropic
+2026-02-19 07:36:13,307 - fetchers - INFO - Fetched 21 jobs from Ashby for Notion
+2026-02-19 07:36:13,336 - fetchers - INFO - Fetched 0 jobs from Ashby for Reddit
+2026-02-19 07:36:13,401 - fetchers - INFO - Fetched 245 jobs from Ashby for OpenAI
+2026-02-19 07:36:13,420 - fetchers - INFO - Fetched 32 jobs from Ashby for Snowflake
+2026-02-19 07:36:13,422 - fetchers - INFO - Fetched 2 jobs from Ashby for Quora
+2026-02-19 07:36:13,423 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/figma
+2026-02-19 07:36:13,440 - fetchers - INFO - Fetched 1 jobs from Ashby for Linear
+2026-02-19 07:36:13,487 - fetchers - INFO - Fetched 5 jobs from Ashby for Vanta
+2026-02-19 07:36:13,498 - fetchers - INFO - Fetched 59 jobs from Ashby for Whatnot
+2026-02-19 07:36:13,681 - fetchers - INFO - Fetched 0 jobs from Ashby for Ironclad
+2026-02-19 07:36:13,829 - fetchers - INFO - Fetched 18 jobs from Ashby for Cursor
+2026-02-19 07:36:13,853 - fetchers - INFO - Fetched 1 jobs from Ashby for Coder
+2026-02-19 07:36:13,998 - fetchers - INFO - Fetched 5 jobs from Ashby for Zapier
+2026-02-19 07:36:14,441 - fetchers - INFO - Fetched 1 jobs from Ashby for Owner.com
+2026-02-19 07:36:14,492 - fetchers - INFO - Fetched 11 jobs from Ashby for PermitFlow
+2026-02-19 07:36:14,556 - fetchers - INFO - Fetched 4 jobs from Ashby for Lemonade
+2026-02-19 07:36:14,590 - fetchers - INFO - Fetched 0 jobs from Ashby for Thinkific
+2026-02-19 07:36:14,594 - fetchers - INFO - Fetched 2 jobs from Ashby for Gorgias
+2026-02-19 07:36:14,633 - fetchers - INFO - Fetched 1 jobs from Ashby for Cointracker
+2026-02-19 07:36:14,679 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/rippling
+2026-02-19 07:36:14,786 - fetchers - INFO - Fetched 0 jobs from Ashby for Marqeta
+2026-02-19 07:36:14,820 - fetchers - INFO - Fetched 18 jobs from Ashby for Replit
+2026-02-19 07:36:15,107 - fetchers - INFO - Fetched 12 jobs from Ashby for Bedrock Robotics
+2026-02-19 07:36:16,073 - fetchers - INFO - Fetched 288 jobs from Greenhouse for Anduril
+2026-02-19 07:36:16,088 - fetchers - INFO - Fetched 1 jobs from Ashby for Deliveroo
+2026-02-19 07:36:16,112 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/benchling/jobs?content=true
+2026-02-19 07:36:16,124 - fetchers - INFO - Fetched 0 jobs from Ashby for Retool
+2026-02-19 07:36:16,146 - fetchers - INFO - Fetched 15 jobs from Greenhouse for Hex
+2026-02-19 07:36:16,246 - fetchers - INFO - Fetched 41 jobs from Greenhouse for Verkada
+2026-02-19 07:36:16,299 - fetchers - INFO - Fetched 10 jobs from Greenhouse for Datadog
+2026-02-19 07:36:16,334 - fetchers - INFO - Fetched 3 jobs from Greenhouse for Flexport
+2026-02-19 07:36:16,337 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Harry's
+2026-02-19 07:36:16,371 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Runway ML
+2026-02-19 07:36:16,449 - fetchers - INFO - Fetched 35 jobs from Greenhouse for Scale AI
+2026-02-19 07:36:16,627 - fetchers - INFO - Fetched 47 jobs from Greenhouse for Stripe
+2026-02-19 07:36:16,660 - fetchers - INFO - Fetched 29 jobs from Greenhouse for Databricks
+2026-02-19 07:36:16,692 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Brex
+2026-02-19 07:36:16,727 - fetchers - INFO - Fetched 3 jobs from Ashby for Harvey
+2026-02-19 07:36:16,764 - fetchers - INFO - Fetched 12 jobs from Greenhouse for Adyen
+2026-02-19 07:36:16,775 - fetchers - INFO - Fetched 7 jobs from Greenhouse for Affirm
+2026-02-19 07:36:16,789 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/plaid/jobs?content=true
+2026-02-19 07:36:16,836 - fetchers - INFO - Fetched 4 jobs from Greenhouse for Instacart
+2026-02-19 07:36:16,852 - fetchers - INFO - Fetched 8 jobs from Greenhouse for Ripple
+2026-02-19 07:36:16,903 - fetchers - INFO - Fetched 5 jobs from Greenhouse for Chime
+2026-02-19 07:36:16,955 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Carta
+2026-02-19 07:36:16,981 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Rebellion Defense
+2026-02-19 07:36:17,010 - fetchers - INFO - Fetched 17 jobs from Greenhouse for SoFi
+2026-02-19 07:36:17,014 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Shift5
+2026-02-19 07:36:17,044 - fetchers - INFO - Fetched 7 jobs from Greenhouse for Vannevar Labs
+2026-02-19 07:36:17,052 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Everlane
+2026-02-19 07:36:17,071 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Allbirds
+2026-02-19 07:36:17,088 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Glossier
+2026-02-19 07:36:17,147 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Peloton
+2026-02-19 07:36:17,150 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Sweetgreen
+2026-02-19 07:36:17,210 - fetchers - INFO - Fetched 0 jobs from Greenhouse for HubSpot
+2026-02-19 07:36:17,259 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Gusto
+2026-02-19 07:36:17,495 - fetchers - INFO - Fetched 2 jobs from Ashby for Deel
+2026-02-19 07:36:17,971 - fetchers - INFO - Fetched 21 jobs from Greenhouse for Coinbase
+2026-02-19 07:36:20,083 - fetchers - INFO - Fetched 17 jobs from Lever for Shield AI
+2026-02-19 07:36:20,307 - fetchers - INFO - Fetched 80 jobs from Lever for Zoox
+2026-02-19 07:36:20,620 - fetchers - INFO - Fetched 31 jobs from Greenhouse for DoorDash
+2026-02-19 07:36:20,678 - fetchers - INFO - Fetched 15 jobs from Greenhouse for Opendoor
+2026-02-19 07:36:20,789 - fetchers - INFO - Fetched 9 jobs from Greenhouse for Epic Games
+2026-02-19 07:36:20,820 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Pendo
+2026-02-19 07:36:20,845 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/ncino/jobs?content=true
+2026-02-19 07:36:20,850 - fetchers - INFO - Fetched 7 jobs from Greenhouse for LendingTree
+2026-02-19 07:36:20,874 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/avidxchange/jobs?content=true
+2026-02-19 07:36:20,889 - fetchers - INFO - Fetched 16 jobs from Greenhouse for Bandwidth
+2026-02-19 07:36:20,944 - fetchers - INFO - Fetched 40 jobs from Greenhouse for Astranis
+2026-02-19 07:36:20,952 - fetchers - INFO - Fetched 10 jobs from Greenhouse for Red Ventures
+2026-02-19 07:36:20,968 - fetchers - INFO - Fetched 52 jobs from Lever for Saronic
+2026-02-19 07:36:20,992 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/skydio/jobs?content=true
+2026-02-19 07:36:21,000 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/hadrian
+2026-02-19 07:36:21,009 - fetchers - INFO - Fetched 27 jobs from Greenhouse for Varda Space
+2026-02-19 07:36:21,028 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/helionenergy/jobs?content=true
+2026-02-19 07:36:21,030 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Epirus
+2026-02-19 07:36:21,091 - fetchers - INFO - Fetched 8 jobs from Greenhouse for Helsing
+2026-02-19 07:36:21,104 - fetchers - INFO - Fetched 15 jobs from Greenhouse for Radiant
+2026-02-19 07:36:21,133 - fetchers - INFO - Fetched 80 jobs from Greenhouse for xAI
+2026-02-19 07:36:21,140 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Descript
+2026-02-19 07:36:21,161 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Forethought
+2026-02-19 07:36:21,178 - fetchers - INFO - Fetched 30 jobs from Greenhouse for Glean
+2026-02-19 07:36:21,217 - fetchers - INFO - Fetched 2 jobs from Ashby for Cohere
+2026-02-19 07:36:21,553 - fetchers - INFO - Fetched 7 jobs from Ashby for Nooks
+2026-02-19 07:36:21,866 - fetchers - INFO - Fetched 18 jobs from Ashby for LangChain
+2026-02-19 07:36:21,868 - fetchers - INFO - Fetched 0 jobs from Ashby for SF Tensor
+2026-02-19 07:36:21,913 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Chainguard
+2026-02-19 07:36:21,929 - fetchers - INFO - Fetched 6 jobs from Greenhouse for Abnormal Security
+2026-02-19 07:36:21,967 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Dashlane
+2026-02-19 07:36:21,994 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/safebase/jobs?content=true
+2026-02-19 07:36:22,025 - fetchers - INFO - Fetched 1 jobs from Ashby for HackerOne
+2026-02-19 07:36:22,062 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/chainalysis
+2026-02-19 07:36:22,263 - fetchers - INFO - Fetched 153 jobs from Greenhouse for Cloudflare
+2026-02-19 07:36:22,322 - fetchers - INFO - Fetched 3 jobs from Greenhouse for Checkr
+2026-02-19 07:36:22,445 - fetchers - INFO - Fetched 1 jobs from Greenhouse for Fivetran
+2026-02-19 07:36:22,504 - fetchers - INFO - Fetched 4 jobs from Ashby for Airwallex
+2026-02-19 07:36:22,506 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/mode/jobs?content=true
+2026-02-19 07:36:22,540 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/mparticle/jobs?content=true
+2026-02-19 07:36:22,564 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Mixpanel
+2026-02-19 07:36:22,597 - fetchers - INFO - Fetched 1 jobs from Ashby for Pinecone
+2026-02-19 07:36:22,650 - fetchers - INFO - Fetched 2 jobs from Ashby for Sentry
+2026-02-19 07:36:22,656 - fetchers - INFO - Fetched 1 jobs from Ashby for MotherDuck
+2026-02-19 07:36:22,689 - fetchers - INFO - Fetched 13 jobs from Ashby for UiPath
+2026-02-19 07:36:22,716 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/supabase/jobs?content=true
+2026-02-19 07:36:22,747 - utils.network - WARNING - HTTP 404 for https://api.lever.co/v0/postings/dunandbradstreet
+2026-02-19 07:36:22,747 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Netlify
+2026-02-19 07:36:22,770 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/bubble/jobs?content=true
+2026-02-19 07:36:22,771 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/sourcegraph/jobs?content=true
+2026-02-19 07:36:22,802 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/mapbox/jobs?content=true
+2026-02-19 07:36:22,827 - fetchers - INFO - Fetched 16 jobs from Greenhouse for Postman
+2026-02-19 07:36:22,829 - fetchers - INFO - Fetched 0 jobs from Greenhouse for PartnerStack
+2026-02-19 07:36:22,853 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/ably/jobs?content=true
+2026-02-19 07:36:22,857 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/trayio/jobs?content=true
+2026-02-19 07:36:22,891 - fetchers - INFO - Fetched 0 jobs from Ashby for Docker
+2026-02-19 07:36:22,923 - fetchers - INFO - Fetched 6 jobs from Greenhouse for Contentful
+2026-02-19 07:36:22,994 - fetchers - INFO - Fetched 0 jobs from Ashby for OutRival
+2026-02-19 07:36:22,998 - utils.network - WARNING - HTTP 404 for https://api.lever.co/v0/postings/cit
+2026-02-19 07:36:23,020 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/wise/jobs?content=true
+2026-02-19 07:36:23,034 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Mercury
+2026-02-19 07:36:23,072 - fetchers - INFO - Fetched 33 jobs from Ashby for Ramp
+2026-02-19 07:36:23,075 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/modern-treasury
+2026-02-19 07:36:23,115 - fetchers - INFO - Fetched 9 jobs from Ashby for Mollie
+2026-02-19 07:36:23,121 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/evenup
+2026-02-19 07:36:23,163 - fetchers - INFO - Fetched 10 jobs from Lever for Rackspace Technology
+2026-02-19 07:36:23,167 - utils.network - WARNING - HTTP 404 for https://api.ashbyhq.com/posting-api/job-board/jerry
+2026-02-19 07:36:23,276 - fetchers - INFO - Fetched 10 jobs from Ashby for Flock Safety
+2026-02-19 07:36:23,363 - fetchers - INFO - Fetched 1 jobs from Ashby for Mosaic
+2026-02-19 07:36:23,383 - fetchers - INFO - Fetched 11 jobs from Ashby for Character.ai
+2026-02-19 07:36:23,597 - fetchers - INFO - Fetched 0 jobs from Ashby for Elliptic
+2026-02-19 07:36:23,685 - fetchers - INFO - Fetched 0 jobs from Ashby for Fundamental Research Labs
+2026-02-19 07:36:23,813 - fetchers - INFO - Fetched 404 jobs from Greenhouse for SpaceX
+2026-02-19 07:36:23,891 - fetchers - INFO - Fetched 6 jobs from Ashby for Normal Computing
+2026-02-19 07:36:24,086 - fetchers - INFO - Fetched 2 jobs from Ashby for Wordware
+2026-02-19 07:36:24,110 - fetchers - INFO - Fetched 6 jobs from Ashby for Writer
+2026-02-19 07:36:24,134 - utils.network - WARNING - HTTP 404 for https://boards-api.greenhouse.io/v1/boards/sambanovarecruiting/jobs?content=true
+2026-02-19 07:36:24,152 - fetchers - INFO - Fetched 0 jobs from Ashby for Retell AI
+2026-02-19 07:36:24,164 - fetchers - INFO - Fetched 6 jobs from Greenhouse for World Labs
+2026-02-19 07:36:24,184 - fetchers - INFO - Fetched 2 jobs from Ashby for ConductorAI
+2026-02-19 07:36:24,499 - fetchers - INFO - Fetched 2 jobs from Ashby for Seven AI
+2026-02-19 07:36:24,534 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Endor Labs
+2026-02-19 07:36:24,566 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Thoropass
+2026-02-19 07:36:24,604 - fetchers - INFO - Fetched 3 jobs from Greenhouse for Torq
+2026-02-19 07:36:24,638 - fetchers - INFO - Fetched 5 jobs from Ashby for ElevenLabs
+2026-02-19 07:36:24,927 - fetchers - INFO - Fetched 4 jobs from Lever for Binance
+2026-02-19 07:36:24,950 - fetchers - INFO - Fetched 6 jobs from Ashby for Eventual
+2026-02-19 07:36:25,224 - fetchers - INFO - Fetched 2 jobs from Ashby for Lambda Labs
+2026-02-19 07:36:25,359 - fetchers - INFO - Fetched 30 jobs from Greenhouse for CoreWeave
+2026-02-19 07:36:25,399 - fetchers - INFO - Fetched 10 jobs from Greenhouse for Together AI
+2026-02-19 07:36:25,426 - fetchers - INFO - Fetched 12 jobs from Ashby for d-Matrix
+2026-02-19 07:36:25,453 - fetchers - INFO - Fetched 24 jobs from Ashby for Mach Industries
+2026-02-19 07:36:25,516 - fetchers - INFO - Fetched 0 jobs from Ashby for Arkenstone
+2026-02-19 07:36:25,594 - fetchers - INFO - Fetched 2 jobs from Ashby for REGENT
+2026-02-19 07:36:25,689 - fetchers - INFO - Fetched 2 jobs from Ashby for Valinor
+2026-02-19 07:36:25,756 - fetchers - INFO - Fetched 6 jobs from Lever for Paytm
+2026-02-19 07:36:25,777 - fetchers - INFO - Fetched 18 jobs from Greenhouse for Relativity Space
+2026-02-19 07:36:25,842 - fetchers - INFO - Fetched 9 jobs from Ashby for E2B
+2026-02-19 07:36:25,937 - fetchers - INFO - Fetched 2 jobs from Ashby for Stack AI
+2026-02-19 07:36:26,013 - fetchers - INFO - Fetched 1 jobs from Ashby for Saris AI
+2026-02-19 07:36:26,053 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Human Interest
+2026-02-19 07:36:26,172 - fetchers - INFO - Fetched 0 jobs from Ashby for vCluster
+2026-02-19 07:36:26,200 - fetchers - INFO - Fetched 2 jobs from Ashby for Charge Robotics
+2026-02-19 07:36:26,212 - fetchers - INFO - Fetched 1 jobs from Ashby for SentiLink
+2026-02-19 07:36:26,319 - fetchers - INFO - Fetched 1 jobs from Ashby for Orchard Robotics
+2026-02-19 07:36:26,364 - fetchers - INFO - Fetched 33 jobs from Greenhouse for Figure AI
+2026-02-19 07:36:26,405 - fetchers - INFO - Fetched 3 jobs from Ashby for Reflex Robotics
+2026-02-19 07:36:26,431 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Durable
+2026-02-19 07:36:26,448 - fetchers - INFO - Fetched 30 jobs from Greenhouse for Aurora Innovation
+2026-02-19 07:36:26,450 - fetchers - INFO - Fetched 14 jobs from Ashby for Sunday Robotics
+2026-02-19 07:36:26,464 - fetchers - INFO - Fetched 12 jobs from Greenhouse for Hebbia
+2026-02-19 07:36:26,480 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Prodigal
+2026-02-19 07:36:26,603 - fetchers - INFO - Fetched 3 jobs from Ashby for Astera Institute
+2026-02-19 07:36:26,638 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Axonius
+2026-02-19 07:36:26,746 - utils.network - WARNING - HTTP 404 for https://api.lever.co/v0/postings/invisible
+2026-02-19 07:36:26,876 - fetchers - INFO - Fetched 4 jobs from Ashby for Twelve Labs
+2026-02-19 07:36:26,923 - fetchers - INFO - Fetched 11 jobs from Greenhouse for Neo4j
+2026-02-19 07:36:27,073 - fetchers - INFO - Fetched 39 jobs from Greenhouse for Pure Storage
+2026-02-19 07:36:27,125 - fetchers - INFO - Fetched 11 jobs from Greenhouse for Sigma Computing
+2026-02-19 07:36:27,237 - fetchers - INFO - Fetched 2 jobs from Ashby for Zettabyte
+2026-02-19 07:36:27,299 - fetchers - INFO - Fetched 9 jobs from Lever for CertiK
+2026-02-19 07:36:27,375 - fetchers - INFO - Fetched 6 jobs from Lever for Mistral AI
+2026-02-19 07:36:27,476 - fetchers - INFO - Fetched 4 jobs from Ashby for Cape
+2026-02-19 07:36:27,480 - fetchers - INFO - Fetched 8 jobs from Ashby for Gallatin
+2026-02-19 07:36:27,499 - fetchers - INFO - Fetched 0 jobs from Ashby for Mural
+2026-02-19 07:36:27,622 - fetchers - INFO - Fetched 2 jobs from Ashby for The Browser Company
+2026-02-19 07:36:27,765 - fetchers - INFO - Fetched 1 jobs from Ashby for Miter
+2026-02-19 07:36:27,815 - fetchers - INFO - Fetched 1 jobs from Ashby for Front
+2026-02-19 07:36:27,983 - fetchers - INFO - Fetched 1 jobs from Ashby for Weave
+2026-02-19 07:36:28,009 - fetchers - INFO - Fetched 2 jobs from Greenhouse for Daylight
+2026-02-19 07:36:28,052 - fetchers - INFO - Fetched 3 jobs from Greenhouse for Credit Karma
+2026-02-19 07:36:28,080 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Magic.dev
+2026-02-19 07:36:28,105 - fetchers - INFO - Fetched 0 jobs from Greenhouse for Zora
+2026-02-19 07:36:28,203 - fetchers - INFO - Fetched 22 jobs from Ashby for Crusoe
+2026-02-19 07:36:28,231 - fetchers - INFO - Fetched 4 jobs from Ashby for Middesk
+2026-02-19 07:36:28,265 - fetchers - INFO - Fetched 2 jobs from Ashby for Cardless
+2026-02-19 07:36:28,334 - fetchers - INFO - Fetched 32 jobs from Greenhouse for Scout Motors
+2026-02-19 07:36:28,717 - utils.network - WARNING - HTTP 404 for https://api.lever.co/v0/postings/flybits
+2026-02-19 07:36:29,196 - fetchers - INFO - Fetched 12 jobs from Lever for Aircall
+2026-02-19 07:36:30,764 - utils.network - WARNING - HTTP 404 for https://api.lever.co/v0/postings/mattermost

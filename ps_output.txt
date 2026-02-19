@@ -1,0 +1,15 @@
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED       STATUS                      PORTS                                         NAMES
+3aa252ef26b2   factoryexcelmanager-frontend          "docker-entrypoint.s…"   2 days ago    Exited (143) 40 hours ago                                                 linesight-frontend
+57d045930ac6   factoryexcelmanager-backend           "uvicorn app.main:ap…"   2 days ago    Exited (137) 40 hours ago                                                 linesight-api
+c8700aebd09a   factoryexcelmanager-celery-worker     "celery -A app.worke…"   2 days ago    Exited (137) 40 hours ago                                                 linesight-celery
+fb664ce10369   postgres:15-alpine                    "docker-entrypoint.s…"   2 days ago    Exited (0) 40 hours ago                                                   linesight-postgres
+3786425d2445   redis:7-alpine                        "docker-entrypoint.s…"   2 days ago    Exited (0) 40 hours ago                                                   linesight-redis
+38a4a1028103   jobseeker-analytics-backend           "sh -c 'alembic upgr…"   3 days ago    Exited (1) 6 hours ago                                                    jobseeker-analytics-backend-1
+092d608abe00   jobseeker-analytics-frontend          "docker-entrypoint.s…"   3 days ago    Exited (0) 6 hours ago                                                    jobseeker-analytics-frontend-1
+f2ab256d84d1   postgres:13                           "docker-entrypoint.s…"   3 days ago    Exited (255) 3 days ago     0.0.0.0:5433->5432/tcp                        jobseeker-analytics-db-1
+b4869ba41910   rendercv-rendercv-dev                 "bash -c 'uv sync --…"   6 days ago    Exited (0) 6 days ago                                                     rendercv-rendercv-dev-1
+13dea667e7a7   accountingsaas-frontend               "docker-entrypoint.s…"   12 days ago   Exited (0) 7 days ago                                                     accountingsaas-frontend-1
+49e91afd848b   accountingsaas-backend                "uvicorn app.main:ap…"   12 days ago   Exited (0) 7 days ago                                                     accountingsaas-backend-1
+80ee858b1be7   mysql:8.0                             "docker-entrypoint.s…"   12 days ago   Up 6 hours (healthy)        0.0.0.0:3307->3306/tcp, [::]:3307->3306/tcp   accountingsaas-db-1
+19a64f028f3a   dgtlmoon/sockpuppetbrowser:latest     "tini -- /usr/local/…"   2 weeks ago   Up 6 hours                                                                changedetectionio-browser-sockpuppet-chrome-1
+59af1f00866c   ghcr.io/dgtlmoon/changedetection.io   "python ./changedete…"   2 weeks ago   Up 6 hours                  127.0.0.1:5000->5000/tcp                      changedetection

@@ -1,5 +1,5 @@
 # Core Components
-rendercv==2.6
+# rendercv==2.6
 ruamel.yaml>=0.17.4,<0.19.0
 
 # Dashboard Dependencies (pinned from job-scraping-app usage if needed, else these are installed via that package)

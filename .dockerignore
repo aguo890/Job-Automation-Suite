@@ -16,3 +16,7 @@ env
 # Ignore local PDFs/artifacts in root (they should be in generated_cvs)
 *.pdf
 temp_playground.yaml
+generated_cvs
+rendercv/rendercv_output
+job-scraping-app/logs
+job-scraping-app/data

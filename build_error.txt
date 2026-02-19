@@ -1,0 +1,67 @@
+time="2026-02-19T02:42:52-05:00" level=warning msg="C:\\Users\\19803\\Projects\\Job-Automation-Suite\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image job-automation-suite-scraper Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 587B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.scraper
+#2 transferring dockerfile: 1.24kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 354B done
+#4 DONE 0.0s
+
+#5 [1/8] FROM docker.io/library/python:3.12-slim@sha256:9e01bf1ae5db7649a236da7be1e94ffbbbdd7a93f867dd0d8d5720d9e1f89fab
+#5 resolve docker.io/library/python:3.12-slim@sha256:9e01bf1ae5db7649a236da7be1e94ffbbbdd7a93f867dd0d8d5720d9e1f89fab 0.0s done
+#5 DONE 0.1s
+
+#6 [2/8] WORKDIR /app
+#6 CACHED
+
+#7 [internal] load build context
+#7 transferring context: 68.70kB 0.0s done
+#7 DONE 0.1s
+
+#8 [3/8] RUN apt-get update && apt-get install -y     gcc     python3-dev     && rm -rf /var/lib/apt/lists/*
+#8 CANCELED
+
+#9 [6/8] COPY job-scraping-app/ ./job-scraping-app/
+#9 CACHED
+
+#10 [4/8] COPY job-scraping-app/requirements-scraper.txt ./job-scraping-app/
+#10 CACHED
+
+#11 [5/8] RUN pip install --no-cache-dir -r job-scraping-app/requirements-scraper.txt
+#11 CACHED
+
+#12 [7/8] COPY utils/ ./job-scraping-app/utils/
+#12 ERROR: failed to calculate checksum of ref jc6db0y0nmfj7d2wk0421stzq::eg3w5z11w7cxlrjknt76l183a: "/utils": not found
+------
+ > [7/8] COPY utils/ ./job-scraping-app/utils/:
+------
+Dockerfile.scraper:19
+
+--------------------
+
+  17 |     # Copy application code
+
+  18 |     COPY job-scraping-app/ ./job-scraping-app/
+
+  19 | >>> COPY utils/ ./job-scraping-app/utils/
+
+  20 |     # Note: we need common utils if scraper uses them.
+
+  21 |     # The user's pseudocode suggests copying everything, but we can be more selective.
+
+--------------------
+
+failed to solve: failed to compute cache key: failed to calculate checksum of ref jc6db0y0nmfj7d2wk0421stzq::eg3w5z11w7cxlrjknt76l183a: "/utils": not found
+
+
+
+View build details: docker-desktop://dashboard/build/default/default/452zzt45gms4axdc6nb7ei3ea
+

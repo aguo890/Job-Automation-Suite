@@ -1,0 +1,15 @@
+CONTAINER ID   NAMES                                           STATUS                      IMAGE
+3aa252ef26b2   linesight-frontend                              Exited (143) 40 hours ago   factoryexcelmanager-frontend
+57d045930ac6   linesight-api                                   Exited (137) 40 hours ago   factoryexcelmanager-backend
+c8700aebd09a   linesight-celery                                Exited (137) 40 hours ago   factoryexcelmanager-celery-worker
+fb664ce10369   linesight-postgres                              Exited (0) 40 hours ago     postgres:15-alpine
+3786425d2445   linesight-redis                                 Exited (0) 40 hours ago     redis:7-alpine
+38a4a1028103   jobseeker-analytics-backend-1                   Exited (1) 6 hours ago      jobseeker-analytics-backend
+092d608abe00   jobseeker-analytics-frontend-1                  Exited (0) 6 hours ago      jobseeker-analytics-frontend
+f2ab256d84d1   jobseeker-analytics-db-1                        Exited (255) 3 days ago     postgres:13
+b4869ba41910   rendercv-rendercv-dev-1                         Exited (0) 6 days ago       rendercv-rendercv-dev
+13dea667e7a7   accountingsaas-frontend-1                       Exited (0) 7 days ago       accountingsaas-frontend
+49e91afd848b   accountingsaas-backend-1                        Exited (0) 7 days ago       accountingsaas-backend
+80ee858b1be7   accountingsaas-db-1                             Up 6 hours (healthy)        mysql:8.0
+19a64f028f3a   changedetectionio-browser-sockpuppet-chrome-1   Up 6 hours                  dgtlmoon/sockpuppetbrowser:latest
+59af1f00866c   changedetection                                 Up 6 hours                  ghcr.io/dgtlmoon/changedetection.io

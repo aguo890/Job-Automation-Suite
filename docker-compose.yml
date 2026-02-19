@@ -26,3 +26,31 @@ services:
       # --- Master Data ---
       # Direct mapping of your master YAML file so edits save to your host machine
       - ./rendercv/Aaron_Guo_CV.yaml:/app/rendercv/Aaron_Guo_CV.yaml
+
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile.scraper
+    working_dir: /app/job-scraping-app
+    command: python scheduler.py
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Ensure these strictly match the dashboard's volume mounts
+      - ./job-scraping-app/config:/app/job-scraping-app/config
+      - ./job-scraping-app/data:/app/job-scraping-app/data
+      - ./generated_cvs:/app/generated_cvs
+      - ./rendercv/backups:/app/rendercv/backups
+      - ./rendercv/rendercv_output:/app/rendercv/rendercv_output
+      - ./rendercv/Aaron_Guo_CV.yaml:/app/rendercv/Aaron_Guo_CV.yaml
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      # Check if the heartbeat file exists and was modified in the last 40 minutes
+      test: [ "CMD-SHELL", "find /tmp/scraper_heartbeat -mmin -40 | grep scraper_heartbeat || exit 1" ]
+      interval: 5m
+      timeout: 10s
+      retries: 3
