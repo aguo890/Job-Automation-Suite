@@ -24,6 +24,13 @@ services:
       # --- Master Data ---
       # Direct mapping of your master YAML file so edits save to your host machine
       - ./rendercv/Aaron_Guo_CV.yaml:/app/rendercv/Aaron_Guo_CV.yaml
+    healthcheck:
+      # Check if jobs_agg.json was modified in the last 24 hours (86400 seconds)
+      test: [ "CMD-SHELL", "test $$(expr $$(date +%s) - $$(stat -c %Y /app/job-scraping-app/data/jobs_agg.json)) -lt 86400 || exit 1" ]
+      interval: 10m
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   scraper:
     build:
