@@ -16,14 +16,8 @@ services:
       # --- CV Generation Persistence ---
       # Where the final PDFs land
       - ./generated_cvs:/app/generated_cvs
-      # Backup history of your CVs
-      - ./rendercv/backups:/app/rendercv/backups
-      # Intermediate render artifacts (LaTeX files)
-      - ./rendercv/rendercv_output:/app/rendercv/rendercv_output
-
-      # --- Master Data ---
-      # Direct mapping of your master YAML file so edits save to your host machine
-      - ./rendercv/Aaron_Guo_CV.yaml:/app/rendercv/Aaron_Guo_CV.yaml
+      # Mount entire rendercv directory to avoid inode file locks during atomic saves
+      - ./rendercv:/app/rendercv
     healthcheck:
       # Check if jobs_agg.json was modified in the last 24 hours (86400 seconds)
       test: [ "CMD-SHELL", "test $$(expr $$(date +%s) - $$(stat -c %Y /app/job-scraping-app/data/jobs_agg.json)) -lt 86400 || exit 1" ]
@@ -45,9 +39,7 @@ services:
       - ./job-scraping-app/config:/app/job-scraping-app/config
       - ./job-scraping-app/data:/app/job-scraping-app/data
       - ./generated_cvs:/app/generated_cvs
-      - ./rendercv/backups:/app/rendercv/backups
-      - ./rendercv/rendercv_output:/app/rendercv/rendercv_output
-      - ./rendercv/Aaron_Guo_CV.yaml:/app/rendercv/Aaron_Guo_CV.yaml
+      - ./rendercv:/app/rendercv
     restart: unless-stopped
     deploy:
       resources:

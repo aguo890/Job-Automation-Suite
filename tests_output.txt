@@ -1,0 +1,47 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\19803\Projects\Job-Automation-Suite\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\19803\Projects\Job-Automation-Suite\job-scraping-app
+configfile: pyproject.toml
+plugins: anyio-4.12.1, asyncio-1.3.0, mock-3.15.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+job-scraping-app\tests\test_processor.py::test_extract_yoe_valid PASSED  [ 20%]
+job-scraping-app\tests\test_processor.py::test_extract_yoe_false_positives PASSED [ 40%]
+job-scraping-app\tests\test_processor.py::test_process_jobs_bypass FAILED [ 60%]
+job-scraping-app\tests\test_processor.py::test_process_jobs_no_bypass_for_description PASSED [ 80%]
+job-scraping-app\tests\test_processor.py::test_process_jobs_disqualification PASSED [100%]
+
+================================== FAILURES ===================================
+__________________________ test_process_jobs_bypass ___________________________
+
+processor = <processor.JobProcessor object at 0x000002893ADDCE10>
+
+    def test_process_jobs_bypass(processor):
+        """Test that Intern/New Grad titles bypass the YOE check."""
+        jobs = [{
+            "id": "1",
+            "title": "Software Engineering Intern",
+            "company": "TestCorp",
+            "location": "Remote",
+            "url": "http://test.com",
+            "description": "Requires 10 years of experience" # High YOE in description
+        }]
+    
+        # max_exp in fixture is 3
+        processed = processor.process_jobs(jobs)
+        assert len(processed) == 1
+>       assert processed[0]['title'] == "Software Engineering Intern"
+E       AssertionError: assert '\U0001f525 Software E...eering Intern' == 'Software Engineering Intern'
+E         
+E         - Software Engineering Intern
+E         + \U0001f525 Software Engineering Intern
+E         ? ++
+
+job-scraping-app\tests\test_processor.py:57: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    root:location_filter.py:16 Failed to load location config: [Errno 2] No such file or directory: 'config/filtering.yaml'
+=========================== short test summary info ===========================
+FAILED job-scraping-app\tests\test_processor.py::test_process_jobs_bypass - A...
+========================= 1 failed, 4 passed in 0.16s =========================

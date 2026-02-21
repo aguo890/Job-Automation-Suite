@@ -7,9 +7,15 @@
 *.py[cod]
 *~
 *.egg-info/
-.venv/
-venv/
-env/
+**/.venv/
+**/venv/
+**/env/
+
+# Data and Outputs
+job-scraping-app/data/
+rendercv/rendercv_output/
+rendercv/backups/
+generated_cvs/
 
 # Docker
 docker-compose.yml

@@ -43,7 +43,7 @@ COPY cv_bridge.py ai_tailor.py ./
 # Stage 4: Local Package Install
 # -----------------------------------------------------------------------------
 # Install local packages in editable mode so changes to source are immediate
-RUN pip install -e ./rendercv
+RUN pip install -e "./rendercv[full]"
 RUN pip install -e ./job-scraping-app
 
 # -----------------------------------------------------------------------------
