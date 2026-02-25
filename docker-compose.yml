@@ -7,16 +7,26 @@ services:
     env_file:
       - .env
     volumes:
-      # --- Job Scraper Persistence ---
-      # Persist user config (searches, API keys)
+      # --- Hot Reload: Source Code ---
+      # Dashboard & pages
+      - ./job-scraping-app/dashboard.py:/app/job-scraping-app/dashboard.py
+      - ./job-scraping-app/pages:/app/job-scraping-app/pages
+      # Core modules
+      - ./cv_bridge.py:/app/cv_bridge.py
+      - ./ai_tailor.py:/app/ai_tailor.py
+      - ./job-scraping-app/processor.py:/app/job-scraping-app/processor.py
+      - ./job-scraping-app/main.py:/app/job-scraping-app/main.py
+      - ./job-scraping-app/fetchers.py:/app/job-scraping-app/fetchers.py
+      - ./job-scraping-app/reporter.py:/app/job-scraping-app/reporter.py
+      - ./job-scraping-app/scheduler.py:/app/job-scraping-app/scheduler.py
+      - ./job-scraping-app/utils:/app/job-scraping-app/utils
+
+      # --- Data Persistence ---
       - ./job-scraping-app/config:/app/job-scraping-app/config
-      # Persist scraped job data
       - ./job-scraping-app/data:/app/job-scraping-app/data
 
       # --- CV Generation Persistence ---
-      # Where the final PDFs land
       - ./generated_cvs:/app/generated_cvs
-      # Mount entire rendercv directory to avoid inode file locks during atomic saves
       - ./rendercv:/app/rendercv
     healthcheck:
       # Check if jobs_agg.json was modified in the last 24 hours (86400 seconds)
@@ -35,7 +45,17 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     volumes:
-      # Ensure these strictly match the dashboard's volume mounts
+      # --- Hot Reload: Source Code ---
+      - ./cv_bridge.py:/app/cv_bridge.py
+      - ./ai_tailor.py:/app/ai_tailor.py
+      - ./job-scraping-app/processor.py:/app/job-scraping-app/processor.py
+      - ./job-scraping-app/main.py:/app/job-scraping-app/main.py
+      - ./job-scraping-app/fetchers.py:/app/job-scraping-app/fetchers.py
+      - ./job-scraping-app/reporter.py:/app/job-scraping-app/reporter.py
+      - ./job-scraping-app/scheduler.py:/app/job-scraping-app/scheduler.py
+      - ./job-scraping-app/utils:/app/job-scraping-app/utils
+
+      # --- Data Persistence ---
       - ./job-scraping-app/config:/app/job-scraping-app/config
       - ./job-scraping-app/data:/app/job-scraping-app/data
       - ./generated_cvs:/app/generated_cvs

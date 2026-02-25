@@ -155,6 +155,19 @@ class CVOrchestrator:
 
     # --- CV Editor Methods ---
 
+    def reset_playground(self):
+        """Removes playground-specific files to ensure a fresh start."""
+        playground_yaml = self.output_dir / "playground.yaml"
+        playground_pdf = self.output_dir / "playground.pdf"
+        
+        try:
+            if playground_yaml.exists():
+                playground_yaml.unlink()
+            if playground_pdf.exists():
+                playground_pdf.unlink()
+        except Exception as e:
+            print(f"Warning: Could not reset playground files: {e}")
+
     def load_job_cv(self, job_id):
         """Load CV content for a given job. For 'master_cv', always loads the base file."""
         if job_id == "master_cv":

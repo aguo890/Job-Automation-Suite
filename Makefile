@@ -28,7 +28,7 @@ endif
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
-.PHONY: install run scrape test clean help docker-up docker-build docker-down
+.PHONY: install run scrape test clean help docker-up docker-build docker-down docker-test docker-logs
 
 help:
 	@echo "Local Commands:"
@@ -42,6 +42,8 @@ help:
 	@echo "  make docker-up     - Build and run the full suite in Docker"
 	@echo "  make docker-down   - Stop and remove the Docker container"
 	@echo "  make docker-build  - Force rebuild the Docker image"
+	@echo "  make docker-test   - Run scraper unit tests inside the container"
+	@echo "  make docker-logs   - Tail the recent logs for the scraper"
 
 # --- Local Development ---
 
@@ -91,3 +93,11 @@ docker-down:
 docker-build:
 	@echo "Building Docker image..."
 	docker-compose build
+
+docker-test:
+	@echo "Running scraper scheduler tests inside Docker..."
+	docker-compose run --rm scraper python -m unittest tests/test_scheduler_logic.py
+
+docker-logs:
+	@echo "Tailing scraper logs..."
+	docker-compose logs scraper --tail 20 -f
