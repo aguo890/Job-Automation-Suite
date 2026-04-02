@@ -20,7 +20,7 @@ jobs:
 
       - name: Run Schema & Data Verifications
         # Runs standardized pytest suite within the container
-        run: docker compose run --rm scraper pytest tests/
+        run: docker compose run --rm scraper python -m pytest tests/
         
       - name: Dry-Run Scrape Test
         # Perform a dry-run to ensure logical connectivity
