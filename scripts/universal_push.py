@@ -37,6 +37,10 @@ def run_git_cmd(args, cwd):
         errors='replace'
     )
 
+def get_current_branch(repo_path):
+    res = run_git_cmd(["branch", "--show-current"], repo_path)
+    return res.stdout.strip()
+
 def get_commit_message(diff_content):
     api_key = os.getenv("DEEPSEEK_API_KEY") or os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -65,11 +69,24 @@ def diff_context(diff):
 
 def process_repo(repo_path_rel):
     repo_path = (ROOT_DIR / repo_path_rel).resolve()
-    print(f"\n📂 Processing: {repo_path.name}")
+    print(f"\n📂 Processing: {repo_path_rel if repo_path_rel != '.' else 'Root'}")
     
     if not (repo_path / ".git").exists():
-        print("  ❌ Not a git repository. Skipping.")
+        # Check if it's a submodule directory without .git (might happen if not initialized)
+        if (repo_path).is_dir():
+            print(f"  ⚠️  {repo_path.name} is a directory but not a git repo. Skipping.")
+        else:
+            print(f"  ❌ {repo_path.name} not found. Skipping.")
         return
+
+    # 0. Branch Guardrail
+    branch = get_current_branch(repo_path)
+    if not branch:
+        print(f"  ⚠️  Skipping: Repository is in a detached HEAD state.")
+        print(f"     To push changes, cd into '{repo_path_rel}', checkout a branch (e.g., 'main'), and try again.")
+        return
+
+    print(f"  🌿 Branch: {branch}")
 
     # 1. Check for Uncommitted Changes
     status = run_git_cmd(["status", "--porcelain"], repo_path)
@@ -89,16 +106,17 @@ def process_repo(repo_path_rel):
             if res.returncode == 0:
                 print("  ✅ Committed.")
             else:
+                # If commit failed (e.g. pre-commit hooks), we shouldn't continue to push
                 print(f"  ❌ Commit failed: {res.stderr}")
+                return
 
     # 1.5 Pull Rebase (Sync with remote to prevent non-fast-forward errors)
     print("  ⬇️  Pulling changes (rebase)...")
     pull_res = run_git_cmd(["pull", "--rebase"], repo_path)
     if pull_res.returncode != 0:
-        print(f"  ⚠️  Pull rebase warning: {pull_res.stderr}")
+        print(f"  ⚠️  Pull rebase warning: {pull_res.stderr.strip()}")
 
     # 2. Check for Unpushed Commits
-    # 'git status -sb' shows ## branch... ahead X
     status_sb = run_git_cmd(["status", "-sb"], repo_path).stdout
     if "ahead" in status_sb:
         print("  🚀 Local is ahead. Pushing...")
@@ -106,7 +124,7 @@ def process_repo(repo_path_rel):
         if push_res.returncode == 0:
             print("  ✅ Pushed!")
         else:
-            print(f"  ❌ Push failed: {push_res.stderr}")
+            print(f"  ❌ Push failed: {push_res.stderr.strip()}")
     else:
         print("  ✨ Everything up to date.")
 
