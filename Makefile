@@ -3,32 +3,37 @@
 # -----------------------------------------------------------------------------
 ifeq ($(OS),Windows_NT)
     # Windows Settings
+    PYTHON_SYS = python
     VENV_BIN = venv/Scripts
-    PYTHON = $(VENV_BIN)/python
-    PIP = $(VENV_BIN)/pip
     RM_DIR = rmdir /s /q
     RM_FILE = del /q
     FIX_PATH = $(subst /,\,$(1))
     MKDIR_P = mkdir
-    # Run from subdir, so use relative path to venv in root
-    RUN_SCRAPER = cd job-scraping-app && ..\$(subst /,\,$(PYTHON)) main.py
 else
     # Unix Settings
+    PYTHON_SYS = python3
     VENV_BIN = venv/bin
-    PYTHON = $(VENV_BIN)/python
-    PIP = $(VENV_BIN)/pip
     RM_DIR = rm -rf
     RM_FILE = rm -f
     FIX_PATH = $(1)
     MKDIR_P = mkdir -p
-    # Run from subdir
+endif
+
+# Common Variables
+PYTHON = $(VENV_BIN)/python
+PIP = $(VENV_BIN)/pip
+
+# Run from subdir
+ifeq ($(OS),Windows_NT)
+    RUN_SCRAPER = cd job-scraping-app && ..\$(subst /,\,$(PYTHON)) main.py
+else
     RUN_SCRAPER = cd job-scraping-app && ../$(PYTHON) main.py
 endif
 
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
-.PHONY: install run scrape test clean help docker-up docker-build docker-down docker-test docker-logs
+.PHONY: install run scrape test clean help docker-up docker-build docker-down docker-test docker-logs push
 
 help:
 	@echo "Local Commands:"
@@ -37,6 +42,7 @@ help:
 	@echo "  make scrape        - Run the Job Scraper (Local)"
 	@echo "  make test          - Run verification tests"
 	@echo "  make clean         - Remove temp files and venv"
+	@echo "  make push          - Run the push script"
 	@echo ""
 	@echo "Docker Commands:"
 	@echo "  make docker-up     - Build and run the full suite in Docker"
@@ -49,14 +55,14 @@ help:
 
 install:
 	@echo "Creating virtual environment..."
-	python -c "import os; import venv; venv.create('venv', with_pip=True) if not os.path.exists('venv') else None"
+	$(PYTHON_SYS) -m venv venv
 	@echo "Installing dependencies..."
-	.$(FIX_PATH)/venv/Scripts/python -m pip install --upgrade pip
+	$(PIP) install --upgrade pip
 	@echo "Installing root requirements..."
-	.$(FIX_PATH)/venv/Scripts/python -m pip install -r requirements.txt
+	$(PIP) install -r requirements.txt
 	@echo "Installing local packages (Editable Mode)..."
-	.$(FIX_PATH)/venv/Scripts/python -m pip install -e "./rendercv[full]"
-	.$(FIX_PATH)/venv/Scripts/python -m pip install -e ./job-scraping-app
+	-$(PIP) install -e "./rendercv[full]"
+	$(PIP) install -e ./job-scraping-app
 
 run:
 	@echo "Starting Dashboard..."
@@ -84,7 +90,7 @@ clean:
 
 docker-up:
 	@echo "Starting Docker container..."
-	docker-compose up --build
+	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build
 
 docker-down:
 	@echo "Stopping Docker container..."

@@ -29,9 +29,8 @@ services:
       - ./generated_cvs:/app/generated_cvs
       - ./rendercv:/app/rendercv
     healthcheck:
-      # Check if jobs_agg.json was modified in the last 24 hours (86400 seconds)
-      test: [ "CMD-SHELL", "test $$(expr $$(date +%s) - $$(stat -c %Y /app/job-scraping-app/data/jobs_agg.json)) -lt 86400 || exit 1" ]
-      interval: 10m
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
