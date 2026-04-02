@@ -14,12 +14,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker Containers
-        run: docker-compose build
+        run: docker compose build
 
       - name: Run Schema & Data Verifications
         # Runs standardized pytest suite within the container
-        run: docker-compose run --rm scraper pytest tests/
+        run: docker compose run --rm scraper pytest tests/
         
       - name: Dry-Run Scrape Test
         # Perform a dry-run to ensure logical connectivity
-        run: docker-compose run --rm scraper python main.py --help
+        run: docker compose run --rm scraper python main.py --help
