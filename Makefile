@@ -107,3 +107,5 @@ docker-test:
 docker-logs:
 	@echo "Tailing scraper logs..."
 	docker-compose logs scraper --tail 20 -f
+
+# Trigger push
