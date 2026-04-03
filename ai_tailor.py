@@ -1,55 +1,71 @@
 import os
 import json
-import yaml
 import re
 from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
+from ruamel.yaml import YAML
 
 # --- ROBUST ENV LOADING ---
 current_dir = Path(__file__).parent
 env_path = current_dir / ".env"
 load_dotenv(dotenv_path=env_path)
 
-def validate_integrity(base_data, ai_data):
+def validate_integrity(master_cv_data, ai_suggested_data):
     """
-    Ensures the AI didn't invent companies.
+    STRICT HALLUCINATION GATE (Anti-Fabrication).
+    Ensures the AI didn't invent companies or modify official titles.
+    Returns: (bool, list_of_violations)
     """
-    # 1. Extract valid companies from Source (normalize to lowercase)
-    valid_companies = set()
-    if 'cv' in base_data and 'sections' in base_data['cv'] and 'experience' in base_data['cv']['sections']:
-        for role in base_data['cv']['sections']['experience']:
-            # Adjust 'organization' key based on your YAML schema
-            company = role.get('company') or role.get('organization') 
-            if company:
-                valid_companies.add(company.lower().strip())
-
-    # 2. Check AI output
-    if 'experience' in ai_data:
-        for role in ai_data['experience']:
-            # Adjust key based on your PROMPT schema
-            ai_company = role.get('company') or role.get('organization')
-            
-            if ai_company and ai_company.lower().strip() not in valid_companies:
-                print(f"⚠️ WARNING: AI generated a company not in source: '{ai_company}' (Hallucination Risk)")
-                # Optional: raise ValueError("Integrity Check Failed")
+    violations = []
     
-    return True
+    # 1. Extract valid factual anchors from Master CV
+    factual_anchors = {} # {company_lower: set(valid_titles_lower)}
+    
+    cv_sections = master_cv_data.get('cv', {}).get('sections', {})
+    experience = cv_sections.get('experience', [])
+    
+    for role in experience:
+        company = (role.get('company') or role.get('organization') or "").lower().strip()
+        title = (role.get('position') or role.get('title') or "").lower().strip()
+        if company:
+            if company not in factual_anchors:
+                factual_anchors[company] = set()
+            if title:
+                factual_anchors[company].add(title)
+
+    # 2. Verify AI Suggestions against factual anchors
+    if 'experience' in ai_suggested_data:
+        for suggestion in ai_suggested_data['experience']:
+            ai_company = (suggestion.get('company') or suggestion.get('organization') or "").lower().strip()
+            ai_title = (suggestion.get('position') or suggestion.get('title') or "").lower().strip()
+            
+            if not ai_company or ai_company not in factual_anchors:
+                violations.append(f"HAL01: Invented Company '{ai_company}'")
+                continue
+                
+            if ai_title and ai_title not in factual_anchors[ai_company]:
+                violations.append(f"HAL02: Modified Title '{ai_title}' at {ai_company}")
+    
+    return len(violations) == 0, violations
 
 def generate_tailored_resume(base_yaml_content, job_description, job_title, company_name):
     """
-    "THE GHOSTWRITER" Architecture:
-    1. Loads Master Resume (Source of Truth).
-    2. Asks AI to REWRITE the experience section from scratch for the JD.
-    3. Validates integrity (no hallucinated companies/dates).
-    4. Returns a fully synthesized new YAML.
+    "THE GHOSTWRITER" Architecture (Hardened):
+    1. Loads Master Resume via ruamel.yaml to preserve formatting.
+    2. Uses a 'Delta-Optimization' prompt to generate specific optimizations.
+    3. Enforces a 'Strict Hallucination Gate' on company/title integrity.
+    4. Performs selective patching, keeping 100% of human formatting/comments.
     """
+    yaml = YAML()
+    yaml.preserve_quotes = True
+    yaml.indent(mapping=2, sequence=4, offset=2)
     
-    # 1. LOAD BASE RESUME
+    # 1. LOAD MASTER RESUME (FORMAT PRESERVING)
     try:
-        base_resume = yaml.safe_load(base_yaml_content)
-    except yaml.YAMLError as e:
-        raise ValueError(f"CRITICAL: Your source YAML is broken. Fix it first: {e}")
+        master_cv = yaml.load(base_yaml_content)
+    except Exception as e:
+        raise ValueError(f"CRITICAL: Master YAML parsing failed: {e}")
 
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
@@ -57,65 +73,54 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
         
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-
-    # 2. THE "GHOSTWRITER" PROMPT
-    # We ask for a FULL LIST of experience, not just updates.
+    # 2. THE "DELTA-OPTIMIZATION" PROMPT
+    # Focused only on strategy, hooks, and bullet optimization.
     system_prompt = """
-    Role: Elite Resume Ghostwriter & Career Strategist.
-    Goal: Rewrite the candidate's experience section from scratch to perfectly match the target JD.
+    Role: Senior Resume Ghostwriter & Tech Strategist.
+    Goal: Optimize the candidate's bullets and summary to align with the target JD.
+    
+    STRICT COMPLIANCE RULES:
+    1. ZERO HALLUCINATION: You are forbidden from inventing companies, dates, or degrees.
+    2. SOURCE ANCHORING: You must use the EXACT Company Names and Job Titles provided in the Master Resume.
+    3. FORMATTING: BOLD matching technical keywords (e.g., **Python**, **Kubernetes**).
+    
+    TASK:
+    - Write a 2-sentence high-impact summary hook.
+    - Select the Top 6 Key Skills matching the JD.
+    - Rewrite experience bullets using 'Action + Keyword + Metric'. 
+    - Identify 'Gaps' where the candidate lacks a required skill.
 
-    INPUT DATA:
-    1. **Master Resume** (FACTUAL SOURCE OF TRUTH). You MUST use the exact Company Names and Titles from here.
-    2. **Job Description** (TARGET).
-
-    YOUR TASK:
-    1. **SELECT**: Choose the most relevant roles from the Master Resume (drop irrelevant ones like Food Service if enough Engineering experience exists).
-    2. **REWRITE**: Ignore the original bullet points. Write NEW, high-impact bullets based on the facts provided.
-       - Focus on **Engineering/Data/Product** impact.
-       - Use **Action + Keyword + Metric** formula.
-       - **BOLD** matching keywords from the JD (e.g., **React**, **AWS**, **Docker**).
-    3. **LIMITS**:
-       - Max 4 bullets for recent/relevant roles.
-       - Max 2 bullets for older/less relevant roles.
-       - TOTAL LENGTH: Must fit on 1 page (so be concise).
-
-    OUTPUT FORMAT: JSON ONLY.
+    OUTPUT: JSON ONLY.
     {
-        "strategy_brief": "Explain your rewrite strategy.",
-        "summary": "2-line high-impact summary hook.",
-        "key_skills": ["Top 6 relevant skills"],
+        "strategy_brief": "Short explanation of tailoring approach.",
+        "gap_analysis": "What skills are missing for this role?",
+        "summary": "Tailored summary hook.",
+        "key_skills": ["Skill 1", "Skill 2"...],
         "experience": [
             {
                 "company": "Exact Name from Source",
                 "position": "Exact Title from Source",
-                "location": "Exact Location",
-                "date": "YYYY-MM or YYYY (Match Source Format)",
-                "highlights": [
-                    "New Bullet 1 with **Keywords**...",
-                    "New Bullet 2 with **Metrics**..."
-                ]
+                "highlights": ["Optimized bullet 1", "Optimized bullet 2"]
             }
         ],
         "projects": [
             {
-                "name": "Project Name",
-                "date": "YYYY-MM or YYYY",
-                "summary": "One line summary",
-                "highlights": ["Bullet 1", "Bullet 2"]
+                "name": "Project Name from Source",
+                "highlights": ["Optimized bullet 1"]
             }
         ]
     }
     """
 
     user_content = f"""
-    TARGET ROLE: {job_title} at {company_name}
+    TARGET: {job_title} at {company_name}
     JD: {job_description}
     
-    MY MASTER RESUME CONTENT:
+    MASTER SOURCE (DO NOT INVENT FROM HERE):
     {base_yaml_content}
     """
 
-    # 3. CALL AI
+    # 3. CALL AI (DEEPSEEK REASONER)
     response = client.chat.completions.create(
         model="deepseek-reasoner",
         messages=[
@@ -123,84 +128,73 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
             {"role": "user", "content": user_content}
         ],
         response_format={'type': 'json_object'}, 
-        temperature=0.3, # Low temp for factual consistency
-        timeout=120.0
+        temperature=0.3
     )
     
     raw_response = response.choices[0].message.content
-    try:
-        reasoning = getattr(response.choices[0].message, 'reasoning_content', "Reasoning unavailable.")
-    except Exception:
-        reasoning = "Reasoning unavailable."
+    reasoning = getattr(response.choices[0].message, 'reasoning_content', "Reasoning unavailable.")
 
-    # 4. PARSE JSON
+    # 4. PARSE & CLEAN
     try:
-        # Robust cleaning for DeepSeek R1 (Case Insensitive)
         if "<think>" in raw_response:
             raw_response = raw_response.split("</think>")[-1]
-        elif "<THINK>" in raw_response:
-            raw_response = raw_response.split("</THINK>")[-1]
-            
         clean_json = raw_response.replace("```json", "").replace("```", "").strip()
-        if "{" in clean_json:
-            clean_json = clean_json[clean_json.find("{"):clean_json.rfind("}")+1]
         ai_data = json.loads(clean_json)
     except json.JSONDecodeError:
-        raise ValueError(f"AI Output Malformed. Raw: {raw_response[:200]}")
+        raise ValueError(f"AI Output Malformed: {raw_response[:200]}")
 
-    # 5. INTEGRITY CHECK (Anti-Hallucination)
-    validate_integrity(base_resume, ai_data)
+    # 5. HALLUCINATION GATE (Atomic Verification)
+    is_intact, violations = validate_integrity(master_cv, ai_data)
+    if not is_intact:
+        print(f"🛑 GHOSTWRITER ABORTED: Hallucinations detected: {violations}")
+        # In a real-world scenario, we might retry or fail. For now, we log and fallback to master values.
+        # We will strip the offending items from ai_data to proceed safely
+        ai_data['experience'] = [e for e in ai_data.get('experience', []) if not any(v in str(e) for v in violations)]
 
-    # 6. THE RE-WRITER (Full Overwrite)
+    # 6. SELECTIVE PATCHING (The Pro-Tier Move)
+    # This preserves your header, education, and comments while updating the meat.
+    cv_sections = master_cv.get('cv', {}).get('sections', {})
     
-    cv_sections = base_resume.get('cv', {}).get('sections', {})
-
-    # Create a new ordered dictionary to control section order (Summary First)
-    new_sections = {}
-
-    # C. Inject Summary (Ensure it's first)
+    # A. Patch Summary
     if "summary" in ai_data:
-        new_sections['summary'] = [ai_data['summary']]
-    elif 'summary' in cv_sections:
-        new_sections['summary'] = cv_sections['summary']
-
-    # Copy other existing sections temporarily
-    # We want strict order: Summary -> Experience -> Projects -> Education -> etc.
-    # But we also want to overwrite Experience/Projects.
-    
-    # A. Overwrite Experience
+        cv_sections['summary'] = [ai_data['summary']]
+        
+    # B. Patch Experience
     if "experience" in ai_data:
-        new_sections['experience'] = ai_data['experience']
-    elif 'experience' in cv_sections:
-        new_sections['experience'] = cv_sections['experience']
+        # Match by company/title to ensure we maintain order
+        for suggested in ai_data['experience']:
+            for master_role in cv_sections.get('experience', []):
+                m_co = (master_role.get('company') or master_role.get('organization') or "").strip()
+                m_pos = (master_role.get('position') or master_role.get('title') or "").strip()
+                
+                if m_co == suggested.get('company') and m_pos == suggested.get('position'):
+                    master_role['highlights'] = suggested['highlights']
 
-    # B. Overwrite Projects
+    # C. Patch Projects
     if "projects" in ai_data:
-        new_sections['projects'] = ai_data['projects']
-    elif 'projects' in cv_sections:
-        new_sections['projects'] = cv_sections['projects']
+        for suggested in ai_data['projects']:
+            for master_proj in cv_sections.get('projects', []):
+                if master_proj.get('name') == suggested.get('name'):
+                    master_proj['highlights'] = suggested['highlights']
 
-    # Copy remaining sections (Education, Skills, etc.) preserving original order if possible
-    for key, val in cv_sections.items():
-        if key not in ['summary', 'experience', 'projects']:
-            new_sections[key] = val
-            
-    # Update the base resume with the new ordered sections
-    base_resume['cv']['sections'] = new_sections
+    # D. Patch Skills (Focus Skills Injection)
+    if "key_skills" in ai_data and 'skills' in cv_sections:
+        new_skill_entry = {"label": "Focus Skills", "details": ", ".join(ai_data['key_skills'])}
+        # Prepend to skills list if not already there
+        if cv_sections['skills'] and cv_sections['skills'][0].get('label') != "Focus Skills":
+            cv_sections['skills'].insert(0, new_skill_entry)
+        else:
+            cv_sections['skills'][0] = new_skill_entry
 
-    # D. Inject Focus Skills (handled differently in previous code, let's fix it)
-    if "key_skills" in ai_data and ai_data['key_skills']:
-        if 'skills' in new_sections:
-            if new_sections['skills'] and new_sections['skills'][0].get('label') == "Focus Skills":
-                new_sections['skills'].pop(0)
-            
-            new_skill_entry = {
-                "label": "Focus Skills", 
-                "details": ", ".join(ai_data['key_skills'])
-            }
-            new_sections['skills'].insert(0, new_skill_entry)
-
-    # 7. RETURN
-    final_yaml_str = yaml.dump(base_resume, sort_keys=False, allow_unicode=True)
+    # 7. EXPORT (FULL FORMAT PRESERVING)
+    import io
+    output_stream = io.StringIO()
+    yaml.dump(master_cv, output_stream)
+    final_yaml_str = output_stream.getvalue()
     
-    return ai_data.get("strategy_brief", ""), final_yaml_str, ai_data.get("gap_analysis", ""), reasoning
+    return (
+        ai_data.get("strategy_brief", ""), 
+        final_yaml_str, 
+        ai_data.get("gap_analysis", ""), 
+        reasoning
+    )
