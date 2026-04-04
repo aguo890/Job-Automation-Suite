@@ -1,0 +1,23 @@
+# Ruff configuration for Job-Automation-Suite
+# Aiming for a pragmatic baseline for a research/automation codebase.
+
+# Allow some rules that are common in automation scripts
+# T201: Allow print statements (used for CLI feedback)
+# PLW1510: Allow subprocess.run without check=True (standard in simple scripts)
+# E712: Allow '== True' comparisons (personal preference in some tests)
+# E402: Allow module level imports not at top (used in scripts to adjust sys.path)
+# F401: Unused imports (these should be fixed, but allowing for now in legacy files)
+
+line-length = 120
+target-version = "py312"
+exclude = ["rendercv"]
+
+[lint]
+# Start with a very permissive baseline (Pyflakes only) and gradually tighten
+select = ["F"]
+ignore = [
+    "F401", # Unused imports (legacy files have many, allowing for now)
+]
+
+[lint.isort]
+known-first-party = ["cv_bridge", "ai_tailor", "processor"]

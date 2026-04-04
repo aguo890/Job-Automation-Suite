@@ -1,6 +1,5 @@
 import os
 import json
-import re
 from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv

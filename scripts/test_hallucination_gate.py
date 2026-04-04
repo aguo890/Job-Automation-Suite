@@ -1,6 +1,5 @@
 import os
 import sys
-import yaml
 
 # Correct Python path
 sys.path.insert(0, os.getcwd())

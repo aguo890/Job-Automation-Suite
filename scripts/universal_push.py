@@ -82,7 +82,7 @@ def process_repo(repo_path_rel):
     # 0. Branch Guardrail
     branch = get_current_branch(repo_path)
     if not branch:
-        print(f"  ⚠️  Skipping: Repository is in a detached HEAD state.")
+        print("  ⚠️  Skipping: Repository is in a detached HEAD state.")
         print(f"     To push changes, cd into '{repo_path_rel}', checkout a branch (e.g., 'main'), and try again.")
         return
 

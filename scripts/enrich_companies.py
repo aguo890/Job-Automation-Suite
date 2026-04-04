@@ -1,12 +1,8 @@
 import yaml
 import requests
-import time
-import random
 import logging
 import os
 from datetime import date
-from typing import Dict, List, Optional
-from urllib.parse import urlparse
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')

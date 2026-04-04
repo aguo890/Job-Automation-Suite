@@ -1,7 +1,6 @@
 import time
 import subprocess
 import logging
-from typing import Optional
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -23,7 +22,7 @@ def check_enrichment_health(config_path: str):
     verified = sum(1 for c in companies if c.get('enrichment', {}).get('status') == 'verified')
     errors = sum(1 for c in companies if c.get('enrichment', {}).get('status') == 'error')
     
-    logger.info(f"--- Enrichment Health Report ---")
+    logger.info("--- Enrichment Health Report ---")
     logger.info(f"Verified: {verified}/{total} | Errors: {errors}")
     
     if total > 0 and (errors / total) > 0.1:

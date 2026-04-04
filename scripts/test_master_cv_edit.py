@@ -6,7 +6,6 @@ import unittest
 import os
 import sys
 import time
-import shutil
 
 # Add root to path so we can import cv_bridge
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
