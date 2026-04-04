@@ -6,6 +6,9 @@ WORKDIR /app
 
 # Install OS dependencies (minimal for scraper)
 RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    tar \
     gcc \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*

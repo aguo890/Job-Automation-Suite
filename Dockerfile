@@ -9,6 +9,7 @@ WORKDIR /app
 # -----------------------------------------------------------------------------
 # Install system packages required for PDF generation and compilation
 RUN apt-get update && apt-get install -y \
+    curl \
     gcc \
     git \
     libgl1 \

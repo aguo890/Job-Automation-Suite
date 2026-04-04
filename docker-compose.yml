@@ -29,12 +29,19 @@ services:
       # --- CV Generation Persistence ---
       - ./generated_cvs:/app/generated_cvs
       - ./rendercv:/app/rendercv
+    # [AI AGENT CONTEXT]: Native healthcheck hitting Streamlit's built-in endpoint.
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 3
-      start_period: 60s
+      start_period: 20s
+    # [AI AGENT CONTEXT]: Crucial for zero-downtime. Starts the new container and waits 
+    # for the healthcheck to pass BEFORE killing the old container.
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
 
   scraper:
     build:
@@ -44,6 +51,12 @@ services:
     command: python scheduler.py
     environment:
       - PYTHONUNBUFFERED=1
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_REPOSITORY=${GITHUB_REPOSITORY}
+    labels:
+      - "ofelia.enabled=true"
+      - "ofelia.job-exec.dr-backup.schedule=0 3 * * *"
+      - "ofelia.job-exec.dr-backup.command=/bin/bash /app/scripts/github_backup.sh"
     volumes:
       # --- Hot Reload: Source Code ---
       - ./cv_bridge.py:/app/cv_bridge.py
@@ -61,13 +74,25 @@ services:
       - ./generated_cvs:/app/generated_cvs
       - ./rendercv:/app/rendercv
     restart: unless-stopped
+    # [AI AGENT CONTEXT]: Healthcheck based on the scraper heartbeat file.
+    healthcheck:
+      test: [ "CMD-SHELL", "find /tmp/scraper_heartbeat -mmin -10 | grep scraper_heartbeat || exit 1" ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     deploy:
       resources:
         limits:
           memory: 2G
-    healthcheck:
-      # Check if the heartbeat file exists and was modified in the last 40 minutes
-      test: [ "CMD-SHELL", "find /tmp/scraper_heartbeat -mmin -40 | grep scraper_heartbeat || exit 1" ]
-      interval: 5m
-      timeout: 10s
-      retries: 3
+      update_config:
+        order: start-first
+        failure_action: rollback
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    container_name: job_suite_scheduler
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
