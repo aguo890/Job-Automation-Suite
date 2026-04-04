@@ -64,12 +64,18 @@ jobs:
              # Regenerate with backtracking to capture all binary hashes for the runner
              pip-compile --generate-hashes --resolver=backtracking --output-file=requirements.txt pyproject.toml
              
-             # Commit the 'Healed' lockfile back to main
+             # SURGICAL PUSH: Target ONLY the root lockfile to bypass submodule noise
              git config --global user.name "github-actions[bot]"
              git config --global user.email "github-actions[bot]@users.noreply.github.com"
              git add requirements.txt
-             git commit -m "🤖 SRE: Auto-updated hermetic lockfile (pip-compile)"
-             git push origin main
+             
+             if git diff --staged --quiet; then
+                echo "✨ Lockfile is already hermetic. Skipping push."
+             else
+                echo "🛡️ Detected Lockfile evolution. Committing updated signatures..."
+                git commit -m "🤖 SRE: Auto-update hermetic lockfile (Surgical Fix)"
+                git push origin main
+             fi
           fi
           
           # Strictly enforce the hashes we just verified
