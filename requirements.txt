@@ -670,7 +670,8 @@ pillow==11.3.0 \
     --hash=sha256:fe27fb049cdcca11f11a7bfda64043c37b30e6b91f10cb5bab275806c32f6ab3
     # via streamlit
 propcache==0.2.1 \
-    --hash=sha256:e093d548b17849e776e0179929280d96d24f0c4314c1a257545939768656d0d7
+    --hash=sha256:e093d548b17849e776e0179929280d96d24f0c4314c1a257545939768656d0d7 \
+    --hash=sha256:647894f5ae99c4cf6bb82a1bb3a796f6e06af3caa3d32e26d2350d0e3e3faf24
     # via
     #   aiohttp
     #   yarl
