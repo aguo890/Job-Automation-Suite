@@ -24,6 +24,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+          submodules: 'recursive'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Initialize Data State
         run: |
@@ -43,7 +45,6 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-          pip install -r job-scraping-app/requirements.txt
 
       - name: Run Scraper (Proactive)
         env:
