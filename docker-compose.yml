@@ -49,6 +49,8 @@ services:
       dockerfile: Dockerfile.scraper
     working_dir: /app/job-scraping-app
     command: python scheduler.py
+    env_file:
+      - .env
     environment:
       - PYTHONUNBUFFERED=1
       - GITHUB_TOKEN=${GITHUB_TOKEN}
