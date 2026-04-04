@@ -15,9 +15,13 @@ license = {text = "MIT"}
 # Add them here and run `pip-compile --generate-hashes pyproject.toml -o requirements.txt`
 dependencies = [
     "ruamel.yaml>=0.17.4,<0.19.0",
-    "streamlit>=1.32.0",
+    "PyYAML",
+    "streamlit>=1.39.0",
     "watchdog", # Explicitly promoted to solve resolution drift in Docker
     "pandas",
+    "aiohttp",
+    "pytz",
+    "python-dateutil",
     "openai>=1.0.0",
     "python-dotenv"
 ]
