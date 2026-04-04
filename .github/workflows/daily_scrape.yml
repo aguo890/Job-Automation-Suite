@@ -29,12 +29,24 @@ jobs:
 
       - name: Fetch Existing Data (Source of Truth)
         run: |
-          git fetch origin data-state || echo "Branch not found"
-          # Try to checkout the files; if they don't exist, just create empty ones
-          git checkout origin/data-state -- job-scraping-app/data/jobs_agg.json || echo "{ \"jobs\": [] }" > job-scraping-app/data/jobs_agg.json
-          git checkout origin/data-state -- job-scraping-app/data/applied_jobs.json || echo "[]" > job-scraping-app/data/applied_jobs.json
-          # Switch back to main code so we don't accidentally run old code
-          git checkout main
+          # 1. Create the data directory explicitly so redirection doesn't fail
+          mkdir -p job-scraping-app/data
+          
+          # 2. Try to grab existing state, but don't crash if it's not there
+          git fetch origin data-state || echo "Branch not found yet"
+          
+          # 3. Use a conditional check to see if the file exists on the branch
+          if git ls-tree -r origin/data-state --name-only | grep -q "job-scraping-app/data/jobs_agg.json"; then
+            git checkout origin/data-state -- job-scraping-app/data/jobs_agg.json
+            git checkout origin/data-state -- job-scraping-app/data/applied_jobs.json
+          else
+            echo "Initializing fresh state files..."
+            echo '{ "jobs": [] }' > job-scraping-app/data/jobs_agg.json
+            echo '[]' > job-scraping-app/data/applied_jobs.json
+          fi
+          
+          # 4. Ensure we are back on main code before running
+          git checkout main -- .
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
