@@ -54,32 +54,10 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: Verify and Install Dependencies
+      - name: Install Dependencies
         run: |
-          pip install pip-tools
-          # Optimized SRE Header: Check if the lockfile is stale (relative to pyproject.toml)
-          if ! pip-compile --verify --output-file=requirements.txt pyproject.toml; then
-             echo "⚠️ Lockfile is stale. Regenerating with backtracking resolver..."
-             
-             # Regenerate with backtracking to capture all binary hashes for the runner
-             pip-compile --generate-hashes --resolver=backtracking --output-file=requirements.txt pyproject.toml
-             
-             # SURGICAL PUSH: Target ONLY the root lockfile to bypass submodule noise
-             git config --global user.name "github-actions[bot]"
-             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-             git add requirements.txt
-             
-             if git diff --staged --quiet; then
-                echo "✨ Lockfile is already hermetic. Skipping push."
-             else
-                echo "🛡️ Detected Lockfile evolution. Committing updated signatures..."
-                git commit -m "🤖 SRE: Auto-update hermetic lockfile (Surgical Fix)"
-                git push origin main
-             fi
-          fi
-          
-          # Strictly enforce the hashes we just verified
-          pip install --require-hashes -r requirements.txt
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Run Scraper (Proactive)
         env:
@@ -90,7 +68,6 @@ jobs:
           MAX_YOE: "2"
         run: |
           # SRE: Ensure we are running against a clean Source of Truth
-          # This clears any temporary changes from the Locker step if a push happened
           git reset --hard HEAD
           
           # Execute the core engine
