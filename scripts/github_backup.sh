@@ -18,9 +18,12 @@ DATA_DIR="$APP_ROOT/job-scraping-app/data"
 CV_DIR="$APP_ROOT/generated_cvs"
 
 echo "📦 Archiving state data..."
+# SRE Guardrail: Ensure directories exist before tar tries to zip them
+mkdir -p "$APP_ROOT/job-scraping-app/data" "$APP_ROOT/generated_cvs" "$APP_ROOT/data" "$APP_ROOT/report"
+
 # Archive the specific state directories. 
-# We use -C to change directory so the paths in the tar are relative to APP_ROOT.
-tar -czf $BACKUP_FILE -C $APP_ROOT job-scraping-app/data generated_cvs
+# We include the new root-level data/ and report/ folders for full persistence.
+tar -czf $BACKUP_FILE -C $APP_ROOT job-scraping-app/data generated_cvs data report
 
 echo "🔧 Preparing isolated Git environment..."
 rm -rf $TMP_REPO_DIR
