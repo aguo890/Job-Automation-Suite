@@ -27,13 +27,13 @@ jobs:
           submodules: 'recursive'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Initialize Data State
+      - name: Fetch Existing Data (Source of Truth)
         run: |
-          # Checkout ONLY the data folder from the data-state branch (Source of Truth)
-          # This ensures the 'Merge' logic has the latest persistent state.
-          git fetch origin data-state:data-state || (git checkout -b data-state && git push -u origin data-state)
-          git checkout data-state -- job-scraping-app/data/jobs_agg.json job-scraping-app/data/applied_jobs.json || true
-          # Return to main for code execution
+          git fetch origin data-state || echo "Branch not found"
+          # Try to checkout the files; if they don't exist, just create empty ones
+          git checkout origin/data-state -- job-scraping-app/data/jobs_agg.json || echo "{ \"jobs\": [] }" > job-scraping-app/data/jobs_agg.json
+          git checkout origin/data-state -- job-scraping-app/data/applied_jobs.json || echo "[]" > job-scraping-app/data/applied_jobs.json
+          # Switch back to main code so we don't accidentally run old code
           git checkout main
 
       - name: Set up Python 3.12
