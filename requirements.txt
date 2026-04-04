@@ -190,12 +190,9 @@ distro==1.9.0 \
     --hash=sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed \
     --hash=sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2
     # via openai
-# [AI AGENT SRE NOTE]: These manual hash seeds bridge the gap between local 
-# compilation and the GitHub Action 'ubuntu-latest' runner requirement.
-# Do NOT remove these without verifying against a fresh Linux compilation.
 frozenlist==1.5.0 \
-    --hash=sha256:6670b80b728b61c7717646549a37e583c7919246107a97b233a111a14c6e9198 \
-    --hash=sha256:000a77d6034fbad9b6bb880f7ec073027908f1b40254b5d6f26210d2dab1240e
+    --hash=sha256:000a77d6034fbad9b6bb880f7ec073027908f1b40254b5d6f26210d2dab1240e \
+    --hash=sha256:6670b80b728b61c7717646549a37e583c7919246107a97b233a111a14c6e9198
     # via
     #   aiohttp
     #   aiosignal
