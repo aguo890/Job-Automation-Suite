@@ -89,8 +89,12 @@ jobs:
           STRICT_MODE: "true"
           MAX_YOE: "2"
         run: |
-          cd job-scraping-app
-          python main.py
+          # SRE: Ensure we are running against a clean Source of Truth
+          # This clears any temporary changes from the Locker step if a push happened
+          git reset --hard HEAD
+          
+          # Execute the core engine
+          python job-scraping-app/main.py --companies "Anduril, SpaceX, Tesla, Neuralink, X, Grok, Boring Company, OpenAI, Anthropic, Palantir, Scale AI"
 
       - name: Sync and Commit to data-state
         uses: stefanzweifel/git-auto-commit-action@v5
