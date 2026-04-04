@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only scraper dependencies first to leverage Docker cache
+# [AI AGENT CONTEXT]: Dependencies are managed via pip-tools and pyproject.toml.
+# This requirements-scraper.txt contains cryptographic hashes for supply chain security.
 COPY job-scraping-app/requirements-scraper.txt ./job-scraping-app/
 RUN pip install --no-cache-dir -r job-scraping-app/requirements-scraper.txt
 

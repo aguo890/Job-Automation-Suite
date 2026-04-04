@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "job-automation-suite"
+version = "0.1.0"
+description = "Orchestration layer for the Job Automation Suite"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+
+# [AI AGENT CONTEXT]: Dependencies are managed via pip-tools. 
+# Do NOT add loose dependencies directly to Dockerfiles. 
+# Add them here and run `pip-compile --generate-hashes pyproject.toml -o requirements.txt`
+dependencies = [
+    "ruamel.yaml>=0.17.4,<0.19.0",
+    "streamlit>=1.32.0",
+    "pandas",
+    "openai>=1.0.0",
+    "python-dotenv"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

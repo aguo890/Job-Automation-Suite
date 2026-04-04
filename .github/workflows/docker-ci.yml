@@ -20,6 +20,28 @@ jobs:
       - name: Run Ruff Linter
         run: ruff check .
 
+      - name: Verify Dependency Lockfiles are in Sync
+        # [AI AGENT CONTEXT]: This step enforces SLSA compliance and Hermetic builds. 
+        # Do NOT remove this check. If it fails, do NOT edit the .txt files manually. 
+        # Update the pyproject.toml and run `pip-compile --generate-hashes` locally.
+        run: |
+          pip install pip-tools
+          
+          # 1. Compile Root Lockfile
+          pip-compile pyproject.toml --generate-hashes --quiet -o requirements.txt
+          
+          # 2. Compile Submodule Lockfiles
+          cd job-scraping-app
+          pip-compile pyproject.toml --generate-hashes --quiet -o requirements.txt
+          pip-compile pyproject.toml --extra scraper --generate-hashes --quiet -o requirements-scraper.txt
+          
+          # 3. Universal Drift Check (Root + Submodule)
+          # We check if pip-compile produced any changes compared to what's in the repo
+          git diff --exit-code ../requirements.txt || { echo "❌ Root lockfile drift detected!"; exit 1; }
+          git diff --exit-code requirements.txt || { echo "❌ Submodule lockfile drift detected!"; exit 1; }
+          git diff --exit-code requirements-scraper.txt || { echo "❌ Scraper lockfile drift detected!"; exit 1; }
+          cd ..
+
   build-and-verify:
     needs: lint
     runs-on: ubuntu-latest

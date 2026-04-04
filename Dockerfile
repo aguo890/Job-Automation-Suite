@@ -17,15 +17,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------------------------------------
-# Stage 2: Dependency Caching (The "Google" Way)
-# -----------------------------------------------------------------------------
-# Copy only dependency definitions first to leverage Docker cache
+# [AI AGENT CONTEXT]: Dependencies are managed via pip-tools and pyproject.toml.
+# This requirements.txt and job-scraping-app/requirements.txt contain 
+# cryptographic hashes for supply chain security.
 COPY requirements.txt ./
-COPY rendercv/pyproject.toml ./rendercv/
 COPY job-scraping-app/requirements.txt ./job-scraping-app/
+COPY rendercv/pyproject.toml ./rendercv/
 
-# Install Python dependencies
-# --no-cache-dir reduces image size
+# Install Python dependencies using the exact-version lockfiles
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r job-scraping-app/requirements.txt
 # Note: rendercv deps are installed in Stage 4 via pip install -e
