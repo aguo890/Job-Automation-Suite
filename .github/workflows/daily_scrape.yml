@@ -1,0 +1,74 @@
+name: Daily Job Scrape
+
+on:
+  schedule:
+    # PEAK: Every 30 mins from 13:00 to 17:00 UTC (Approx 8 AM - 12 PM EST)
+    - cron: '*/30 13-17 * * *'
+    # OFF-PEAK: Every 3 hours for the rest of the day
+    - cron: '0 0,3,6,9,18,21 * * *'
+  workflow_dispatch: # Allows manual trigger from the UI
+
+# SRE RULE: Prevent race conditions with concurrency groups
+concurrency:
+  group: job-scrape-group
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Initialize Data State
+        run: |
+          # Checkout ONLY the data folder from the data-state branch (Source of Truth)
+          # This ensures the 'Merge' logic has the latest persistent state.
+          git fetch origin data-state:data-state || (git checkout -b data-state && git push -u origin data-state)
+          git checkout data-state -- job-scraping-app/data/jobs_agg.json job-scraping-app/data/applied_jobs.json || true
+          # Return to main for code execution
+          git checkout main
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r job-scraping-app/requirements.txt
+
+      - name: Run Scraper (Proactive)
+        env:
+          # System context for Anti-Bot Jitter
+          GITHUB_ACTIONS: "true"
+          # Configuration overrides
+          STRICT_MODE: "true"
+          MAX_YOE: "2"
+        run: |
+          cd job-scraping-app
+          python main.py
+
+      - name: Sync and Commit to data-state
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: data-state
+          commit_message: "🤖 Auto-ingest jobs: $(date +'%Y-%m-%d %H:%M')"
+          file_pattern: 'job-scraping-app/data/jobs_agg.json job-scraping-app/data/applied_jobs.json'
+          create_branch: true
+
+      - name: Trigger DR Backup
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          # CI Awareness: Ensure script has permissions and correct paths
+          chmod +x ./scripts/github_backup.sh
+          ./scripts/github_backup.sh

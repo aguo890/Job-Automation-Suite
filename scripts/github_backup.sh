@@ -1,14 +1,19 @@
 #!/bin/bash
 set -e # Exit on any error
 
-# [AI AGENT CONTEXT]: We operate entirely in /tmp to prevent changing 
-# the Git branch of the active, running application.
-BACKUP_FILE="/tmp/job_suite_backup.tar.gz"
-TMP_REPO_DIR="/tmp/dr_backup_repo"
+# [AI AGENT CONTEXT]: Detect GitHub Runner vs Docker environment
+if [ "$GITHUB_ACTIONS" == "true" ]; then
+    echo "🏗️ CI Environment Detected: Monitoring GitHub Workspace..."
+    APP_ROOT="$GITHUB_WORKSPACE"
+    BACKUP_FILE="$GITHUB_WORKSPACE/job_suite_backup.tar.gz"
+    TMP_REPO_DIR="$GITHUB_WORKSPACE/dr_backup_repo_tmp"
+else
+    # Default to Docker path
+    APP_ROOT="/app"
+    BACKUP_FILE="/tmp/job_suite_backup.tar.gz"
+    TMP_REPO_DIR="/tmp/dr_backup_repo"
+fi
 
-# Ensure we are in a known state (app root) if possible, 
-# but we'll use absolute paths for the archive to be safest.
-APP_ROOT="/app"
 DATA_DIR="$APP_ROOT/job-scraping-app/data"
 CV_DIR="$APP_ROOT/generated_cvs"
 

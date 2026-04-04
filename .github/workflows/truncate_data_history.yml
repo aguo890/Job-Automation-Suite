@@ -1,0 +1,51 @@
+name: Weekly Data History Truncate
+
+on:
+  schedule:
+    # Runs at 00:00 UTC (Approx 8 PM EST) every Sunday
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Allows manual trigger from the UI
+
+# SRE RULE: Prevent race conditions
+concurrency:
+  group: job-scrape-group
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  truncate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: data-state
+          fetch-depth: 0 # Essential for history management
+
+      - name: Squash data-state History
+        run: |
+          # The "Nuclear Option" to prevent repo bloat:
+          # Resets the data-state branch HISTORY to a single commit, 
+          # but keeps the LATEST state of the files.
+          echo "📦 Starting data-state history truncation..."
+          
+          # Initialize identity
+          git config user.name "SRE Data Bot"
+          git config user.email "sre-bot@job-suite.local"
+          
+          # 1. Create a temporary 'reset' branch from the latest point
+          git checkout --orphan reset-branch
+          
+          # 2. Add current data state
+          git add job-scraping-app/data/jobs_agg.json job-scraping-app/data/applied_jobs.json
+          
+          # 3. Commit this as the NEW 'First Commit'
+          git commit -m "📊 Weekly Data Reset: Baseline $(date +'%Y-%m-%d')"
+          
+          # 4. Force override data-state with this single-commit history
+          git branch -M data-state
+          git push origin data-state --force
+          
+          echo "✅ History squashed! data-state is now a single baseline commit."
