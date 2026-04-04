@@ -70,6 +70,9 @@ jobs:
           # SRE: Ensure we are running against a clean Source of Truth
           git reset --hard HEAD
           
+          # Lock Buster: Clear any stale locks from previous crashed runs
+          rm -f job-scraping-app/data/scraper.lock
+          
           # Execute the core engine
           python job-scraping-app/main.py --companies "Anduril, SpaceX, Tesla, Neuralink, X, Grok, Boring Company, OpenAI, Anthropic, Palantir, Scale AI"
 
