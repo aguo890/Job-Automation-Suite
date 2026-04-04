@@ -29,20 +29,18 @@ jobs:
         run: |
           pip install pip-tools
           
-          # 1. Compile Root Lockfile
-          pip-compile pyproject.toml --generate-hashes --quiet -o requirements.txt
+          # 1. Root Lockfile Check
+          pip-compile pyproject.toml --generate-hashes --strip-extras --quiet -o requirements.txt
+          git diff --exit-code requirements.txt || { echo "❌ Root lockfile drift detected!"; exit 1; }
           
-          # 2. Compile Submodule Lockfiles
+          # 2. Submodule Lockfile Check
           cd job-scraping-app
-          pip-compile pyproject.toml --generate-hashes --quiet -o requirements.txt
-          pip-compile pyproject.toml --extra scraper --generate-hashes --quiet -o requirements-scraper.txt
+          pip-compile pyproject.toml --generate-hashes --strip-extras --quiet -o requirements.txt
+          pip-compile pyproject.toml --extra scraper --generate-hashes --strip-extras --quiet -o requirements-scraper.txt
           
-          # 3. Universal Drift Check (Root + Submodule)
-          # We check if pip-compile produced any changes compared to what's in the repo
-          git diff --exit-code ../requirements.txt || { echo "❌ Root lockfile drift detected!"; exit 1; }
+          # We check if pip-compile produced any changes compared to what's in the submodule
           git diff --exit-code requirements.txt || { echo "❌ Submodule lockfile drift detected!"; exit 1; }
           git diff --exit-code requirements-scraper.txt || { echo "❌ Scraper lockfile drift detected!"; exit 1; }
-          cd ..
 
   build-and-verify:
     needs: lint
