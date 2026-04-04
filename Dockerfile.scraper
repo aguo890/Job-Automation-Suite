@@ -21,8 +21,9 @@ RUN pip install --no-cache-dir -r job-scraping-app/requirements-scraper.txt
 # Copy application code
 COPY job-scraping-app/ ./job-scraping-app/
 
-# Copy common files if any
+# Copy common files and supporting scripts
 COPY cv_bridge.py ai_tailor.py ./
+COPY scripts/ ./scripts/
 
 # Performance: Unbuffered logging
 ENV PYTHONUNBUFFERED=1

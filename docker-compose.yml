@@ -60,7 +60,8 @@ services:
       - "ofelia.job-exec.dr-backup.schedule=0 3 * * *"
       - "ofelia.job-exec.dr-backup.command=/bin/bash /app/scripts/github_backup.sh"
     volumes:
-      # --- Hot Reload: Source Code ---
+      # --- Hot Reload: Source Code & Scripts ---
+      - ./scripts:/app/scripts
       - ./cv_bridge.py:/app/cv_bridge.py
       - ./ai_tailor.py:/app/ai_tailor.py
       - ./job-scraping-app/processor.py:/app/job-scraping-app/processor.py
