@@ -1179,4 +1179,5 @@ watchdog==6.0.0 \
     # via
     #   job-automation-suite (pyproject.toml)
     #   streamlit
-PyYAML==6.0.1
+PyYAML==6.0.1 \
+    --hash=sha256:6c22bec3fbe2524cde73d7ada88f6566758a8f7227bfbf93a408a9d86bcc12a0
