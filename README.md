@@ -13,7 +13,9 @@ A powerful, highly-configurable suite designed to automate your job search. It s
 
 I built this project out of pure frustration. The traditional application loop—finding a relevant role, mapping out the right skills, agonizing over keyword optimization, rewriting bullet points, fixing PDF formatting, and finally submitting—takes hours. All of that effort goes into a document that might only get a six-second glance from a recruiter.
 
-I wanted my time back. I created this all-in-one suite to compress that exhausting, manual cycle down to about one minute per application. It has saved me countless hours of my life and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
+I wanted my time back. I created this all-in-one suite to compress that exhausting, manual cycle down to about one minute per application. To make this as intuitive as possible, I built a dedicated **Streamlit dashboard**—because while I have deep respect for the terminal-only roots of the foundational tools, I find staring at a flickering CLI for hours on end to be... let's just say, "unnecessarily character-building" (and slightly ugly).
+
+This suite has saved me countless hours of my life and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
 
 ---
 
