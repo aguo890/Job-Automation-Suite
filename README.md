@@ -81,6 +81,17 @@ While the suite is easy to use, it is backed by production-grade infrastructure:
 
 ---
 
+## 🙏 Acknowledgments
+
+This suite stands on the shoulders of giants. It integrates and modifies two incredible open-source projects as its core engines:
+
+* **[job-scraping-app by billyweinberger](https://github.com/billyweinberger/job-scraping-app):** Provided the foundational architecture for the multi-ATS scraping engine (Greenhouse, Lever, Ashby), data normalization, and the ranking logic.
+* **[RenderCV by sinaatalay](https://github.com/sinaatalay/rendercv):** Powers the entire PDF generation pipeline, transforming structured YAML data into beautifully formatted, typographically perfect LaTeX resumes.
+
+A massive thank you to both authors for their phenomenal work in the open-source community.
+
+---
+
 ## 🤝 Contributing & License
 
 We love contributions! Please read our [CONTRIBUTING.md](https://github.com/aguo890/Job-Automation-Suite/blob/main/CONTRIBUTING.md).
