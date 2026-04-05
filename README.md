@@ -17,7 +17,7 @@ Then I found **RenderCV**, which was amazing for the rendering part. But after a
 
 That idea turned into an unhealthy obsession to make the process perfect. Honestly, I probably spent longer building this suite than I actually used it to apply to jobs. But let's be real: applying to jobs is boring, but making something minutely more efficient is way funner.
 
-To make this as intuitive as possible, I built a dedicated **Streamlit dashboard**—because while I have deep respect for the terminal-only roots of the foundational tools, I find staring at a flickering CLI for hours on end to be... let's just say, "unnecessarily character-building" (and slightly ugly). This suite has saved me countless hours of my life and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
+To make this as intuitive as possible, I built a dedicated **Streamlit dashboard**—because while I have deep respect for the terminal-only roots of the foundational tools, I find staring at a flickering CLI for hours on end to be... let's just say, "unnecessarily character-building" (and slightly ugly). This suite has saved me countless hours of my life (and costed hundreds of more hours, but i view that as "learning") and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
 
 ---
 
