@@ -93,6 +93,7 @@ jobs:
           commit_message: "🤖 Auto-ingest jobs: $(date +'%Y-%m-%d %H:%M')"
           file_pattern: 'data/*.json report/*.md'
           create_branch: true
+          push_options: '--force'
 
       - name: Trigger DR Backup
         env:
