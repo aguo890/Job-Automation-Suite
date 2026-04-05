@@ -9,6 +9,14 @@ A powerful, highly-configurable suite designed to automate your job search. It s
 
 ---
 
+## 📖 The Story Behind the Suite
+
+I built this project out of pure frustration. The traditional application loop—finding a relevant role, mapping out the right skills, agonizing over keyword optimization, rewriting bullet points, fixing PDF formatting, and finally submitting—takes hours. All of that effort goes into a document that might only get a six-second glance from a recruiter.
+
+I wanted my time back. I created this all-in-one suite to compress that exhausting, manual cycle down to about one minute per application. It has saved me countless hours of my life and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
+
+---
+
 ## ✨ Core Capabilities
 
 - **🧠 Smart Ranking Algorithm:** Stop scrolling through irrelevant postings. A powerful, fine-tuned algorithm evaluates and ranks scraped jobs based on your specific skills, experience, and alignment criteria.
