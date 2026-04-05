@@ -76,7 +76,26 @@ make run
 
 ---
 
-## ⚙️ Under the Hood (SRE & Architecture)
+## ⚙️ Configuration & Environment Variables
+
+The suite is highly configurable via environmental flags. To get started, copy the template and edit it with your credentials:
+
+```bash
+cp .env.example .env
+```
+
+### Key Toggles
+
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `USE_GITHUB_DATA` | `false` | **Crucial:** Set to `true` to fetch data from your GitHub `data-state` branch. Set to `false` (Local Mode) to read the 1,459+ jobs you've scraped directly to your disk. |
+| `GITHUB_TOKEN` | `N/A` | Required if `USE_GITHUB_DATA=true` or for automated state backups. |
+| `OPENAI_API_KEY` | `N/A` | (Optional) Enables AI-powered resume tailoring with GPT models. |
+| `DEEPSEEK_API_KEY` | `N/A` | (Optional) Enables high-performance, cost-effective reasoning via DeepSeek. |
+
+---
+
+## 🏗️ Under the Hood (SRE & Architecture)
 
 While the suite is easy to use, it is backed by production-grade infrastructure:
 
