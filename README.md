@@ -1,93 +1,79 @@
 # Job Automation Suite
 
-![Python](https://img.shields.io/badge/python-3.9-blue)
+![Python](https://img.shields.io/badge/python-3.12-blue)
 ![CI/CD](https://img.shields.io/github/actions/workflow/status/aguo890/Job-Automation-Suite/daily_scrape.yml?label=daily%20scrape)
 ![Build](https://img.shields.io/github/actions/workflow/status/aguo890/Job-Automation-Suite/docker-ci.yml?label=docker-ci)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A production-grade, hardened suite for **automated job scraping**, **analysis**, and **instant CV tailoring**. Built with SRE best practices to ensure a "Set it and Forget it" experience.
+A powerful, highly-configurable suite designed to automate your job search. It scrapes high-signal job boards, ranks opportunities using a custom alignment algorithm, and generates perfectly tailored PDF resumes with a single click.
 
 ---
 
-## 🚀 Key Features
+## ✨ Core Capabilities
 
--   **🔍 Automated Scraping**:  Fetches jobs from high-signal sources and aggregates them into a clean dashboard.
--   **📄 Instant CV Tailoring**: Generates custom PDF CVs with one click, injecting relevant keywords and summaries via `rendercv`.
--   **📊 Smart Dashboard**: Filter, sort, and track applications in real-time with a Streamlit-powered UI.
--   **🤖 AI-Powered**: Optional LLM integration for analyzing job descriptions and drafting cover letters.
--   **🛡️ Hardened SRE**: Built for reliability, with automated state management, anti-bot protections, and disaster recovery.
-
----
-
-## 🏗️ "Set it and Forget it" CI/CD
-
-The suite runs fully autonomously via GitHub Actions. The `daily_scrape.yml` pipeline handles the heavy lifting:
-
--   **Autonomous Execution**: Scheduled to run daily (with peak/off-peak frequencies) to ensure the platform is never stale.
--   **State Management**: Automatically commits results to a dedicated `data-state` branch, separating application logic from persistent data.
--   **Hermetic Testing**: The `docker-ci.yml` pipeline verifies every commit in an immutable container environment, ensuring total parity between local and production.
+- **🧠 Smart Ranking Algorithm:** Stop scrolling through irrelevant postings. A powerful, fine-tuned algorithm evaluates and ranks scraped jobs based on your specific skills, experience, and alignment criteria.
+- **📄 Custom CV Engine:** Integrated with a modern `rendercv` pipeline. Select a highly-ranked job from the dashboard and instantly generate a beautifully formatted, tailor-made PDF resume injected with the optimal keywords.
+- **🎛️ Fine-Tuned Configuration:** Complete control over your search. Easily tweak target job titles, locations, ranking weights, and resume templates to perfectly match your career goals.
+- **🤖 "Set it and Forget it" Automation:** The suite runs fully autonomously via GitHub Actions. It scrapes daily, persists the data, and updates your dashboard without any manual intervention.
 
 ---
 
-## 🛡️ SRE & Resiliency Features
+## 🚀 Quick Start: How to Run
 
-This suite is engineered for 99.9% reliability in scraping and data integrity:
+You can run the Job Automation Suite locally or in a fully isolated Docker container. 
 
--   **Anti-Bot Mitigation**: Implements a randomized **1-10 minute execution jitter** to protect datacenter IPs and mimic human behavior.
--   **State Persistence**: Handles Git Submodule boundaries to persist data from `job-scraping-app` to the root repository, using `--force` pushes to the `data-state` branch for a clean history.
--   **Disaster Recovery (DR)**: Automated nightly backups create `.tar` archives of the critical data state, pushed to a secure remote using authenticated `x-access-token` credentials.
--   **Crash Prevention**: Automated `.lock` file clearing (`rm -f *.lock`) before every execution prevents "ghost crashes" and ensures the scraper always recovers from interrupted states.
-
----
-
-## 📦 Dependency Management
-
-We use a pure-data, cross-platform architecture powered by `pip-tools`:
-
--   **Python 3.9 Pinned**: Guaranteed environment parity between macOS (M-series), Linux CI runners, and Docker containers.
--   **Deterministic Lockfiles**: Using `pip-compile` to generate hash-free, annotation-free `requirements.txt` files that eliminate cross-platform wheel mismatches.
--   **SLSA Compliance**: Lockfile drift checks in CI ensure that the current environment perfectly matches the source of truth.
-
----
-
-## 🛠️ Quick Start
-
-### Prerequisites
--   Python 3.9 (Recommended via `pyenv` or `conda`)
--   Git
--   Docker (Optional, for hermetic execution)
-
-### Installation
+### Option A: Run via Docker (Recommended)
+The simplest way to get started without worrying about system dependencies.
 
 ```bash
 git clone --recursive https://github.com/aguo890/Job-Automation-Suite.git
 cd Job-Automation-Suite
-make install
+make docker-up
 ```
 
-### Usage
+*Access the Streamlit dashboard at: http://localhost:8501*
 
-**1. Run the Dashboard:**
+### Option B: Run Locally
+
+If you prefer to run it natively, ensure you have **Python 3.12** installed.
+
 ```bash
+# 1. Clone the repo and submodules
+git clone --recursive https://github.com/aguo890/Job-Automation-Suite.git
+cd Job-Automation-Suite
+
+# 2. Set up the Python 3.12 environment
+python3.12 -m venv venv
+source venv/bin/activate
+
+# 3. Install dependencies and run
+make install
 make run
 ```
-*Access at: http://localhost:8501*
 
-**2. Generate a CV:**
-Select a job in the dashboard and click **"Generate CV for Selected"**.
+---
+
+## ⚙️ Under the Hood (SRE & Architecture)
+
+While the suite is easy to use, it is backed by production-grade infrastructure:
+
+  - **Hermetic Dependency Management:** Built on Python 3.12 using `pip-tools` for deterministic, cross-platform parity.
+  - **Automated State Persistence:** The GitHub Actions pipeline bridges submodule boundaries, automatically pushing fresh job data to a dedicated `data-state` branch.
+  - **Anti-Bot Protections:** The scraper utilizes randomized 1-10 minute execution jitters to protect IPs and mimic human behavior during automated cloud runs.
+  - **Disaster Recovery:** Automated `.tar` backups are securely archived to prevent data loss.
 
 ---
 
 ## 📂 Project Structure
 
--   **`job-scraping-app/`**: The intelligence core (Scraper + Dashboard) [Submodule].
--   **`rendercv/`**: The LaTeX/PDF rendering engine.
--   **`cv_bridge.py`**: The orchestrator linking scraping data to CV generation.
--   **`.github/workflows/`**: The SRE engine (Daily scrapes, Docker CI, Backups).
+  - **`job-scraping-app/`**: The intelligence core. Contains the scraping engine, ranking algorithm, and the Streamlit dashboard (Submodule).
+  - **`rendercv/`**: The modern LaTeX/PDF rendering engine for tailored resumes.
+  - **`cv_bridge.py`**: The orchestrator linking the job data directly to the CV generator.
+  - **`.github/workflows/`**: The SRE automation engine handling daily scrapes and Docker CI.
 
 ---
 
 ## 🤝 Contributing & License
 
-We love contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md).
+We love contributions! Please read our [CONTRIBUTING.md](https://github.com/aguo890/Job-Automation-Suite/blob/main/CONTRIBUTING.md).
 Licensed under the **MIT License**.
