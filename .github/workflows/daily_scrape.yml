@@ -79,6 +79,13 @@ jobs:
           # Execute the core engine
           python job-scraping-app/main.py --companies "Anduril, SpaceX, Tesla, Neuralink, X, Grok, Boring Company, OpenAI, Anthropic, Palantir, Scale AI"
 
+      - name: Move data to root for commit
+        run: |
+          mkdir -p data report
+          # Use -r to copy recursively and '|| true' to avoid failure if no new data
+          cp -rf job-scraping-app/data/* data/ || true
+          cp -rf job-scraping-app/report/* report/ || true
+
       - name: Auto-Commit Scrape Data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
