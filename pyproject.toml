@@ -12,7 +12,7 @@ license = {text = "MIT"}
 
 # [AI AGENT CONTEXT]: Dependencies are managed via pip-tools. 
 # Do NOT add loose dependencies directly to Dockerfiles. 
-# Add them here and run `pip-compile --generate-hashes pyproject.toml -o requirements.txt`
+# Add them here and run `pip-compile pyproject.toml -o requirements.txt`
 dependencies = [
     "ruamel.yaml>=0.17.4,<0.19.0",
     "PyYAML",
