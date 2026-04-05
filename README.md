@@ -100,6 +100,3 @@ While the suite is easy to use, it is backed by production-grade infrastructure:
 
 We love contributions! Please read our [CONTRIBUTING.md](https://github.com/aguo890/Job-Automation-Suite/blob/main/CONTRIBUTING.md).
 Licensed under the **MIT License**.
-
-We love contributions! Please read our [CONTRIBUTING.md](https://github.com/aguo890/Job-Automation-Suite/blob/main/CONTRIBUTING.md).
-Licensed under the **MIT License**.
