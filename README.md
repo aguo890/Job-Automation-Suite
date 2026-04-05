@@ -11,11 +11,24 @@ A powerful, highly-configurable suite designed to automate your job search. It s
 
 ## 📖 The Story Behind the Suite
 
-I built this project out of pure frustration. The traditional application loop—finding a relevant role, mapping out the right skills, agonizing over keyword optimization, rewriting bullet points, fixing PDF formatting, and finally submitting—takes hours. All of that effort goes into a document that might only get a six-second glance from a recruiter.
+I built this project out of pure frustration. I first stumbled upon the **job-scraping-app** (see below), and I was like, "Okay, I now have all these hundreds of jobs I can apply to!" But the friction was still immense. The traditional application loop—mapping out the right skills, agonizing over keyword optimization, rewriting bullet points, and fixing PDF formatting—still takes hours. All of that effort goes into a document that might only get a six-second glance from a recruiter.
 
-I wanted my time back. I created this all-in-one suite to compress that exhausting, manual cycle down to about one minute per application. To make this as intuitive as possible, I built a dedicated **Streamlit dashboard**—because while I have deep respect for the terminal-only roots of the foundational tools, I find staring at a flickering CLI for hours on end to be... let's just say, "unnecessarily character-building" (and slightly ugly).
+Then I found **RenderCV**, which was amazing for the rendering part. But after another few days of using both of them in conjunction, a thought struck me: *How nice would it be if I was able to directly generate the CV within the same interface, allowing me to integrate AI and other tools to handle the heavy lifting?*
 
-This suite has saved me countless hours of my life and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
+That idea turned into an unhealthy obsession to make the process perfect. Honestly, I probably spent longer building this suite than I actually used it to apply to jobs. But let's be real: applying to jobs is boring, but making something minutely more efficient is way funner.
+
+To make this as intuitive as possible, I built a dedicated **Streamlit dashboard**—because while I have deep respect for the terminal-only roots of the foundational tools, I find staring at a flickering CLI for hours on end to be... let's just say, "unnecessarily character-building" (and slightly ugly). This suite has saved me countless hours of my life and played a direct role in helping me land data and engineering internships at great companies. I open-sourced it in the hopes that it saves you just as much time.
+
+---
+
+## 🙏 Acknowledgments
+
+This suite stands on the shoulders of giants. It integrates and modifies two incredible open-source projects as its core engines:
+
+* **[job-scraping-app by billyweinberger](https://github.com/billyweinberger/job-scraping-app):** Provided the foundational architecture for the multi-ATS scraping engine (Greenhouse, Lever, Ashby), data normalization, and the ranking logic.
+* **[RenderCV by sinaatalay](https://github.com/sinaatalay/rendercv):** Powers the entire PDF generation pipeline, transforming structured YAML data into beautifully formatted, typographically perfect LaTeX resumes.
+
+A massive thank you to both authors for their phenomenal work in the open-source community.
 
 ---
 
@@ -83,18 +96,10 @@ While the suite is easy to use, it is backed by production-grade infrastructure:
 
 ---
 
-## 🙏 Acknowledgments
-
-This suite stands on the shoulders of giants. It integrates and modifies two incredible open-source projects as its core engines:
-
-* **[job-scraping-app by billyweinberger](https://github.com/billyweinberger/job-scraping-app):** Provided the foundational architecture for the multi-ATS scraping engine (Greenhouse, Lever, Ashby), data normalization, and the ranking logic.
-* **[RenderCV by sinaatalay](https://github.com/sinaatalay/rendercv):** Powers the entire PDF generation pipeline, transforming structured YAML data into beautifully formatted, typographically perfect LaTeX resumes.
-
-A massive thank you to both authors for their phenomenal work in the open-source community.
-
----
-
 ## 🤝 Contributing & License
+
+We love contributions! Please read our [CONTRIBUTING.md](https://github.com/aguo890/Job-Automation-Suite/blob/main/CONTRIBUTING.md).
+Licensed under the **MIT License**.
 
 We love contributions! Please read our [CONTRIBUTING.md](https://github.com/aguo890/Job-Automation-Suite/blob/main/CONTRIBUTING.md).
 Licensed under the **MIT License**.
