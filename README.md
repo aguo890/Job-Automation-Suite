@@ -92,6 +92,7 @@ cp .env.example .env
 | `GITHUB_TOKEN` | `N/A` | Required if `USE_GITHUB_DATA=true` or for automated state backups. |
 | `OPENAI_API_KEY` | `N/A` | (Optional) Enables AI-powered resume tailoring with GPT models. |
 | `DEEPSEEK_API_KEY` | `N/A` | (Optional) Enables high-performance, cost-effective reasoning via DeepSeek. |
+| `USER_AGENT` | `N/A` | (Optional) Override the default browser identity to avoid bot detection. |
 
 ---
 
