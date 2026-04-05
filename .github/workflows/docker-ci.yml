@@ -30,13 +30,13 @@ jobs:
           pip install pip-tools
           
           # 1. Root Lockfile Check
-          pip-compile pyproject.toml --strip-extras --quiet -o requirements.txt
+          pip-compile pyproject.toml --strip-extras --no-annotate --quiet -o requirements.txt
           git diff --exit-code requirements.txt || { echo "❌ Root lockfile drift detected!"; exit 1; }
           
           # 2. Submodule Lockfile Check
           cd job-scraping-app
-          pip-compile pyproject.toml --strip-extras --quiet -o requirements.txt
-          pip-compile pyproject.toml --extra scraper --strip-extras --quiet -o requirements-scraper.txt
+          pip-compile pyproject.toml --strip-extras --no-annotate --quiet -o requirements.txt
+          pip-compile pyproject.toml --extra scraper --strip-extras --no-annotate --quiet -o requirements-scraper.txt
           
           # We check if pip-compile produced any changes compared to what's in the submodule
           git diff --exit-code requirements.txt || { echo "❌ Submodule lockfile drift detected!"; exit 1; }
