@@ -31,7 +31,7 @@ mkdir -p $TMP_REPO_DIR
 cd $TMP_REPO_DIR
 
 # Initialize empty repo and set bot identity
-git init
+git init --initial-branch=master
 git config user.name "Automated DR Bot"
 git config user.email "dr-bot@job-suite.local"
 
