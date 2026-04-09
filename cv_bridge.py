@@ -55,7 +55,7 @@ class CVOrchestrator:
         self.backups_dir = self.root_dir / "rendercv" / "backups"
         self.backups_dir.mkdir(parents=True, exist_ok=True)
 
-    def generate_tailored_cv(self, job_details, use_ai=False, status_callback=None):
+    def generate_tailored_cv(self, job_details, use_ai=False, status_callback=None, overrides=None):
         """
         Reads base YAML, injects job-specific details, and renders PDF.
         """
@@ -95,16 +95,13 @@ class CVOrchestrator:
                 print(f"AI Tailoring failed: {e}")
                 strategy_report = f"AI Tailoring failed: {e}"
 
-        # C. Manual Injection Fallback (if AI not used)
+        # C. Summary Injection (using native overrides)
         if not use_ai:
-            try:
-                # Safely try to inject summary if structure permits
-                summary_list = cv_data.get('cv', {}).get('sections', {}).get('summary', [])
-                if isinstance(summary_list, list):
-                    tailored_line = f"Targeting the {role} position at **{company}**."
-                    summary_list.insert(0, tailored_line)
-            except Exception:
-                pass
+            if not overrides:
+                overrides = {}
+            # Standard pattern: Inject targeting line at the top of the summary section
+            # NOTE: We use RenderCV's dotted path syntax for overrides
+            overrides["cv.sections.summary.0"] = f"Targeting the {role} position at **{company}**."
 
         # D. Prepare Filenames
         safe_company = "".join([c for c in company if c.isalnum() or c in (' ', '_', '-')]).strip().replace(' ', '_')
@@ -142,7 +139,8 @@ class CVOrchestrator:
                     run_rendercv(
                         pathlib.Path(temp_yaml_name),
                         progress,
-                        pdf_path=expected_pdf_path
+                        pdf_path=expected_pdf_path,
+                        overrides=overrides
                     )
                 finally:
                     os.chdir(current_cwd)
@@ -261,7 +259,7 @@ class CVOrchestrator:
         except Exception:
             pass  # Non-critical failure
 
-    def render_from_content(self, job_id, yaml_content):
+    def render_from_content(self, job_id, yaml_content, overrides=None):
         if not run_rendercv: return None, "RenderCV missing."
 
         base_cv_folder = self.base_cv_path.parent
@@ -279,7 +277,8 @@ class CVOrchestrator:
                     run_rendercv(
                         pathlib.Path(temp_yaml_name),
                         progress,
-                        pdf_path=expected_pdf_path
+                        pdf_path=expected_pdf_path,
+                        overrides=overrides
                     )
                 finally:
                     os.chdir(current_cwd)
