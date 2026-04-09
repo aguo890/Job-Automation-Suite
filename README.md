@@ -76,15 +76,18 @@ make run
 
 ---
 
-## ⚙️ Configuration & Environment Variables
+## ⚙️ Configuration & Setup
 
-The suite is highly configurable via environmental flags. To get started, copy the template and edit it with your credentials:
+> [!IMPORTANT]
+> **Are you a new user?** Before you start scraping, you MUST set up your environment variables, inject your YAML Master CV, and tweak your job board targets. 
+> 
+> **👉 Read the [New User Configuration Guide](CONFIGURATION_GUIDE.md) for a complete 5-minute setup tutorial.**
 
-```bash
-cp .env.example .env
-```
+The suite is designed to be fully customizable to your career goals. Most configuration (like target companies and blacklisted job titles) can be managed via the **`⚙️ Configuration`** tab in the Streamlit Dashboard.
 
-### Key Toggles
+### Key Toggles (Environment Variables)
+
+The `.env` file houses your core architectural flags:
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
