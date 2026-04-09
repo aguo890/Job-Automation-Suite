@@ -33,13 +33,21 @@ except ImportError:
     print("WARNING: rendercv not found. Ensure it is installed.")
 
 class CVOrchestrator:
-    def __init__(self, base_cv_filename="Aaron_Guo_CV.yaml"):
-        # 1. Deterministic Root: The directory where THIS script lives
+    def __init__(self, base_cv_filename="Master_CV.yaml"):
+        # Search for any .yaml file in rendercv directory if Master_CV.yaml doesn't exist
+        # This helps users who renamed the file to their own name.
         self.root_dir = pathlib.Path(__file__).resolve().parent
+        cv_dir = self.root_dir / "rendercv"
+        
+        target_path = cv_dir / base_cv_filename
+        if not target_path.exists():
+            # Fallback: Find the first YAML file that looks like a CV
+            yaml_files = list(cv_dir.glob("*.yaml"))
+            if yaml_files:
+                target_path = yaml_files[0]
+                base_cv_filename = target_path.name
 
-        # 2. Strict Paths
-        # Looks for: /app/rendercv/Aaron_Guo_CV.yaml (Docker) or ./rendercv/Aaron_Guo_CV.yaml (Local)
-        self.base_cv_path = self.root_dir / "rendercv" / base_cv_filename
+        self.base_cv_path = target_path
         
         self.output_dir = self.root_dir / "generated_cvs"
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -102,7 +110,8 @@ class CVOrchestrator:
         safe_company = "".join([c for c in company if c.isalnum() or c in (' ', '_', '-')]).strip().replace(' ', '_')
         unique_id = uuid.uuid4().hex[:8]
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        new_filename = f"Aaron_Guo_CV_{safe_company}_{timestamp}_{unique_id}" 
+        cv_stem = self.base_cv_path.stem
+        new_filename = f"{cv_stem}_{safe_company}_{timestamp}_{unique_id}" 
 
         # E. Save Temp YAML (Must be in same folder as base CV for assets)
         base_cv_folder = self.base_cv_path.parent
@@ -212,7 +221,8 @@ class CVOrchestrator:
         # 2. BACKUP: Timestamped rotation
         self.backups_dir.mkdir(parents=True, exist_ok=True)
         timestamp = int(time.time())
-        backup_path = self.backups_dir / f"Aaron_Guo_CV_{timestamp}.yaml.bak"
+        cv_name = self.base_cv_path.name
+        backup_path = self.backups_dir / f"{cv_name}_{timestamp}.bak"
 
         if self.base_cv_path.exists():
             try:

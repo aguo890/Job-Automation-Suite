@@ -7,6 +7,11 @@
 
 A powerful, highly-configurable suite designed to automate your job search. It scrapes high-signal job boards, ranks opportunities using a custom alignment algorithm, and generates perfectly tailored PDF resumes with a single click.
 
+> [!TIP]
+> **Enjoying the suite?** 🌟 **Please star this repository** to help it reach more developers! 
+> 
+> **Encountered a bug?** 🛠️ We want to make this perfect—please **[open an issue](https://github.com/aguo890/Job-Automation-Suite/issues)** for any and all feedback or problems you run into.
+
 ---
 
 ## 📖 The Story Behind the Suite

@@ -68,4 +68,35 @@ With your environment loaded, your CV injected, and your job constraints defined
 4. Once completed, navigate to the **`📊 Dashboard`** tab. You'll see all your high-signal job matches ranked natively by your preset constraints.
 5. Click on any job ID to enter the **Master CV Editor**, click **Auto-Tailor with AI**, and watch your PDF resume regenerate!
 
+---
+
+## Step 5: Maintenance & Upstream Syncing 🔄
+
+To maintain a production-grade suite, you must keep your customized submodules synchronized with their original upstream repositories for bug patches and new features.
+
+### The Local SRE Setup
+Your environment is already configured with `upstream` remotes. You can check for updates using:
+```bash
+# For RenderCV
+cd rendercv && git fetch upstream
+# For Job Scraper
+cd job-scraping-app && git fetch upstream
+```
+
+### Applying Updates
+
+#### Option A: The "Surgical Strike" (Cherry-Pick)
+Use this if you only want a specific fix or template without merging massive changes.
+1. Find the commit hash from the upstream repository.
+2. Run: `git cherry-pick <commit_hash>`
+
+#### Option B: Full Synchronization (Merge)
+Use this to bring your entire engine up to the latest version.
+```bash
+git merge upstream/main  # Or upstream/master for the scraper
+```
+
+> [!CAUTION]
+> Always resolve merge conflicts in a visual editor like VS Code before committing! After merging inside a submodule, remember to run `git add <submodule_folder>` in the root directory to lock in the update.
+
 **Happy Hunting!** 🎉
