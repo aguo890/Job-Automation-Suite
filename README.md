@@ -97,6 +97,9 @@ cp .env.example .env
 ### 🤖 Enabling Automated AI Matching & Tailoring
 To use the automated AI resume tailoring and job matching features, you **must** configure either an `OPENAI_API_KEY` or `DEEPSEEK_API_KEY` in your `.env` file. Without this key, the AI buttons in the CV Editor will be disabled or fail to generate content.
 
+### ⚡ Fast Configuration (Advanced Users)
+While the Streamlit Dashboard provides a nice UI for configuration, if you want to set up massive lists of target companies or skills quickly (e.g. formatting a bulk list using AI), you can bypass the UI and directly edit the RAW YAML files located in `job-scraping-app/config/`. The core files are `companies.yaml` and `filtering.yaml`.
+
 ---
 
 ## 🏗️ Under the Hood (SRE & Architecture)
