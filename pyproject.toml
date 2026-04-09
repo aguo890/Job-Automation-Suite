@@ -23,7 +23,8 @@ dependencies = [
     "pytz",
     "python-dateutil",
     "openai>=1.0.0",
-    "python-dotenv"
+    "python-dotenv",
+    "streamlit-code-editor"
 ]
 
 [tool.setuptools.packages.find]

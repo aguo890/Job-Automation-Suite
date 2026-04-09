@@ -76,15 +76,18 @@ make run
 
 ---
 
-## ⚙️ Configuration & Environment Variables
+## ⚙️ Configuration & Setup
 
-The suite is highly configurable via environmental flags. To get started, copy the template and edit it with your credentials:
+> [!IMPORTANT]
+> **Are you a new user?** Before you start scraping, you MUST set up your environment variables, inject your YAML Master CV, and tweak your job board targets. 
+> 
+> **👉 Read the [New User Configuration Guide](CONFIGURATION_GUIDE.md) for a complete 5-minute setup tutorial.**
 
-```bash
-cp .env.example .env
-```
+The suite is designed to be fully customizable to your career goals. Most configuration (like target companies and blacklisted job titles) can be managed via the **`⚙️ Configuration`** tab in the Streamlit Dashboard.
 
-### Key Toggles
+### Key Toggles (Environment Variables)
+
+The `.env` file houses your core architectural flags:
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
@@ -93,6 +96,12 @@ cp .env.example .env
 | `OPENAI_API_KEY` | `N/A` | (Optional) Enables AI-powered resume tailoring with GPT models. |
 | `DEEPSEEK_API_KEY` | `N/A` | (Optional) Enables high-performance, cost-effective reasoning via DeepSeek. |
 | `USER_AGENT` | `N/A` | (Optional) Override the default browser identity to avoid bot detection. |
+
+### 🤖 Enabling Automated AI Matching & Tailoring
+To use the automated AI resume tailoring and job matching features, you **must** configure either an `OPENAI_API_KEY` or `DEEPSEEK_API_KEY` in your `.env` file. Without this key, the AI buttons in the CV Editor will be disabled or fail to generate content.
+
+### ⚡ Fast Configuration (Advanced Users)
+While the Streamlit Dashboard provides a nice UI for configuration, if you want to set up massive lists of target companies or skills quickly (e.g. formatting a bulk list using AI), you can bypass the UI and directly edit the RAW YAML files located in `job-scraping-app/config/`. The core files are `companies.yaml` and `filtering.yaml`.
 
 ---
 
