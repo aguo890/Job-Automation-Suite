@@ -94,6 +94,9 @@ cp .env.example .env
 | `DEEPSEEK_API_KEY` | `N/A` | (Optional) Enables high-performance, cost-effective reasoning via DeepSeek. |
 | `USER_AGENT` | `N/A` | (Optional) Override the default browser identity to avoid bot detection. |
 
+### 🤖 Enabling Automated AI Matching & Tailoring
+To use the automated AI resume tailoring and job matching features, you **must** configure either an `OPENAI_API_KEY` or `DEEPSEEK_API_KEY` in your `.env` file. Without this key, the AI buttons in the CV Editor will be disabled or fail to generate content.
+
 ---
 
 ## 🏗️ Under the Hood (SRE & Architecture)
