@@ -7,6 +7,7 @@ from datetime import datetime
 import pathlib
 import uuid
 import ai_tailor
+from io import StringIO
 
 # --- YAML Handler Setup ---
 try:
@@ -245,6 +246,35 @@ class CVOrchestrator:
             if temp_name and os.path.exists(temp_name):
                 os.remove(temp_name)
             return {"success": False, "error": f"Write failed: {str(e)}"}
+
+    def set_master_theme(self, theme_name):
+        """
+        [AST MUTATION]: Strictly enforces ruamel.yaml to update the theme key 
+        while preserving comments, spacing, and structural formatting of the 
+        Master_CV.yaml file.
+        """
+        if not self.base_cv_path.exists():
+            return {"success": False, "error": "Master CV file not found."}
+
+        try:
+            # Re-read with ruamel.yaml specifically for mutation
+            with open(self.base_cv_path, 'r', encoding='utf-8') as f:
+                data = yaml_handler.load(f)
+            
+            # AST Update
+            data['cv']['theme'] = theme_name
+            
+            # Atomic rewrite using the robust save_master_cv logic (round-trip)
+            # Actually, to preserve comments perfectly, we should dump to a buffer
+            # and then use the save_master_cv logic.
+            from io import StringIO
+            stream = StringIO()
+            yaml_handler.dump(data, stream)
+            new_content = stream.getvalue()
+            
+            return self.save_master_cv(new_content)
+        except Exception as e:
+            return {"success": False, "error": f"Theme update failed: {str(e)}"}
 
     def _rotate_backups(self, keep=5):
         """Delete old backups, keeping only the most recent `keep` files."""
