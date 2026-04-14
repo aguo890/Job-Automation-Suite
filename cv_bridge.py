@@ -7,6 +7,7 @@ from datetime import datetime
 import pathlib
 import uuid
 import ai_tailor
+from io import StringIO
 
 # --- YAML Handler Setup ---
 try:
@@ -55,7 +56,7 @@ class CVOrchestrator:
         self.backups_dir = self.root_dir / "rendercv" / "backups"
         self.backups_dir.mkdir(parents=True, exist_ok=True)
 
-    def generate_tailored_cv(self, job_details, use_ai=False, status_callback=None):
+    def generate_tailored_cv(self, job_details, use_ai=False, status_callback=None, overrides=None):
         """
         Reads base YAML, injects job-specific details, and renders PDF.
         """
@@ -95,16 +96,13 @@ class CVOrchestrator:
                 print(f"AI Tailoring failed: {e}")
                 strategy_report = f"AI Tailoring failed: {e}"
 
-        # C. Manual Injection Fallback (if AI not used)
+        # C. Summary Injection (using native overrides)
         if not use_ai:
-            try:
-                # Safely try to inject summary if structure permits
-                summary_list = cv_data.get('cv', {}).get('sections', {}).get('summary', [])
-                if isinstance(summary_list, list):
-                    tailored_line = f"Targeting the {role} position at **{company}**."
-                    summary_list.insert(0, tailored_line)
-            except Exception:
-                pass
+            if not overrides:
+                overrides = {}
+            # Standard pattern: Inject targeting line at the top of the summary section
+            # NOTE: We use RenderCV's dotted path syntax for overrides
+            overrides["cv.sections.summary.0"] = f"Targeting the {role} position at **{company}**."
 
         # D. Prepare Filenames
         safe_company = "".join([c for c in company if c.isalnum() or c in (' ', '_', '-')]).strip().replace(' ', '_')
@@ -142,7 +140,8 @@ class CVOrchestrator:
                     run_rendercv(
                         pathlib.Path(temp_yaml_name),
                         progress,
-                        pdf_path=expected_pdf_path
+                        pdf_path=expected_pdf_path,
+                        overrides=overrides
                     )
                 finally:
                     os.chdir(current_cwd)
@@ -248,6 +247,35 @@ class CVOrchestrator:
                 os.remove(temp_name)
             return {"success": False, "error": f"Write failed: {str(e)}"}
 
+    def set_master_theme(self, theme_name):
+        """
+        [AST MUTATION]: Strictly enforces ruamel.yaml to update the theme key 
+        while preserving comments, spacing, and structural formatting of the 
+        Master_CV.yaml file.
+        """
+        if not self.base_cv_path.exists():
+            return {"success": False, "error": "Master CV file not found."}
+
+        try:
+            # Re-read with ruamel.yaml specifically for mutation
+            with open(self.base_cv_path, 'r', encoding='utf-8') as f:
+                data = yaml_handler.load(f)
+            
+            # AST Update
+            data['cv']['theme'] = theme_name
+            
+            # Atomic rewrite using the robust save_master_cv logic (round-trip)
+            # Actually, to preserve comments perfectly, we should dump to a buffer
+            # and then use the save_master_cv logic.
+            from io import StringIO
+            stream = StringIO()
+            yaml_handler.dump(data, stream)
+            new_content = stream.getvalue()
+            
+            return self.save_master_cv(new_content)
+        except Exception as e:
+            return {"success": False, "error": f"Theme update failed: {str(e)}"}
+
     def _rotate_backups(self, keep=5):
         """Delete old backups, keeping only the most recent `keep` files."""
         try:
@@ -261,7 +289,7 @@ class CVOrchestrator:
         except Exception:
             pass  # Non-critical failure
 
-    def render_from_content(self, job_id, yaml_content):
+    def render_from_content(self, job_id, yaml_content, overrides=None):
         if not run_rendercv: return None, "RenderCV missing."
 
         base_cv_folder = self.base_cv_path.parent
@@ -279,7 +307,8 @@ class CVOrchestrator:
                     run_rendercv(
                         pathlib.Path(temp_yaml_name),
                         progress,
-                        pdf_path=expected_pdf_path
+                        pdf_path=expected_pdf_path,
+                        overrides=overrides
                     )
                 finally:
                     os.chdir(current_cwd)

@@ -6,3 +6,4 @@ generated_cvs/
 *.log
 .DS_Store
 .env
+.aider*
