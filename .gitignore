@@ -7,3 +7,24 @@ generated_cvs/
 .DS_Store
 .env
 .aider*
+
+# --- Local Secrets Backup ---
+# AGENT_NOTE: Personal resumes and configs are moved here for local persistence.
+secrets_backup/
+
+# --- Personal Resumes (RenderCV) ---
+# Block all personal YAMLs, but allow the template/example
+rendercv/*.yaml
+!rendercv/*.yaml.example
+rendercv/rendercv_output/
+
+# --- Personal Configurations (App) ---
+# Block active configs, but allow templates
+job-scraping-app/config/*.yaml
+!job-scraping-app/config/*.yaml.example
+
+# --- App Data & Logs ---
+job-scraping-app/data/*.json
+job-scraping-app/report/
+job-scraping-app/logs/
+job-scraping-app/scratch/
