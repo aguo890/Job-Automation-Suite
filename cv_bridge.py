@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 import pathlib
 import uuid
+import re
 import ai_tailor
 from io import StringIO
 
@@ -35,20 +36,59 @@ except ImportError:
 
 class CVOrchestrator:
     def __init__(self, base_cv_filename="Master_CV.yaml"):
-        # Search for any .yaml file in rendercv directory if Master_CV.yaml doesn't exist
-        # This helps users who renamed the file to their own name.
         self.root_dir = pathlib.Path(__file__).resolve().parent
         cv_dir = self.root_dir / "rendercv"
         
+        # 1. PRIMARY CHECK: Look for the specific filename provided
         target_path = cv_dir / base_cv_filename
-        if not target_path.exists():
-            # Fallback: Find the first YAML file that looks like a CV
-            yaml_files = list(cv_dir.glob("*.yaml"))
-            if yaml_files:
-                target_path = yaml_files[0]
-                base_cv_filename = target_path.name
+        if target_path.exists() and self._is_valid_cv(target_path):
+            self.base_cv_path = target_path
+        else:
+            # 2. SECONDARY CHECK: Look for standard names (case-insensitive)
+            standard_names = ["Master_CV.yaml", "master_cv.yaml", "CV.yaml", "cv.yaml"]
+            detected_path = None
+            
+            for name in standard_names:
+                p = cv_dir / name
+                if p.exists() and self._is_valid_cv(p):
+                    detected_path = p
+                    break
+            
+            if not detected_path:
+                # 3. FALLBACK: Glob for any .yaml/.yml and perform a safe content "peek"
+                # This helps users who renamed their file to "My_Resume.yaml" etc.
+                candidates = list(cv_dir.glob("*.yaml")) + list(cv_dir.glob("*.yml"))
+                blacklist = ["mkdocs.yaml", "docker-compose.yml", "docker-compose.yaml"]
+                
+                for p in candidates:
+                    if p.name.lower() in blacklist or p.name.startswith("."):
+                        continue
+                    if self._is_valid_cv(p):
+                        detected_path = p
+                        break
+            
+            self.base_cv_path = detected_path
 
-        self.base_cv_path = target_path
+        self.output_dir = self.root_dir / "generated_cvs"
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        self.backups_dir = self.root_dir / "rendercv" / "backups"
+        self.backups_dir.mkdir(parents=True, exist_ok=True)
+
+    def _is_valid_cv(self, file_path):
+        """
+        Performs a safe plain-text peek to verify if a file is a RenderCV file.
+        Uses regex to avoid crashing on complex YAML tags in non-CV files.
+        """
+        try:
+            # Read first 1000 chars to cover comments/header
+            content = file_path.read_text(encoding='utf-8', errors='ignore')[:1000]
+            # Look for the 'cv:' root key at the start of a line (ignoring comments)
+            # This regex allows for optional leading whitespace but ensures it's a root key
+            return bool(re.search(r'^\s*cv:\s*$', content, re.MULTILINE) or 
+                        re.search(r'^\s*cv:\s+[\S]', content, re.MULTILINE))
+        except Exception:
+            return False
         
         self.output_dir = self.root_dir / "generated_cvs"
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -63,8 +103,11 @@ class CVOrchestrator:
         if not run_rendercv:
             raise EnvironmentError("RenderCV library is not installed.")
 
-        if not self.base_cv_path.exists():
-             raise FileNotFoundError(f"MASTER CV MISSING. Expected at: {self.base_cv_path}")
+        if not self.base_cv_path or not self.base_cv_path.exists():
+             raise FileNotFoundError(
+                 "MASTER CV MISSING: No valid RenderCV file found in the 'rendercv/' directory. "
+                 "Please ensure your master CV (e.g., Master_CV.yaml) exists and contains a 'cv:' root key."
+             )
 
         # A. Load Base YAML
         with open(self.base_cv_path, 'r', encoding='utf-8') as f:
@@ -179,18 +222,18 @@ class CVOrchestrator:
     def load_job_cv(self, job_id):
         """Load CV content for a given job. For 'master_cv', always loads the base file."""
         if job_id == "master_cv":
-            if self.base_cv_path.exists():
+            if self.base_cv_path and self.base_cv_path.exists():
                 return self.base_cv_path.read_text(encoding='utf-8')
-            return f"# Error: Master CV not found at {self.base_cv_path}"
+            return "# Error: Master CV not found. Please ensure a valid YAML file with a 'cv:' key is in the 'rendercv/' folder."
 
         tailored_path = self.output_dir / f"{job_id}.yaml"
         if tailored_path.exists():
             return tailored_path.read_text(encoding='utf-8')
         
-        if self.base_cv_path.exists():
+        if self.base_cv_path and self.base_cv_path.exists():
             return self.base_cv_path.read_text(encoding='utf-8')
             
-        return f"# Error: Master CV not found at {self.base_cv_path}"
+        return "# Error: Master CV missing. Check your 'rendercv/' directory."
 
     def save_job_cv(self, job_id, yaml_content):
         """Save CV content. Routes to save_master_cv for 'master_cv' ID."""
@@ -218,6 +261,9 @@ class CVOrchestrator:
             return {"success": False, "error": f"Invalid YAML: {str(e)}"}
 
         # 2. BACKUP: Timestamped rotation
+        if not self.base_cv_path:
+            return {"success": False, "error": "Cannot save: No valid Master CV destination identified."}
+
         self.backups_dir.mkdir(parents=True, exist_ok=True)
         timestamp = int(time.time())
         cv_name = self.base_cv_path.name
@@ -253,7 +299,7 @@ class CVOrchestrator:
         while preserving comments, spacing, and structural formatting of the 
         Master_CV.yaml file.
         """
-        if not self.base_cv_path.exists():
+        if not self.base_cv_path or not self.base_cv_path.exists():
             return {"success": False, "error": "Master CV file not found."}
 
         try:
