@@ -45,7 +45,13 @@ class CVOrchestrator:
             self.base_cv_path = target_path
         else:
             # 2. SECONDARY CHECK: Look for standard names (case-insensitive)
-            standard_names = ["Master_CV.yaml", "master_cv.yaml", "CV.yaml", "cv.yaml"]
+            standard_names = [
+                "Aaron_Guo_CV.yaml", # Top priority for personal record
+                "Master_CV.yaml", 
+                "master_cv.yaml", 
+                "CV.yaml", 
+                "cv.yaml"
+            ]
             detected_path = None
             
             for name in standard_names:
@@ -56,10 +62,26 @@ class CVOrchestrator:
             
             if not detected_path:
                 # 3. FALLBACK: Glob for any .yaml/.yml and perform a safe content "peek"
-                # This helps users who renamed their file to "My_Resume.yaml" etc.
+                # Priority Fallback: Prefer files with "Aaron", "Guo", or "Master" in the name
                 candidates = list(cv_dir.glob("*.yaml")) + list(cv_dir.glob("*.yml"))
-                blacklist = ["mkdocs.yaml", "docker-compose.yml", "docker-compose.yaml"]
                 
+                # Blacklist generic or temporary files from becoming the "Master"
+                blacklist = [
+                    "mkdocs.yaml", "docker-compose.yml", "docker-compose.yaml",
+                    "template.yaml", "tailored_draft.yaml"
+                ]
+                
+                # Sort candidates to prioritize personal-looking files
+                def priority_score(path):
+                    name = path.name.lower()
+                    score = 0
+                    if any(key in name for key in ["aaron", "guo"]): score += 10
+                    if "master" in name: score += 5
+                    if name.startswith("personal"): score += 3
+                    return score
+
+                candidates = sorted(candidates, key=priority_score, reverse=True)
+
                 for p in candidates:
                     if p.name.lower() in blacklist or p.name.startswith("."):
                         continue

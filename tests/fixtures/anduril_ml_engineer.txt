@@ -1,0 +1,19 @@
+Company: Anduril Industries
+Role: Machine Learning Engineer
+Location: Washington, DC / Remote
+
+About the Role:
+Anduril is a defense technology company, bringing Silicon Valley talent and funding to the defense sector. We are looking for a Machine Learning Engineer to build and deploy models that operate at the tactical edge. You will work on computer vision, sensor fusion, and autonomous systems.
+
+Responsibilities:
+- Design, train, and deploy deep learning models for object detection, tracking, and classification using EO/IR sensor data.
+- Optimize ML models for real-time inference on resource-constrained edge hardware (NVIDIA Jetson, custom silicon).
+- Build robust data pipelines for ingesting and processing large-scale multimodal datasets.
+- Collaborate with software and hardware teams to integrate AI models into the Lattice software platform.
+
+Requirements:
+- Strong proficiency in Python and C++.
+- Experience with PyTorch or TensorFlow.
+- Solid understanding of software architecture and system-level design.
+- U.S. Person status is required as this position needs access to export-controlled data.
+- Ability to obtain and maintain a U.S. Security Clearance.

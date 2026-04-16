@@ -24,7 +24,8 @@ dependencies = [
     "python-dateutil",
     "openai>=1.0.0",
     "python-dotenv",
-    "streamlit-code-editor"
+    "streamlit-code-editor",
+    "pytest"
 ]
 
 [tool.setuptools.packages.find]
