@@ -12,6 +12,8 @@
 **/env/
 
 # Data and Outputs
+data/
+report/
 job-scraping-app/data/
 rendercv/rendercv_output/
 rendercv/backups/

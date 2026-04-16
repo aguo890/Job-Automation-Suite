@@ -1,0 +1,19 @@
+Company: xAI
+Role: Summer 2026 Engineering Internship
+Location: San Francisco, CA / Memphis, TN
+
+About the Role:
+xAI is an artificial intelligence company working on building competent AI to accelerate human discovery. We are looking for exceptional engineering interns to join our infrastructure and model training teams for Summer 2026. 
+
+Responsibilities:
+- Write high-performance, concurrent code to optimize our distributed training infrastructure.
+- Develop tools and frameworks to monitor and scale massive GPU clusters.
+- Assist in implementing novel architectural improvements to large language models.
+- Debug complex systems-level issues across networking and compute layers.
+
+Requirements:
+- Currently pursuing a degree in Computer Science, Computer Engineering, or a related field.
+- Exceptionally strong systems programming skills (Rust, C/C++, or Go) and Python.
+- Familiarity with deep learning frameworks and high-performance computing concepts.
+- Demonstrated ability to ship complex software projects independently.
+- Intense work ethic and a bias for action.
