@@ -5,6 +5,8 @@ from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
 from ruamel.yaml import YAML
+from core.llm_sanitizer import sanitize_llm_payload
+
 
 # --- SETUP LOGGING ---
 logger = logging.getLogger("ai_tailor")
@@ -159,12 +161,11 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
     if status_callback: status_callback(msg)
     logger.info(msg)
     try:
-        if "<think>" in raw_response:
-            raw_response = raw_response.split("</think>")[-1]
-        clean_json = raw_response.replace("```json", "").replace("```", "").strip()
+        clean_json = sanitize_llm_payload(raw_response)
         ai_data = json.loads(clean_json)
     except json.JSONDecodeError:
         raise ValueError(f"AI Output Malformed: {raw_response[:200]}")
+
 
     # 5. HALLUCINATION GATE (Atomic Verification)
     msg = "🛂 Validating Integrity (Hallucination Gate)..."
