@@ -117,15 +117,25 @@ def merge_filtering_with_defaults(user_config: dict, defaults_path: str) -> dict
 
 def extract_cv_filename(cv_data: dict) -> str:
     """
-    Parses cv.name and returns a safe filename.
+    Parses cv.name and returns a safe filename using robust regex sanitization.
+    Example: "Aaron Guo" -> "Aaron_Guo_CV.yaml"
     """
+    import re
     try:
-        name = cv_data.get("cv", {}).get("name", "")
-        if not name or not isinstance(name, str):
-            return "Master_CV.yaml"
+        raw_name = cv_data.get("cv", {}).get("name", "Master")
+        if not raw_name or not isinstance(raw_name, str):
+            raw_name = "Master"
         
-        safe_name = "".join(c for c in name if c.isalnum() or c in (" ", "-")).strip()
-        safe_name = safe_name.replace(" ", "_")
+        # Consistent with architectural directives for Open-Source Readiness:
+        # 1. Replace spaces/hyphens with underscores
+        # 2. Strip all non-alphanumeric/underscore characters
+        sanitized = raw_name.replace(" ", "_").replace("-", "_")
+        safe_name = re.sub(r"[^A-Za-z0-9_]", "", sanitized)
+        
+        if not safe_name:
+            safe_name = "Master"
+            
         return f"{safe_name}_CV.yaml"
     except Exception:
         return "Master_CV.yaml"
+

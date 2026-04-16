@@ -31,7 +31,7 @@ The automation suite generates beautiful PDF resumes using the [RenderCV](https:
 1. Navigate to the `rendercv/` folder: `Job-Automation-Suite/rendercv/`
 2. Create your Master CV YAML file:
    - Copy the provided template file: `cp master_cv.yaml.example my_cv.yaml`
-   - We recommend renaming it to your name (e.g., `Aaron_Guo_CV.yaml`).
+   - We recommend naming it `Master_CV.yaml`.
    - *Ensure the structure follows the RenderCV schema.*
 3. When the AI generator kicks in, it reads this master file as the **Source of Truth**, selectively re-writing bullets and summaries based on the job posting, saving the new tailored version securely without destroying this master file.
 

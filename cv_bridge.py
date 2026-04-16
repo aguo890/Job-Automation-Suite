@@ -46,12 +46,12 @@ class CVOrchestrator:
         else:
             # 2. SECONDARY CHECK: Look for standard names (case-insensitive)
             standard_names = [
-                "Aaron_Guo_CV.yaml", # Top priority for personal record
                 "Master_CV.yaml", 
                 "master_cv.yaml", 
                 "CV.yaml", 
                 "cv.yaml"
             ]
+
             detected_path = None
             
             for name in standard_names:
