@@ -1,0 +1,116 @@
+Aaron Guo
+(980) 337-0681 | aguo890@gwmail.gwu.edu | https://www.linkedin.com/in/guo-aaron/ | https://github.com/aguo890 
+Work Experience
+Multi-State Tax Optimization Platform | Project Demo 	Oct 2025- Present
+Co-founder & Lead Data Engineer 	Washington, DC
+Architected a multi-state tax compliance SaaS for locum tenens physicians, automating payroll apportionment and residency logic to mitigate IRS audit risks for S-Corp entities.
+Architected a multi-state tax compliance SaaS validating market demand with a waitlist of 100+ physicians, automating payroll apportionment to mitigate IRS audit risks.
+Engineered a "governance-first" financial engine using SQLAlchemy and Alembic, enabling precise allocation of salary across 50+ tax jurisdictions with complex reciprocity rules.
+Built a high-performance React/Vite dashboard featuring interactive Recharts visualizations to track tax nexus thresholds and per diem timelines in real-time.
+Implemented a tamper-proof, event-sourced audit logging system to capture all financial state changes, ensuring strict adherence to IRS Accountable Plan regulations.
+Designed a robust FastAPI layer with 15+ endpoints, achieving high reliability through comprehensive Pytest coverage and automated documentation.
+AI Factory Analytics Platform | Project Demo 	Oct 2025- Present
+Co-founder & Lead Data Engineer 	Washington, DC
+Founded and engineered an enterprise ERP solution piloting with a major textile manufacturer ($50M+ ARR), digitizing operations for 6,000+ employees.
+Architect a scalable, event-driven data ingestion pipeline using Python and Celery to parse 10k+ daily unstructured rows, reducing data latency by 95%.
+Engineer a high-performance React/Vite dashboard rendering real-time metrics for 60+ synchronous lines, maintaining 60 FPS on low-end hardware.
+Design a Zero-Trust multi-tenant architecture that isolates data across 5 distinct facilities, ensuring strict data sovereignty and preventing privilege escalation.
+Optimize high-traffic API endpoints using SQLAlchemy loading strategies (selectin/joined) to eliminate N+1 query bottlenecks, reducing latency from 300ms to <50ms.
+Implement granular Role-Based Access Control (RBAC) and input sanitizers to neutralize OWASP Top 10 vulnerabilities (XSS, Injection).
+
+The George Washington University	Aug 2025 - Present
+Technical Support Assistant	Washington, DC
+Diagnose and resolve an average of 15+ daily technical support tickets related to Software/Hardware and GWSystems.
+Act as the technical liaison between non-technical university staff and IT engineers.
+Author documentation for an internal knowledge base, improving team efficiency & issue resolution.
+Apply knowledge of core IT infrastructure to resolve complex, underlying system issues.
+Three Stars Fashion Group, Linkedin  	June 2025 - Sept 2025
+Data Engineer Intern (Remote)	Alexandria, Egypt 
+Automated the processing of supplier inventory spreadsheets using a Python and Pandas script, freeing up 30 minutes of cleaning into Excel and saving the supply chain team 16+ hours every week.
+Built and deployed a live dashboard with Flask and Chart.js to help managers visualize production line output, helping pinpoint key bottlenecks in the assembly line nearly instantly.
+Designed a serverless alert system using AWS Lambda and SNS to instantly notify the logistics team about large, shipment-ready orders, effectively cutting down on communication delays.
+Created clear technical documentation and user guides in Microsoft Word for all developed tools above, ensuring a smooth handoff and easy adoption by the full-time team and guaranteeing long-term maintainability.
+Sunwater Capital, Software, Website	Jan 2025 –  May 2025
+Data Science Intern	North Bethesda, MD 
+Architected an end-to-end data pipeline using PySpark and SerpAPI to automatically extract and clean legislative data, ensuring the entire team had a reliable stream of information for analysis.
+Cut manual fact-checking time by 90% by building an AI validation tool with the OpenAI API.
+Turned messy committee hearing transcripts into strategic insights by building a Python web scraper and using NLP to extract key topics for the analysis team.
+Wrangled/transformed raw web data into clean, analysis ready datasets using R (dplyr, tidyr), preparing the ground for modeling and clear reporting.
+China Fun Restaurants	Sept 2020 –  Aug 2024
+Data Analyst (2022-2024), Assistant Manager (2020-2022)	Charlotte, NC 
+Implemented a time-series forecasting model on sales data to optimize daily inventory procurement, reducing food waste by 14% and increasing profit margins by over 7%.
+Analyzed and visualized a complex 200+ item menu using Tableau and Power BI to identify profitability and sales trends, making smarter inventory and marketing decisions.
+Developed compelling data narratives using Tableau visualizations, successfully influencing a new menu strategy that generated an additional $5k in monthly revenue.
+Leadership & Campus Involvement
+Association of Computing Machinery (ACM) | George Washington University | President	Aug 2024 - Present
+Led 10+ professional development workshops and speaker events for the student community on topics ranging from Technical skills, Career Preparation, AI and Machine Learning, Project Documentation.
+Successfully grew chapter membership by over 100 students through strategic outreach, engaging social media content, and promotional events across campus.
+Education
+The George Washington University 	Washington, DC
+Bachelor of Science in Computer Science | GPA: 3.14/4.0	Expected June 2026
+Skills
+Languages: Python, SQL, R, TypeScript, JavaScript
+Frontend: React, Next.js, Vite, Zustand, Recharts, Orval
+Backend: FastAPI, Node.js, PostgreSQL, SQLAlchemy, Alembic, Redis, Celery, REST APIs
+Data & AI: Prompt Engineering, Agentic AIs, Google AI Studio, OpenAI API 
+Tools & Cloud: Docker, Git, Makefile, Tailwind CSS, AWS Lambda
+Spoken Languages: English (Native), Mandarin (Fluent)
+
+
+Aaron Guo - George Washington University Degree Audit
+Student Information
+Student Name: Guo, Aaron
+Degree: Bachelor of Science, Major in Computer Science
+College: School of Engineering & Applied Science (SEAS)
+Class Level: Senior
+Degree Progress Summary
+Overall GPA: 3.14
+
+
+Completed & Future Coursework by Term
+Fall 2022 (First Semester)
+ANTH 1003 - Archaeology - Grade: B, Credits: 3
+CSCI 1010 - Computer Science Orientation - Grade: A, Credits: 1
+CSCI 1111 - Intro to Software Development - Grade: B, Credits: 3
+ENGL 1315 - Lit. & Financial Imagination - Grade: B, Credits: 3
+MATH 1231 - Single-Variable Calculus I - Grade: C, Credits: 3
+SEAS 1001 - Engineering Orientation - Grade: A, Credits: 1
+Spring 2023 (Second Semester)
+CSCI 1112 - Algorithms & Data Structures - Grade: B+, Credits: 3
+CSCI 1311 - Discrete Structures I - Grade: C-, Credits: 3
+MATH 1232 - Single-Variable Calculus II - Grade: B, Credits: 3
+UW 1020 - University Writing - Grade: B-, Credits: 4
+PHYS 1021 - University Physics I - Grade: W (Withdrawal), Credits: 0
+Fall 2023 (Third Semester)
+BISC 1111 - Intro Bio: Cells & Molecules - Grade: B-, Credits: 4
+CSCI 2113 - Software Engineering - Grade: C+, Credits: 3
+CSCI 2312 - Discrete Structures II - Grade: C-, Credits: 3
+CSCI 2410 - System Programming - Grade: A-, Credits: 3
+REL 1003 - Intro to World Religions - Grade: A, Credits: 3
+Spring 2024 (Fourth Semester)
+CSCI 2541W - Database Systems & Team Projects - Grade: A, Credits: 3
+CSCI 3313 - Foundations of Computing - Grade: B, Credits: 3
+CSCI 3401 - Computer Architecture and Organization - Grade: B, Credits: 3
+PHIL 1153 - The Meaning of Mind - Grade: A, Credits: 3
+PSYC 2011 - Abnormal Psychology - Grade: A, Credits: 3
+Fall 2024 (Fifth Semester)
+CHIN 3111 - Chinese Lit in Translation - Grade: C, Credits: 3
+CSCI 3212 - Algorithms - Grade: B, Credits: 4
+CSCI 3411 - Operating Systems - Grade: B, Credits: 4
+CSCI 4431 - Computer Networks I - Grade: B, Credits: 3
+PHYS 1021 - University Physics I - Grade: B, Credits: 4
+Spring 2025 (Sixth Semester)
+APSC 3115 - Engineering Analysis III (Statistics) - Grade: B, Credits: 3
+CSCI 4907 - Big Data & Analytics - Grade: B+, Credits: 3
+FINA 4900 - Excel Financial Modelling - Grade: A, Credits: 3
+MATH 2184 - Linear Algebra I - Grade: A, Credits: 3
+PHIL 2135 - Ethics: Business & Professions - Grade: B-, Credits: 3
+Fall 2025 (Seventh Semester - Planned/In-Progress)
+ACCY 2001 - Intro to Financial Accounting - Grade: Planned, Credits: 3
+ACCY 3401 - Federal Income Tax:Individuals - Grade: Planned, Credits: 3
+BADM 3401 - Contemporary Mktg Mgt - Grade: Planned, Credits: 3
+CSCI 4237 - Software Design: Handheld Devices - Grade: Planned, Credits: 3
+CSCI 4243W - Capstone Design Project I - Grade: Planned, Credits: 4
+Eighth Semester (Planned)
+CSCI 4244 - Capstone Design Project II - Credits: 4
+General Electives - Credits: 12 (4 Classes)
