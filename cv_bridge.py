@@ -39,8 +39,19 @@ class CVOrchestrator:
         self.root_dir = pathlib.Path(__file__).resolve().parent
         cv_dir = self.root_dir / "rendercv"
         
-        # 1. PRIMARY CHECK: Look for the specific filename provided
+        # 0. AUTO-BOOTSTRAP: If no Master_CV.yaml exists, seed from the example template.
+        #    This ensures new users/clones start with a sanitized "John Doe" placeholder
+        #    instead of requiring manual setup.
         target_path = cv_dir / base_cv_filename
+        example_path = cv_dir / "master_cv.yaml.example"
+        if not target_path.exists() and example_path.exists():
+            try:
+                shutil.copy2(str(example_path), str(target_path))
+                print(f"INFO: Bootstrapped {base_cv_filename} from example template.")
+            except Exception as e:
+                print(f"WARNING: Could not bootstrap Master CV from example: {e}")
+
+        # 1. PRIMARY CHECK: Look for the specific filename provided
         if target_path.exists() and self._is_valid_cv(target_path):
             self.base_cv_path = target_path
         else:
@@ -62,21 +73,24 @@ class CVOrchestrator:
             
             if not detected_path:
                 # 3. FALLBACK: Glob for any .yaml/.yml and perform a safe content "peek"
-                # Priority Fallback: Prefer files with "Aaron", "Guo", or "Master" in the name
+                #    Priority: Prefer files with "master" or "cv" in the name.
+                #    NOTE: We intentionally do NOT prioritize by personal name — this ensures
+                #    open-source privacy compliance and prevents PII leakage.
                 candidates = list(cv_dir.glob("*.yaml")) + list(cv_dir.glob("*.yml"))
                 
                 # Blacklist generic or temporary files from becoming the "Master"
                 blacklist = [
                     "mkdocs.yaml", "docker-compose.yml", "docker-compose.yaml",
-                    "template.yaml", "tailored_draft.yaml"
+                    "template.yaml", "tailored_draft.yaml",
+                    "master_cv.yaml.example"
                 ]
                 
-                # Sort candidates to prioritize personal-looking files
+                # Sort candidates to prioritize CV-looking files (privacy-safe heuristic)
                 def priority_score(path):
                     name = path.name.lower()
                     score = 0
-                    if any(key in name for key in ["aaron", "guo"]): score += 10
-                    if "master" in name: score += 5
+                    if "master" in name: score += 10
+                    if "cv" in name: score += 5
                     if name.startswith("personal"): score += 3
                     return score
 
