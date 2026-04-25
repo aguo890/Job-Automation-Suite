@@ -129,7 +129,7 @@ def merge_filtering_with_defaults(user_config: dict, defaults_path: str) -> dict
 def extract_cv_filename(cv_data: dict) -> str:
     """
     Parses cv.name and returns a safe filename using robust regex sanitization.
-    Example: "Aaron Guo" -> "Aaron_Guo_CV.yaml"
+    Example: "John Doe" -> "John_Doe_CV.yaml"
     """
     import re
     try:
