@@ -1,0 +1,90 @@
+name: Generate Traffic Chart
+
+on:
+  workflow_run:
+    workflows: ["Repository Traffic Stats"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-chart:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout github-metrics
+        uses: actions/checkout@v4
+        with:
+          ref: github-metrics
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pandas matplotlib
+
+      - name: Generate Chart
+        run: |
+          cat << 'EOF' > generate_chart.py
+          import pandas as pd
+          import matplotlib.pyplot as plt
+          import matplotlib.dates as mdates
+          import os
+
+          def generate_chart():
+              csv_path = 'aguo890/Job-Automation-Suite/ghrs-data/views_clones_aggregate.csv'
+              if not os.path.exists(csv_path):
+                  print(f"File {csv_path} not found.")
+                  return
+
+              df = pd.read_csv(csv_path)
+              df['Date'] = pd.to_datetime(df['time_iso8601']).dt.date
+              df = df.sort_values('Date')
+
+              # Group by date
+              daily_data = df.groupby('Date').max().reset_index()
+
+              plt.style.use('dark_background')
+              fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
+              fig.patch.set_facecolor('#0d1117')
+              ax.set_facecolor('#0d1117')
+
+              ax.plot(daily_data['Date'], daily_data['views_total'], color='#58a6ff', linewidth=2, marker='o', label='Views')
+              ax.plot(daily_data['Date'], daily_data['clones_total'], color='#3fb950', linewidth=2, marker='o', label='Clones')
+
+              ax.fill_between(daily_data['Date'], daily_data['views_total'], color='#58a6ff', alpha=0.1)
+              ax.fill_between(daily_data['Date'], daily_data['clones_total'], color='#3fb950', alpha=0.1)
+
+              ax.spines['top'].set_visible(False)
+              ax.spines['right'].set_visible(False)
+              ax.spines['left'].set_color('#30363d')
+              ax.spines['bottom'].set_color('#30363d')
+              ax.tick_params(colors='#8b949e')
+              
+              ax.set_title('Repository Traffic (14-Day History)', color='#c9d1d9', pad=15, weight='bold')
+              ax.legend(frameon=False, loc='upper left', labelcolor='#8b949e')
+              
+              ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
+              plt.xticks(rotation=45)
+              plt.tight_layout()
+
+              plt.savefig('traffic_chart.svg', format='svg', bbox_inches='tight', transparent=True)
+              print("Chart successfully generated.")
+
+          if __name__ == "__main__":
+              generate_chart()
+          EOF
+          python generate_chart.py
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add traffic_chart.svg
+          git commit -m "chore: auto-update traffic chart" || echo "No changes to commit"
+          git push
