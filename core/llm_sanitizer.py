@@ -58,6 +58,16 @@ def validate_cv_yaml(raw_text: str) -> tuple:
     
     try:
         data = yaml.safe_load(cleaned)
+        # 5. DEFENSIVE HEALING: RenderCV requires international phone format (+1 for US)
+        # If the AI provides (980) 337-0681 instead of +1 980-337-0681, we fix it here.
+        if isinstance(data, dict) and "cv" in data:
+            phone = data["cv"].get("phone")
+            if isinstance(phone, str) and phone.strip():
+                phone_stripped = phone.strip()
+                # If starts with digit or bracket but lacks '+', assume +1 fallback
+                if re.match(r"^[\d\(]", phone_stripped) and not phone_stripped.startswith("+"):
+                    data["cv"]["phone"] = f"+1 {phone_stripped}"
+
     except yaml.YAMLError as e:
         line_info = ""
         if hasattr(e, 'problem_mark') and e.problem_mark:
@@ -68,6 +78,7 @@ def validate_cv_yaml(raw_text: str) -> tuple:
         return False, None, "Missing required key: `cv`."
     
     return True, data, ""
+
 
 
 def validate_filtering_yaml(raw_text: str) -> tuple:
