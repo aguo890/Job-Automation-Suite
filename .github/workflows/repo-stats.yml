@@ -1,0 +1,19 @@
+name: Repository Traffic Stats
+
+on:
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch: 
+
+jobs:
+  track-stats:
+    name: Fetch and Store GitHub Traffic
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Run GitHub Repo Stats Action
+        uses: jgehrcke/github-repo-stats@v1.4.2
+        with:
+          ghtoken: ${{ secrets.GH_STATS_PAT }}
+          databranch: github-metrics
+          ghpagesprefix: https://aguo890.github.io/Job-Automation-Suite
