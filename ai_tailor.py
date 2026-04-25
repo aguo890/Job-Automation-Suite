@@ -98,13 +98,13 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
     1. ZERO HALLUCINATION: You are forbidden from inventing companies, dates, or degrees.
     2. SOURCE ANCHORING: You must use the EXACT Company Names and Job Titles provided in the Master Resume.
     3. FORMATTING: BOLD matching technical keywords (e.g., **Python**, **Kubernetes**).
-    4. LENGTH CONSTRAINT: Goal is 1.25 pages. Max 1.5 pages.
+    4. LENGTH CONSTRAINT: The final output MUST be ~1.0 - 1.25 pages.
     
     TASK:
     - Write a 2-sentence high-impact summary hook.
-    - Select ONLY the Top 3-4 most relevant experiences and top 2 projects.
-    - EXPERIENCE STRATEGY (Truncate for Continuity): Retain metadata for all roles provided, but for low-signal roles, return an EMPTY `highlights` list. For high-signal roles, provide 3-4 optimized bullets.
-    - PROJECT STRATEGY (Omit for Space): If a project is irrelevant to the JD, completely EXCLUDE it from the JSON output. High-signal projects should have 1-2 optimized bullets.
+    - Select EXACTLY 3-4 most relevant experiences and EXACTLY 2 projects.
+    - EXPERIENCE STRATEGY (Continuity): You MUST include all roles from the source, but for low-signal roles (e.g., unrelated part-time work or older roles), you MUST return an EMPTY `highlights` list. For high-signal roles, provide EXACTLY 3 optimized bullets.
+    - PROJECT STRATEGY (Exclusion): You MUST only return the top 2 most relevant projects. Do NOT include any others in the JSON.
     - Rewrite experience bullets using 'Action + Keyword + Metric'. 
     - Identify 'Gaps' where the candidate lacks a required skill.
 
@@ -116,15 +116,24 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
         "key_skills": ["Skill 1", "Skill 2"...],
         "experience": [
             {
-                "company": "Exact Name from Source",
-                "position": "Exact Title from Source",
-                "highlights": ["Optimized bullet 1", "Optimized bullet 2"] or [] for low-signal
+                "company": "Exact Name",
+                "position": "Exact Title",
+                "highlights": ["Bullet 1", "Bullet 2", "Bullet 3"] 
+            },
+            {
+                "company": "Low Signal Role",
+                "position": "Title",
+                "highlights": [] 
             }
         ],
         "projects": [
             {
-                "name": "Project Name from Source",
-                "highlights": ["Optimized bullet 1"] 
+                "name": "Project 1",
+                "highlights": ["Bullet 1", "Bullet 2"] 
+            },
+            {
+                "name": "Project 2",
+                "highlights": ["Bullet 1"] 
             }
         ]
     }
@@ -202,7 +211,8 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
                           if s.get('company') == m_co and s.get('position') == m_pos), None)
             
             if match:
-                master_role['highlights'] = match.get('highlights', [])
+                # Cap at 3 bullets to ensure density
+                master_role['highlights'] = match.get('highlights', [])[:3]
             else:
                 # Truncate for continuity (bare minimum metadata)
                 master_role['highlights'] = []
@@ -212,10 +222,12 @@ def generate_tailored_resume(base_yaml_content, job_description, job_title, comp
         # Rebuild the projects list to ONLY include AI-selected items.
         # This reclaiming vertical space for high-signal roles.
         selected_projects = []
-        for suggested in ai_data['projects']:
+        # AI is instructed to return exactly 2, but we enforce it here as a fail-safe
+        for suggested in ai_data['projects'][:2]:
             for master_proj in cv_sections.get('projects', []):
                 if master_proj.get('name') == suggested.get('name'):
-                    master_proj['highlights'] = suggested.get('highlights', [])
+                    # Truncate bullets if AI provided too many (max 2 for projects)
+                    master_proj['highlights'] = suggested.get('highlights', [])[:2]
                     selected_projects.append(master_proj)
                     break
         cv_sections['projects'] = selected_projects
