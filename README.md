@@ -135,6 +135,10 @@ While the suite is easy to use, it is backed by production-grade infrastructure:
   <img alt="Traffic Chart" src="https://raw.githubusercontent.com/aguo890/Job-Automation-Suite/github-metrics/traffic_chart.svg">
 </picture>
 
+<p align="center">
+  <b><a href="https://aguo890.github.io/Job-Automation-Suite/">📊 View Full Historical Analytics</a></b>
+</p>
+
 ---
 
 ## 🤝 Contributing & License
