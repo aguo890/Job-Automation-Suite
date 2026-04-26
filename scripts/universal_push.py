@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -20,6 +21,11 @@ REPOS_TO_PUSH = [
 
 ROOT_DIR = Path(__file__).parent.parent
 DOTENV_PATH = ROOT_DIR / "job-scraping-app" / ".env"
+
+# Privacy: paths for the CV swap (rendercv submodule)
+MASTER_CV = ROOT_DIR / "rendercv" / "Master_CV.yaml"
+EXAMPLE_CV = ROOT_DIR / "rendercv" / "master_cv.yaml.example"
+BACKUP_CV = ROOT_DIR / "rendercv" / ".Master_CV.yaml.backup"
 
 # Load environment
 if DOTENV_PATH.exists():
@@ -67,27 +73,32 @@ def diff_context(diff):
         return diff[:10000] + "\n... (truncated)"
     return diff
 
-def process_repo(repo_path_rel):
-    repo_path = (ROOT_DIR / repo_path_rel).resolve()
-    print(f"\n📂 Processing: {repo_path_rel if repo_path_rel != '.' else 'Root'}")
-    
-    if not (repo_path / ".git").exists():
-        # Check if it's a submodule directory without .git (might happen if not initialized)
-        if (repo_path).is_dir():
-            print(f"  ⚠️  {repo_path.name} is a directory but not a git repo. Skipping.")
-        else:
-            print(f"  ❌ {repo_path.name} not found. Skipping.")
-        return
+def _swap_cv_to_example():
+    """Replace Master_CV.yaml with the sanitized example for a clean push."""
+    if not EXAMPLE_CV.exists():
+        print("  ⚠️  No master_cv.yaml.example found — skipping CV swap.")
+        return False
+    if not MASTER_CV.exists():
+        return False
 
-    # 0. Branch Guardrail
-    branch = get_current_branch(repo_path)
-    if not branch:
-        print("  ⚠️  Skipping: Repository is in a detached HEAD state.")
-        print(f"     To push changes, cd into '{repo_path_rel}', checkout a branch (e.g., 'main'), and try again.")
-        return
+    # Only swap if the files actually differ (avoid unnecessary commits)
+    if MASTER_CV.read_text() == EXAMPLE_CV.read_text():
+        return False  # Already identical, no swap needed
 
-    print(f"  🌿 Branch: {branch}")
+    shutil.copy2(MASTER_CV, BACKUP_CV)
+    shutil.copy2(EXAMPLE_CV, MASTER_CV)
+    print("  🔒 Swapped Master_CV.yaml → example (privacy guard)")
+    return True
 
+def _restore_cv():
+    """Restore the user's real Master_CV.yaml from the backup."""
+    if BACKUP_CV.exists():
+        shutil.copy2(BACKUP_CV, MASTER_CV)
+        BACKUP_CV.unlink()
+        print("  🔓 Restored personal Master_CV.yaml")
+
+def _process_repo_inner(repo_path_rel, repo_path, branch):
+    """Core git add/commit/pull/push logic for a single repo."""
     # 1. Check for Uncommitted Changes
     status = run_git_cmd(["status", "--porcelain"], repo_path)
     if status.stdout.strip():
@@ -127,6 +138,39 @@ def process_repo(repo_path_rel):
             print(f"  ❌ Push failed: {push_res.stderr.strip()}")
     else:
         print("  ✨ Everything up to date.")
+
+def process_repo(repo_path_rel):
+    repo_path = (ROOT_DIR / repo_path_rel).resolve()
+    print(f"\n📂 Processing: {repo_path_rel if repo_path_rel != '.' else 'Root'}")
+    
+    if not (repo_path / ".git").exists():
+        # Check if it's a submodule directory without .git (might happen if not initialized)
+        if (repo_path).is_dir():
+            print(f"  ⚠️  {repo_path.name} is a directory but not a git repo. Skipping.")
+        else:
+            print(f"  ❌ {repo_path.name} not found. Skipping.")
+        return
+
+    # 0. Branch Guardrail
+    branch = get_current_branch(repo_path)
+    if not branch:
+        print("  ⚠️  Skipping: Repository is in a detached HEAD state.")
+        print(f"     To push changes, cd into '{repo_path_rel}', checkout a branch (e.g., 'main'), and try again.")
+        return
+
+    print(f"  🌿 Branch: {branch}")
+
+    # --- Privacy Guard: swap personal CV with sanitized example before pushing ---
+    swapped = False
+    if repo_path_rel == "rendercv":
+        swapped = _swap_cv_to_example()
+        try:
+            _process_repo_inner(repo_path_rel, repo_path, branch)
+        finally:
+            if swapped:
+                _restore_cv()
+    else:
+        _process_repo_inner(repo_path_rel, repo_path, branch)
 
 def main():
     print("🔄 Job Automation Suite - Universal Push")
