@@ -344,7 +344,7 @@ class CVOrchestrator:
                 data = yaml_handler.load(f)
             
             # AST Update
-            data['cv']['theme'] = theme_name
+            data['design']['theme'] = theme_name
             
             # Atomic rewrite using the robust save_master_cv logic (round-trip)
             # Actually, to preserve comments perfectly, we should dump to a buffer
