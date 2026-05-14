@@ -36,6 +36,7 @@ RUN pip install --no-cache-dir -r job-scraping-app/requirements.txt
 COPY rendercv/ ./rendercv/
 COPY job-scraping-app/ ./job-scraping-app/
 COPY scripts/ ./scripts/
+COPY core/ ./core/
 COPY cv_bridge.py ai_tailor.py ./
 
 # -----------------------------------------------------------------------------
